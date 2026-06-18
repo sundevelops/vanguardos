@@ -158,12 +158,12 @@
   // ── LAUNCHPAD FAQ ────────────────────────────────────────────────
   const launchpadFaq = [
     ['Do I need to be technical?', 'No. Every template, prompt, and pattern is copy-paste. The prompts ask you a few plain questions and do the rest. If you can follow a recipe, you can follow this.'],
-    ["What if I don't have an idea yet?", 'Day 1 is the ideation system itself: a sequenced way to surface, validate, and price an idea you actually want to ship. You start with a hunch and finish Day 1 with a locked offer.'],
-    ['What AI tools do I need?', 'Free ones. The Prompt Library works with ChatGPT, Claude, or Gemini, and Day 4 builds your landing page in Google Antigravity, which is free to start. Free tiers are enough to complete the 5 days. There is no VanguardOS subscription on top.'],
-    ['How much extra will I spend on tools?', 'You can finish the whole build and deploy your site for $0. The system names the one or two paid upgrades that are actually worth it (and why), but none are required.'],
+    ["What if I don't have an idea yet?", 'Day 1 is the ideation system itself: a sequenced way to surface, validate, and price an idea you actually want to ship. You can start with nothing more than a hunch, or a blank page, and finish Day 1 with a locked offer.'],
+    ['What AI tools do I need?', 'Just one capable model. The prompts work with ChatGPT, Claude, or Gemini, and Day 4 builds your landing page in Google Antigravity, which is free to start. Free tiers can complete the 5 days, but we strongly recommend a paid tier of one model (about $20 a month): you get longer sessions and access to the stronger models, and a stronger model means noticeably better output across all five days. There is no VanguardOS subscription on top.'],
+    ['How much extra will I spend on tools?', 'You can build and host for $0. Two upgrades are worth it: a paid AI tier for stronger output, and a custom domain (about $10 a year) so your site has a real, credible address you own. Neither is strictly required to finish, but both are worth the small spend.'],
     ['Will this work for my niche?', "Yes. The system is niche-agnostic by design. The templates and patterns are the scaffolding; the Day 2 brand work and Day 4 landing copy are where your niche shapes the output."],
     ["What if I'm already mid-launch?", "Drop into whichever day matches where you are. Stuck on the offer? Day 1. Brand feels off? Day 2. No landing page? Day 4. The Launchpad is a system you re-enter whenever a leg is weak."],
-    ['Refund policy?', '30-day no-questions guarantee. Build the system. If you reach Day 5 and your brand + offer + funnel is not launch-ready, email us for a full refund.']
+    ['Refund policy?', 'We call it the Ship-First Guarantee. Run the system and do the work. If you reach Day 5 and your brand, offer, and funnel are not launch-ready, email us within 30 days for a full refund. The only thing we will not refund is a download that was never opened.']
   ];
 
   // Any non-Bundle CTA (Core or Upgrade) opens the Bundle upsell modal first.
@@ -478,12 +478,12 @@
     "@type": "FAQPage",
     "mainEntity": [
       { "@type": "Question", "name": "Do I need to be technical?", "acceptedAnswer": { "@type": "Answer", "text": "No. Every template, prompt, and pattern is copy-paste. The prompts ask you a few plain questions and do the rest. If you can follow a recipe, you can follow this." } },
-      { "@type": "Question", "name": "What if I don't have an idea yet?", "acceptedAnswer": { "@type": "Answer", "text": "Day 1 is the ideation system itself: a sequenced way to surface, validate, and price an idea you actually want to ship. You start with a hunch and finish Day 1 with a locked offer." } },
-      { "@type": "Question", "name": "What AI tools do I need?", "acceptedAnswer": { "@type": "Answer", "text": "Free ones. The Prompt Library works with ChatGPT, Claude, or Gemini, and Day 4 builds your landing page in Google Antigravity, which is free to start. Free tiers are enough to complete the 5 days." } },
-      { "@type": "Question", "name": "How much extra will I spend on tools?", "acceptedAnswer": { "@type": "Answer", "text": "You can finish the whole build and deploy your site for $0. The system names the one or two paid upgrades that are actually worth it, but none are required." } },
+      { "@type": "Question", "name": "What if I don't have an idea yet?", "acceptedAnswer": { "@type": "Answer", "text": "Day 1 is the ideation system itself: a sequenced way to surface, validate, and price an idea you actually want to ship. You can start with nothing more than a hunch, or a blank page, and finish Day 1 with a locked offer." } },
+      { "@type": "Question", "name": "What AI tools do I need?", "acceptedAnswer": { "@type": "Answer", "text": "Just one capable model. The prompts work with ChatGPT, Claude, or Gemini, and Day 4 builds your landing page in Google Antigravity, which is free to start. Free tiers can complete the 5 days, but we strongly recommend a paid tier of one model (about $20 a month): you get longer sessions and access to the stronger models, and a stronger model means noticeably better output across all five days. There is no VanguardOS subscription on top." } },
+      { "@type": "Question", "name": "How much extra will I spend on tools?", "acceptedAnswer": { "@type": "Answer", "text": "You can build and host for $0. Two upgrades are worth it: a paid AI tier for stronger output, and a custom domain (about $10 a year) so your site has a real, credible address you own. Neither is strictly required to finish, but both are worth the small spend." } },
       { "@type": "Question", "name": "Will this work for my niche?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. The system is niche-agnostic by design. The templates and patterns are the scaffolding; the Day 2 brand work and Day 4 landing copy are where your niche shapes the output." } },
       { "@type": "Question", "name": "What if I'm already mid-launch?", "acceptedAnswer": { "@type": "Answer", "text": "Drop into whichever day matches where you are. Stuck on the offer? Day 1. Brand feels off? Day 2. No landing page? Day 4." } },
-      { "@type": "Question", "name": "Refund policy?", "acceptedAnswer": { "@type": "Answer", "text": "30-day no-questions guarantee. Build the system. If you reach Day 5 and your brand + offer + funnel is not launch-ready, email us for a full refund." } }
+      { "@type": "Question", "name": "Refund policy?", "acceptedAnswer": { "@type": "Answer", "text": "We call it the Ship-First Guarantee. Run the system and do the work. If you reach Day 5 and your brand, offer, and funnel are not launch-ready, email us within 30 days for a full refund. The only thing we will not refund is a download that was never opened." } }
     ]
   })}
   </script>
@@ -507,7 +507,10 @@
       <a href="#offer-stack" class="text-xs font-mono uppercase tracking-wider text-muted hover:text-text transition">What's Inside</a>
       <a href="#five-day" class="text-xs font-mono uppercase tracking-wider text-muted hover:text-text transition">5-Day Journey</a>
       <a href="#faq" class="text-xs font-mono uppercase tracking-wider text-muted hover:text-text transition">FAQ</a>
-      <a href={GUMROAD.launchpad} class="px-5 py-2 border border-gold-line hover:border-gold hover:bg-gold-soft text-gold text-xs font-semibold font-mono uppercase tracking-wider rounded-full transition hover:scale-[1.03]">Get The Launchpad →</a>
+      <a href={GUMROAD.launchpad} class="flex items-center gap-2 px-5 py-2 border border-gold-line hover:border-gold hover:bg-gold-soft text-gold text-xs font-semibold font-mono uppercase tracking-wider rounded-full transition hover:scale-[1.03]">
+        <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+        Get The Launchpad →
+      </a>
     </nav>
     <button class="md:hidden text-muted hover:text-text p-1" on:click={() => menuOpen = !menuOpen} aria-label="Toggle menu">
       {#if menuOpen}
@@ -522,7 +525,10 @@
     <a href="#offer-stack" on:click={() => menuOpen = false} class="block text-sm font-mono uppercase tracking-wider text-muted hover:text-text">What's Inside</a>
     <a href="#five-day" on:click={() => menuOpen = false} class="block text-sm font-mono uppercase tracking-wider text-muted hover:text-text">5-Day Journey</a>
     <a href="#faq" on:click={() => menuOpen = false} class="block text-sm font-mono uppercase tracking-wider text-muted hover:text-text">FAQ</a>
-    <a href={GUMROAD.launchpad} on:click={() => menuOpen = false} class="block text-center py-3 bg-gold text-base-2 font-bold font-mono uppercase text-xs tracking-wide rounded-full">Get The Launchpad →</a>
+    <a href={GUMROAD.launchpad} on:click={() => menuOpen = false} class="flex items-center justify-center gap-2 py-3 bg-gold text-base-2 font-bold font-mono uppercase text-xs tracking-wide rounded-full">
+      <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+      Get The Launchpad →
+    </a>
   </div>
   {#if menuOpen}
     <button on:click={() => menuOpen = false} type="button" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[92] md:hidden" aria-label="Close menu"></button>
@@ -584,6 +590,7 @@
       <!-- Primary CTA: gold, prominent, all caps -->
       <div class="hero-item flex flex-col items-center gap-4 pt-3" style="opacity: 0">
         <a href={GUMROAD.launchpad} class="btn-primary inline-flex items-center justify-center gap-3 px-12 py-5 rounded-[2rem] font-mono text-sm md:text-base uppercase tracking-[0.18em]">
+          <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
           Get the Launchpad &nbsp;·&nbsp; $129 →
         </a>
         <p class="text-xs md:text-sm font-mono uppercase tracking-wider text-muted">
@@ -715,7 +722,10 @@
           <span class="font-mono text-sm uppercase tracking-widest text-text">Today, one payment</span>
           <span class="font-mono font-bold text-4xl md:text-5xl text-gold tracking-tight">$129</span>
         </div>
-        <a href={GUMROAD.launchpad} class="btn-primary block text-center mt-7 py-5 rounded-[2rem]">Get The Launchpad · $129 →</a>
+        <a href={GUMROAD.launchpad} class="btn-primary flex items-center justify-center gap-2.5 mt-7 py-5 rounded-[2rem]">
+          <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+          Get The Launchpad · $129 →
+        </a>
         <p class="text-sm font-mono uppercase tracking-widest text-muted mt-3 text-center">One payment. Universal AI. Yours forever.</p>
       </div>
     </div>
@@ -738,6 +748,7 @@
         <p class="text-text text-lg md:text-xl mt-5 leading-relaxed">
           Two of the seven systems are pure design firepower: palettes and type pairings you'd otherwise pay a brand studio for. Here's a sample of what's inside.
         </p>
+        <p class="text-gold text-base md:text-lg mt-5 font-medium">Go ahead and click any palette or type pairing below to open it and inspect the exact hex codes, fonts, and weights.</p>
       </header>
 
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 md:gap-6">
@@ -968,7 +979,8 @@
       </ol>
 
       <div class="text-center mt-12 reveal">
-        <a href={GUMROAD.launchpad} class="btn-primary inline-flex items-center gap-2 px-10 py-5 rounded-[2rem]">
+        <a href={GUMROAD.launchpad} class="btn-primary inline-flex items-center justify-center gap-2.5 px-10 py-5 rounded-[2rem]">
+          <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
           Start The 5-Day Build · $129 →
         </a>
       </div>
@@ -1017,7 +1029,10 @@
                 <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">{launchpadAvatars[selectedAvatar].label}</span>
               </div>
               <p class="text-text text-lg md:text-xl leading-relaxed">{launchpadAvatars[selectedAvatar].promise}</p>
-              <a href={GUMROAD.launchpad} class="btn-primary inline-flex items-center justify-center gap-2 mt-6 px-8 py-4 rounded-[2rem]">Get The Launchpad · $129 →</a>
+              <a href={GUMROAD.launchpad} class="btn-primary inline-flex items-center justify-center gap-2.5 mt-6 px-8 py-4 rounded-[2rem]">
+                <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+                Get The Launchpad · $129 →
+              </a>
             </div>
           {/key}
         {/if}
@@ -1061,7 +1076,10 @@
         <p class="text-base text-text/85 leading-relaxed mt-5 text-center">
           Same deliverables, and you keep the system. Every product you launch after this one rides the same rails for free.
         </p>
-        <a href={GUMROAD.launchpad} class="btn-primary block text-center mt-6 py-5 rounded-[2rem]">Get The Launchpad · $129 →</a>
+        <a href={GUMROAD.launchpad} class="btn-primary flex items-center justify-center gap-2.5 mt-6 py-5 rounded-[2rem]">
+          <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+          Get The Launchpad · $129 →
+        </a>
       </div>
     </div>
   </section>
@@ -1078,7 +1096,7 @@
           Build it. <span class="italic text-gold">Then decide.</span>
         </h2>
         <p class="text-text text-lg md:text-xl leading-relaxed max-w-[640px] mx-auto">
-          <strong class="text-gold">30-day, no-questions guarantee.</strong> Run the 5 days. If your brand, offer, and funnel aren't launch-ready by Day 5, email us for a full refund. No forms, no hoops, no "sorry to see you go" sequence.
+          <strong class="text-gold">30-day Ship-First guarantee.</strong> Run the 5 days. If your brand, offer, and funnel aren't launch-ready by Day 5, email us for a full refund. No forms, no hoops, no "sorry to see you go" sequence.
         </p>
         <p class="text-text text-base md:text-[17px] leading-relaxed max-w-[620px] mx-auto mt-4">
           And if you get stuck on a step, tell us where. We'd rather you finish your launch than have your money back.
@@ -1340,7 +1358,8 @@
       </div>
 
       <div class="text-center mt-12 reveal">
-        <a href={GUMROAD.bundle} class="btn-primary inline-flex items-center gap-2 px-10 py-5 rounded-[2rem]">
+        <a href={GUMROAD.bundle} class="btn-primary inline-flex items-center justify-center gap-2.5 px-10 py-5 rounded-[2rem]">
+          <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
           Get the Bundle — $79 →
         </a>
         <p class="text-sm font-mono uppercase tracking-widest text-muted mt-4">Read-only · it never acts, sends, or spends — it only shows you what's already done</p>
@@ -1458,7 +1477,10 @@
             <span class="font-display text-6xl text-gold">$79</span>
           </div>
         </div>
-        <a href={GUMROAD.bundle} class="btn-primary block text-center mt-6 py-5 rounded-[2rem]">Get the Bundle — $79 →</a>
+        <a href={GUMROAD.bundle} class="btn-primary flex items-center justify-center gap-2.5 mt-6 py-5 rounded-[2rem]">
+          <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+          Get the Bundle — $79 →
+        </a>
         <p class="text-sm font-mono uppercase tracking-widest text-muted mt-3 text-center">One payment. No subscription. Ever.</p>
       </div>
 
@@ -1576,11 +1598,20 @@
             <span class="font-display text-5xl text-gold">{p.price}</span>
           </div>
           {#if p.key === 'core'}
-            <a href={ctaHref(p.key)} on:click={(e) => openUpsell('core', e)} class="btn-secondary block text-center py-4 rounded-full">{p.cta} →</a>
+            <a href={ctaHref(p.key)} on:click={(e) => openUpsell('core', e)} class="btn-secondary flex items-center justify-center gap-2 py-4 rounded-full">
+              <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+              {p.cta} →
+            </a>
           {:else if p.featured}
-            <a href={ctaHref(p.key)} class="btn-primary block text-center py-4 rounded-full">{p.cta} — $79 →</a>
+            <a href={ctaHref(p.key)} class="btn-primary flex items-center justify-center gap-2 py-4 rounded-full">
+              <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+              {p.cta} — $79 →
+            </a>
           {:else}
-            <a href={ctaHref(p.key)} on:click={(e) => openUpsell('upgrade', e)} class="btn-secondary block text-center py-4 rounded-full">{p.cta} — $79 →</a>
+            <a href={ctaHref(p.key)} on:click={(e) => openUpsell('upgrade', e)} class="btn-secondary flex items-center justify-center gap-2 py-4 rounded-full">
+              <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+              {p.cta} — $79 →
+            </a>
           {/if}
         </div>
       {/each}
@@ -1622,7 +1653,10 @@
 
 
       <div class="flex flex-col items-center gap-4">
-        <a href={GUMROAD.launchpad} class="btn-primary inline-flex items-center justify-center gap-2 px-10 py-5 rounded-[2rem]">Get The Launchpad · $129 →</a>
+        <a href={GUMROAD.launchpad} class="btn-primary inline-flex items-center justify-center gap-2.5 px-10 py-5 rounded-[2rem]">
+          <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+          Get The Launchpad · $129 →
+        </a>
         <a href="#offer-stack" class="text-sm font-mono uppercase tracking-widest text-muted hover:text-text transition border-b border-gold-line/40 hover:border-gold pb-1">See what's inside ↓</a>
         <p class="text-sm font-mono uppercase tracking-wider text-muted pt-2">30-day guarantee · One payment · Yours forever</p>
       </div>
@@ -1660,7 +1694,10 @@
       <span class="sticky-cta-price">$129</span>
       <span class="sticky-cta-sub">One payment · Yours forever</span>
     </div>
-    <a href={GUMROAD.launchpad} class="btn-primary sticky-cta-btn" tabindex={showStickyCta ? 0 : -1}>Start in 5 Days →</a>
+    <a href={GUMROAD.launchpad} class="btn-primary sticky-cta-btn flex items-center justify-center gap-2" tabindex={showStickyCta ? 0 : -1}>
+      <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+      Start in 5 Days →
+    </a>
   </div>
 </div>
 
@@ -1700,7 +1737,10 @@
         <p class="text-sm text-muted leading-relaxed mt-5">Display: <span class="text-text/90">{specimenData.display}</span> · Body: <span class="text-text/90">{specimenData.body}</span>. One of 20 type systems inside the pack. Sources: Fontshare + Google Fonts + The League of Moveable Type.</p>
       {/if}
 
-      <a href={GUMROAD.launchpad} class="btn-primary block text-center mt-7 py-4 rounded-[2rem]">Get all 40 systems · $129 →</a>
+      <a href={GUMROAD.launchpad} class="btn-primary flex items-center justify-center gap-2.5 mt-7 py-4 rounded-[2rem]">
+        <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+        Get all 40 systems · $129 →
+      </a>
     </div>
   </div>
 {/if}
@@ -1742,7 +1782,10 @@
       </label>
 
       <div class="upsell-actions">
-        <button bind:this={upsellPrimaryBtn} on:click={upsellContinue} class="btn-primary upsell-primary">Continue to Checkout →</button>
+        <button bind:this={upsellPrimaryBtn} on:click={upsellContinue} class="btn-primary upsell-primary flex items-center justify-center gap-2">
+          <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+          Continue to Checkout →
+        </button>
         <button on:click={upsellDecline} class="upsell-secondary">
           No thanks, just the {upsellSource === 'core' ? 'Playbook' : 'Upgrade'}
         </button>
@@ -2099,6 +2142,32 @@
   }
   @media (min-width: 768px) {
     :global(.btn-primary), :global(.btn-secondary) { font-size: 16px; }
+  }
+
+  /* === OWL LOGO IN CTA === */
+  :global(.owl-logo-cta) {
+    width: 20px !important;
+    height: 20px !important;
+    display: inline-block;
+    vertical-align: middle;
+    flex-shrink: 0;
+    transition: transform 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94), filter 0.25s ease;
+  }
+  :global(.btn-primary .owl-logo-cta), :global(.bg-gold .owl-logo-cta) {
+    color: #111212;
+    filter: drop-shadow(0 0 2px rgba(212, 175, 55, 0.55));
+  }
+  :global(.btn-secondary .owl-logo-cta) {
+    color: #D4AF37;
+    filter: drop-shadow(0 0 3px rgba(212, 175, 55, 0.45));
+  }
+  :global(.btn-primary:hover .owl-logo-cta), :global(.bg-gold:hover .owl-logo-cta) {
+    transform: scale(1.15) rotate(-5deg);
+    filter: drop-shadow(0 0 5px rgba(212, 175, 55, 0.85));
+  }
+  :global(.btn-secondary:hover .owl-logo-cta), :global(.border-gold-line:hover .owl-logo-cta) {
+    transform: scale(1.15) rotate(5deg);
+    filter: drop-shadow(0 0 6px rgba(212, 175, 55, 0.8));
   }
 
   /* === BUNDLE BEST-VALUE BADGE === */
