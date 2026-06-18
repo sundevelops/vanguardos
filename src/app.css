@@ -1,0 +1,57 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root { color-scheme: dark; }
+
+/* Custom font-face targeting numbers, dollar signs, and numeric separators/operators to render them with JetBrains Mono uniform font */
+@font-face {
+  font-family: 'JetBrains Mono Numbers';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: local('JetBrains Mono'), local('JetBrainsMono'), url(https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbY2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKxjPQ.ttf) format('truetype');
+  unicode-range: U+0030-0039, U+0024, U+002C, U+002E, U+002B, U+002D, U+002F, U+0025;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono Numbers';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: local('JetBrains Mono Bold'), local('JetBrainsMono-Bold'), url(https://fonts.gstatic.com/s/jetbrainsmono/v24/tDbY2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8L6tjPQ.ttf) format('truetype');
+  unicode-range: U+0030-0039, U+0024, U+002C, U+002E, U+002B, U+002D, U+002F, U+0025;
+}
+
+body {
+  background: #111212;
+  color: #ECEAE4;
+  font-family: 'JetBrains Mono Numbers', 'Alegreya', Georgia, serif;
+  letter-spacing: 0.005em;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+strong { color: #ECEAE4; font-weight: 600; }
+
+/* Mobile-friendly default: respect prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+  .reveal { opacity: 1 !important; transform: none !important; }
+}
+
+/* IntersectionObserver scroll-reveal — no GSAP, native browser */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: opacity, transform;
+}
+.reveal.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}

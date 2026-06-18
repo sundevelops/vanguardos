@@ -1,0 +1,15 @@
+node_modules
+.svelte-kit
+.svelte-kit-old-*
+.svelte-kit-stale-*
+.svelte-kit.bak*
+build
+dist
+.env
+.env.*
+!.env.example
+
+# Vite / bundler outputs
+vite.config.js.timestamp-*
+*.mjs
+*.js.map
