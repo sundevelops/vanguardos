@@ -51,16 +51,23 @@
   };
 
   // ── LAUNCHPAD OFFER STACK (high-impact) ───────────────────────────
-  // 7 deliverables with retail values. Total stacked $811, sells for $129.
+  // 1 core system ($129) + 6 bonuses ($682). Total stacked $811, sells for $129.
+  // launchpadStack[0] is THE CORE; everything after is a stacked-on bonus.
   const launchpadStack = [
-    { name: 'The 5-Day Launchpad PDF',                 value: '$199', img: '/products/stack-01.webp', blurb: 'The day-by-day build manual. Idea to launch-ready by Day 5.' },
-    { name: '150+ AI Prompt Library',                  value: '$149', img: '/products/stack-02.webp', blurb: 'Paste a prompt, answer up to three plain questions, get finished work. Works with ChatGPT, Claude, and Gemini.' },
-    { name: '5 Cloneable Landing Page Templates',      value: '$149', img: '/products/stack-03.webp', blurb: 'One master prompt builds any of the five. Hero, offer, FAQ, CTAs, already wired.' },
-    { name: 'The Brand Palette Pack',                  value: '$89',  img: '/products/stack-04.webp', blurb: '20 ready-to-use palettes with the psychology behind each.' },
-    { name: 'The Typography Pack',                     value: '$89',  img: '/products/stack-05.webp', blurb: '20 free-to-use premium type systems for solo brands.' },
-    { name: 'The Notion Operations OS',                value: '$39',  img: '/products/stack-06.webp', blurb: 'A 45-minute click-by-click build of the workspace you run the business from after launch.' },
+    { name: 'The 5-Day Launchpad',                     value: '$129', img: '/products/stack-01.webp', blurb: 'The day-by-day build manual. Idea to launch-ready by Day 5.' },
+    { name: '150+ AI Prompt Library',                  value: '$169', img: '/products/stack-02.webp', blurb: 'Paste a prompt, answer up to three plain questions, get finished work. Works with ChatGPT, Claude, and Gemini.' },
+    { name: '5 Cloneable Landing Page Templates',      value: '$169', img: '/products/stack-03.webp', blurb: 'One master prompt builds any of the five. Hero, offer, FAQ, CTAs, already wired.' },
+    { name: 'The Brand Palette Pack',                  value: '$99',  img: '/products/stack-04.webp', blurb: '20 ready-to-use palettes with the psychology behind each.' },
+    { name: 'The Typography Pack',                     value: '$99',  img: '/products/stack-05.webp', blurb: '20 free-to-use premium type systems for solo brands.' },
+    { name: 'The Notion Operations OS',                value: '$49',  img: '/products/stack-06.webp', blurb: 'A 45-minute click-by-click build of the workspace you run the business from after launch.' },
     { name: 'The Funnel Pattern Library',              value: '$97',  img: '/products/stack-07.webp', blurb: 'Modal code, the 9-email sequence, 13 order bumps. The conversion machinery.' }
   ];
+  // Core vs bonus split + self-summing values (keeps the math honest: 129 + 682 = 811).
+  const coreItem  = launchpadStack[0];
+  const bonusItems = launchpadStack.slice(1);
+  const dollars = (v) => parseInt(String(v).replace(/[^0-9]/g, ''), 10) || 0;
+  const bonusValue = bonusItems.reduce((sum, i) => sum + dollars(i.value), 0);   // 682
+  const stackValue = launchpadStack.reduce((sum, i) => sum + dollars(i.value), 0); // 811
 
   // ── 5-DAY JOURNEY ────────────────────────────────────────────────
   const launchpadDays = [
@@ -591,7 +598,7 @@
       <div class="hero-item flex flex-col items-center gap-4 pt-3" style="opacity: 0">
         <a href={GUMROAD.launchpad} class="btn-primary inline-flex items-center justify-center gap-3 px-12 py-5 rounded-[2rem] font-mono text-sm md:text-base uppercase tracking-[0.18em]">
           <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
-          Get the Launchpad &nbsp;·&nbsp; $129 →
+          Get The Launchpad &nbsp;·&nbsp; $129 →
         </a>
         <p class="text-xs md:text-sm font-mono uppercase tracking-wider text-muted">
           One payment. No subscription. Yours forever.
@@ -601,7 +608,7 @@
       <!-- Trust strip: small mono row of credibility anchors -->
       <div class="hero-item pt-4" style="opacity: 0">
         <p class="font-mono text-[10px] md:text-[11px] uppercase tracking-[0.3em] text-muted-2 max-w-[860px] mx-auto leading-relaxed">
-          Instant download &nbsp;·&nbsp; $811 stack value &nbsp;·&nbsp; No code required &nbsp;·&nbsp; 30-day guarantee
+          Instant download &nbsp;·&nbsp; $811 value, six bonuses included &nbsp;·&nbsp; No code required &nbsp;·&nbsp; 30-day guarantee
         </p>
       </div>
     </div>
@@ -679,10 +686,10 @@
           <div class="h-px w-16 bg-gold-line"></div>
         </div>
         <h2 class="font-display text-4xl md:text-6xl lg:text-7xl leading-[0.95] text-text">
-          Seven systems. <span class="italic text-gold">One launch.</span>
+          The system, <span class="italic text-gold">plus six bonuses.</span>
         </h2>
         <p class="text-text text-lg md:text-xl mt-6 leading-relaxed">
-          Each one is a finished, copy-paste system you keep forever. Stacked together, they're the entire build path from a hunch to a checkout page live on the internet.
+          The 5-Day Launchpad is the core: the entire build path from a hunch to a checkout page live on the internet. Then six finished systems stack on top, included free. Each one is something you would otherwise buy on its own. Together they are the difference between launching someday and launching this week.
         </p>
       </header>
 
@@ -693,11 +700,34 @@
         </p>
       </div>
 
+      <!-- THE CORE SYSTEM: visually dominant, the one thing you came for -->
+      <div class="reveal rounded-[1.75rem] border-2 border-gold bg-gold-soft/20 p-6 md:p-8"
+        style="background-image: radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.12), transparent 70%);">
+        <div class="flex items-center justify-between gap-4 mb-4">
+          <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">The core system</span>
+          <span class="font-mono text-base text-gold/70 line-through whitespace-nowrap">Value {coreItem.value}</span>
+        </div>
+        <div class="flex items-start gap-4 md:gap-6">
+          <img src={coreItem.img} alt="{coreItem.name} cover art" class="w-20 h-20 md:w-28 md:h-28 rounded-[1rem] border border-gold-line/60 object-cover shrink-0" loading="lazy" decoding="async" />
+          <div class="flex flex-col gap-2 min-w-0">
+            <h3 class="font-display text-2xl md:text-4xl text-text leading-tight">{coreItem.name}</h3>
+            <p class="text-base md:text-lg text-text/85 leading-relaxed">{coreItem.blurb} This is the whole system. The six below are stacked on top of it.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- BONUS-STACK DIVIDER: makes the pile-on unmistakable to a skimmer -->
+      <div class="reveal flex items-center justify-center gap-4 my-8 md:my-10">
+        <div class="h-px flex-1 bg-gold-line/40"></div>
+        <span class="font-mono text-[10px] md:text-xs uppercase tracking-[0.3em] text-gold text-center whitespace-nowrap">Then six bonuses, free · {'$' + bonusValue} of value</span>
+        <div class="h-px flex-1 bg-gold-line/40"></div>
+      </div>
+
       <ul class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
-        {#each launchpadStack as item, idx}
+        {#each bonusItems as item}
           <li class="reveal rounded-[1.5rem] border border-line bg-surface/60 p-6 md:p-7 hover:border-gold-line transition flex flex-col gap-3">
-            <div class="flex items-baseline justify-between gap-4">
-              <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">N° 0{idx + 1}</span>
+            <div class="flex items-center justify-between gap-4">
+              <span class="font-mono text-[9px] uppercase tracking-[0.25em] text-gold border border-gold/40 bg-gold-soft/20 rounded-full px-2.5 py-1">Bonus</span>
               <span class="font-mono text-base text-gold/60 line-through whitespace-nowrap">Value {item.value}</span>
             </div>
             <div class="flex items-start gap-4">
@@ -711,17 +741,28 @@
         {/each}
       </ul>
 
-      <!-- Value math: stacked $811 → today $129 -->
+      <!-- Value math: core $129 + six bonuses $682 = $811 stacked → today $129 -->
       <div class="reveal mt-10 md:mt-12 rounded-[2rem] border-2 border-gold bg-gold-soft/20 p-8 md:p-10"
         style="background-image: radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.10), transparent 70%);">
-        <div class="flex items-baseline justify-between">
+        <div class="flex items-baseline justify-between text-text/80">
+          <span class="font-mono text-sm uppercase tracking-widest">The 5-day system</span>
+          <span class="font-mono text-base md:text-lg tracking-tight">{coreItem.value}</span>
+        </div>
+        <div class="flex items-baseline justify-between mt-2.5 text-text/80">
+          <span class="font-mono text-sm uppercase tracking-widest">Six bonuses, stacked on top</span>
+          <span class="font-mono text-base md:text-lg tracking-tight">{'+$' + bonusValue}</span>
+        </div>
+        <div class="flex items-baseline justify-between mt-3 pt-3 border-t border-gold-line/40">
           <span class="font-mono text-sm uppercase tracking-widest text-muted">Stacked value</span>
-          <span class="font-mono font-bold text-2xl md:text-3xl text-gold/60 line-through tracking-tight">$811</span>
+          <span class="font-mono font-bold text-2xl md:text-3xl text-gold/60 line-through tracking-tight">{'$' + stackValue}</span>
         </div>
         <div class="flex items-baseline justify-between mt-3 pt-3 border-t border-gold-line/40">
           <span class="font-mono text-sm uppercase tracking-widest text-text">Today, one payment</span>
           <span class="font-mono font-bold text-4xl md:text-5xl text-gold tracking-tight">$129</span>
         </div>
+        <p class="text-base text-text/85 leading-relaxed mt-5 text-center">
+          Get the core system for $129, and the six bonuses, {'$' + bonusValue} of value, come completely free on top.
+        </p>
         <a href={GUMROAD.launchpad} class="btn-primary flex items-center justify-center gap-2.5 mt-7 py-5 rounded-[2rem]">
           <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
           Get The Launchpad · $129 →
@@ -753,23 +794,23 @@
 
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 md:gap-6">
         <!-- Brand Palette Pack specimen -->
-        <div class="rounded-[1.5rem] border border-line bg-surface/60 p-6 md:p-8">
+        <div class="rounded-[1.5rem] border border-line bg-surface/60 p-5 sm:p-6 md:p-8 flex flex-col h-full">
           <div class="flex items-baseline justify-between gap-4 mb-5">
             <h3 class="font-display text-2xl text-text leading-tight">The Brand Palette Pack</h3>
             <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold whitespace-nowrap">5 of 20</span>
           </div>
-          <ul class="flex flex-col gap-3">
+          <ul class="flex flex-col justify-between flex-1 gap-4 lg:gap-0">
             {#each specimenPalettes as palette}
               <li>
                 <button type="button" on:click={(e) => openSpecimen('palette', palette, e)}
-                  class="specimen-row flex items-center gap-3 w-full text-left rounded-lg"
+                  class="specimen-row flex items-center gap-3 w-full text-left rounded-lg py-1 sm:py-1.5"
                   aria-label="Expand the {palette.name} palette to see its hex values">
-                  <div class="flex flex-1 h-9 rounded-lg overflow-hidden border border-line/60">
+                  <div class="flex flex-1 h-10 sm:h-12 rounded-lg overflow-hidden border border-line/60">
                     {#each palette.colors as c}
                       <span class="flex-1" style="background-color: {c};"></span>
                     {/each}
                   </div>
-                  <span class="font-mono text-[10px] uppercase tracking-[0.2em] text-muted w-28 text-right shrink-0">{palette.name}</span>
+                  <span class="font-mono text-[9px] sm:text-[10px] uppercase tracking-[0.15em] sm:tracking-[0.2em] text-muted w-24 sm:w-28 text-right shrink-0 whitespace-nowrap">{palette.name}</span>
                 </button>
               </li>
             {/each}
@@ -777,7 +818,7 @@
         </div>
 
         <!-- Typography Pack specimen -->
-        <div class="rounded-[1.5rem] border border-line bg-surface/60 p-6 md:p-8">
+        <div class="rounded-[1.5rem] border border-line bg-surface/60 p-5 sm:p-6 md:p-8 flex flex-col h-full">
           <div class="flex items-baseline justify-between gap-4 mb-5">
             <h3 class="font-display text-2xl text-text leading-tight">The Typography Pack</h3>
             <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold whitespace-nowrap">3 of 20 inside</span>
@@ -786,9 +827,9 @@
             {#each specimenType as t}
               <li>
                 <button type="button" on:click={(e) => openSpecimen('type', t, e)}
-                  class="specimen-row scheme-preview rounded-[1rem] border border-line/60 bg-base/30 px-5 py-5 w-full text-left"
+                  class="specimen-row scheme-preview rounded-[1rem] border border-line/60 bg-base/30 px-4 py-4 sm:px-5 sm:py-5 w-full text-left"
                   aria-label="Expand the {t.pair} type pairing to see it at display size">
-                  <div class="flex items-baseline justify-between gap-3 mb-1">
+                  <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 sm:gap-3 mb-2 sm:mb-1">
                     <span class="meta">Scheme {String(t.schemeNo).padStart(2,'0')} · {t.tag}</span>
                     <span class="font-mono text-[9px] uppercase tracking-[0.25em] text-muted-2 whitespace-nowrap">{t.display} × {t.body}</span>
                   </div>
@@ -832,11 +873,11 @@
             This is for you if<span class="text-gold">...</span>
           </h3>
           <ul class="flex flex-col gap-4 text-base md:text-lg text-text/90 leading-relaxed">
-            <li class="flex gap-3"><span class="text-gold mt-1">·</span><span>You have an idea you haven't shipped, or no idea yet and want Day 1 to pull one out of your own life.</span></li>
-            <li class="flex gap-3"><span class="text-gold mt-1">·</span><span>You can give five focused days to building a real, paid digital product.</span></li>
-            <li class="flex gap-3"><span class="text-gold mt-1">·</span><span>You want AI to compress thirty days of work into five.</span></li>
-            <li class="flex gap-3"><span class="text-gold mt-1">·</span><span>You're comfortable copying, pasting, and shaping what an AI hands you.</span></li>
-            <li class="flex gap-3"><span class="text-gold mt-1">·</span><span>You want a launch-ready product, not another course about launching.</span></li>
+            <li class="flex gap-3"><span class="text-gold mt-1">·</span><span>You have an idea in your head or notes app that you haven't shipped yet—or no idea at all, and you want our Day 1 matrix to extract a validated offer from your existing knowledge.</span></li>
+            <li class="flex gap-3"><span class="text-gold mt-1">·</span><span>You can dedicate five focused sessions (roughly 8 to 12 hours total) to actively build and package your digital product, rather than just reading about it.</span></li>
+            <li class="flex gap-3"><span class="text-gold mt-1">·</span><span>You want modern AI tools to compress weeks of copy, design, and funnel configuration into minutes of high-speed builder prompts.</span></li>
+            <li class="flex gap-3"><span class="text-gold mt-1">·</span><span>You are comfortable reading prompts, copying code templates, and editing what the AI generates to match your voice and brand.</span></li>
+            <li class="flex gap-3"><span class="text-gold mt-1">·</span><span>You want a real, payment-ready storefront and a live product on a custom URL by Day 5, not another certificate or passive course.</span></li>
           </ul>
         </div>
         <!-- NOT for you if... -->
@@ -1091,7 +1132,7 @@
     <div class="max-w-[860px] mx-auto reveal">
       <div class="rounded-[2.5rem] border border-gold-line bg-gold-soft/30 p-8 md:p-12 text-center"
         style="background-image: radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.10), transparent 70%);">
-        <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">The Set-It-Up Promise</span>
+        <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">The Ship-First Guarantee</span>
         <h2 class="font-display text-3xl md:text-5xl leading-tight text-text mt-4 mb-5">
           Build it. <span class="italic text-gold">Then decide.</span>
         </h2>
@@ -1648,7 +1689,7 @@
       <img src="/brand/brand-mark-owl.svg" alt="VanguardOS owl mark" class="w-12 h-12 mx-auto" />
       <h2 class="font-display text-4xl md:text-6xl lg:text-7xl leading-[0.95] text-text">Five days from now, <span class="italic text-gold">it's live.</span></h2>
       <p class="text-text text-lg md:text-xl max-w-[680px] mx-auto leading-relaxed">
-        Brand, assets, landing page, offer, funnel: the five things every solo launch needs, all built with you, all yours forever. <strong class="text-gold">$129, once.</strong>
+        Brand, assets, landing page, offer, funnel: the five things every solo launch needs, all built with you, all yours forever. The core system plus six bonuses, {'$' + stackValue} of value. <strong class="text-gold">$129, once.</strong>
       </p>
 
 
@@ -1696,7 +1737,7 @@
     </div>
     <a href={GUMROAD.launchpad} class="btn-primary sticky-cta-btn flex items-center justify-center gap-2" tabindex={showStickyCta ? 0 : -1}>
       <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
-      Start in 5 Days →
+      Get The Launchpad →
     </a>
   </div>
 </div>
@@ -1739,7 +1780,7 @@
 
       <a href={GUMROAD.launchpad} class="btn-primary flex items-center justify-center gap-2.5 mt-7 py-4 rounded-[2rem]">
         <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
-        Get all 40 systems · $129 →
+        Get The Launchpad · $129 →
       </a>
     </div>
   </div>
