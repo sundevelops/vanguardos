@@ -54,19 +54,19 @@
   // 1 core system ($129) + 6 bonuses ($682). Total stacked $811, sells for $129.
   // launchpadStack[0] is THE CORE; everything after is a stacked-on bonus.
   const launchpadStack = [
-    { name: 'The 5-Day Launchpad',                     value: '$129', img: '/products/stack-01.webp', blurb: 'The day-by-day build manual. Idea to launch-ready by Day 5.' },
-    { name: '150+ AI Prompt Library',                  value: '$169', img: '/products/stack-02.webp', blurb: 'Paste a prompt, answer up to three plain questions, get finished work. Works with ChatGPT, Claude, and Gemini.' },
-    { name: '5 Cloneable Landing Page Templates',      value: '$169', img: '/products/stack-03.webp', blurb: 'One master prompt builds any of the five. Hero, offer, FAQ, CTAs, already wired.' },
-    { name: 'The Brand Palette Pack',                  value: '$99',  img: '/products/stack-04.webp', blurb: '20 ready-to-use palettes with the psychology behind each.' },
-    { name: 'The Typography Pack',                     value: '$99',  img: '/products/stack-05.webp', blurb: '20 free-to-use premium type systems for solo brands.' },
-    { name: 'The Notion Operations OS',                value: '$49',  img: '/products/stack-06.webp', blurb: 'A 45-minute click-by-click build of the workspace you run the business from after launch.' },
-    { name: 'The Funnel Pattern Library',              value: '$97',  img: '/products/stack-07.webp', blurb: 'Modal code, the 9-email sequence, 13 order bumps. The conversion machinery.' }
+    { name: 'The 5-Day Launchpad',                     value: '$197', img: '/products/stack-01.webp', blurb: 'The day-by-day build manual. Idea to launch-ready by Day 5.' },
+    { name: 'The Vanguard Vault',                      value: '$147', img: '/products/stack-02.webp', blurb: '150 paste-and-go AI prompts. Paste one, answer up to three plain questions, get finished work. Works with ChatGPT, Claude, and Gemini.' },
+    { name: '5 Cloneable Landing Page Templates',      value: '$149', img: '/products/stack-03.webp', blurb: 'One master prompt builds any of the five. Hero, offer, FAQ, CTAs, already wired.' },
+    { name: 'The Brand Palette Pack',                  value: '$79',  img: '/products/stack-04.webp', blurb: '20 ready-to-use palettes with the psychology behind each.' },
+    { name: 'The Typography Pack',                     value: '$79',  img: '/products/stack-05.webp', blurb: '20 free-to-use premium type systems for solo brands.' },
+    { name: 'The Notion Operations OS',                value: '$61',  img: '/products/stack-06.webp', blurb: 'A 45-minute click-by-click build of the workspace you run the business from after launch.' },
+    { name: 'The Funnel Pattern Library',              value: '$99',  img: '/products/stack-07.webp', blurb: 'Modal code, the 9-email sequence, 13 order bumps. The conversion machinery.' }
   ];
-  // Core vs bonus split + self-summing values (keeps the math honest: 129 + 682 = 811).
+  // Core vs bonus split + self-summing values (keeps the math honest: 197 + 614 = 811).
   const coreItem  = launchpadStack[0];
   const bonusItems = launchpadStack.slice(1);
   const dollars = (v) => parseInt(String(v).replace(/[^0-9]/g, ''), 10) || 0;
-  const bonusValue = bonusItems.reduce((sum, i) => sum + dollars(i.value), 0);   // 682
+  const bonusValue = bonusItems.reduce((sum, i) => sum + dollars(i.value), 0);   // 614
   const stackValue = launchpadStack.reduce((sum, i) => sum + dollars(i.value), 0); // 811
 
   // ── 5-DAY JOURNEY ────────────────────────────────────────────────
@@ -170,7 +170,7 @@
     ['How much extra will I spend on tools?', 'You can build and host for $0. Two upgrades are worth it: a paid AI tier for stronger output, and a custom domain (about $10 a year) so your site has a real, credible address you own. Neither is strictly required to finish, but both are worth the small spend.'],
     ['Will this work for my niche?', "Yes. The system is niche-agnostic by design. The templates and patterns are the scaffolding; the Day 2 brand work and Day 4 landing copy are where your niche shapes the output."],
     ["What if I'm already mid-launch?", "Drop into whichever day matches where you are. Stuck on the offer? Day 1. Brand feels off? Day 2. No landing page? Day 4. The Launchpad is a system you re-enter whenever a leg is weak."],
-    ['Refund policy?', 'We call it the Ship-First Guarantee. Run the system and do the work. If you reach Day 5 and your brand, offer, and funnel are not launch-ready, email us within 30 days for a full refund. The only thing we will not refund is a download that was never opened.']
+    ['Refund policy?', 'A full 30 days, no questions asked. Buy it, go through it, and if the Launchpad is not for you for any reason, email us within 30 days for a full refund. No forms, no hoops, no explanation needed.']
   ];
 
   // Any non-Bundle CTA (Core or Upgrade) opens the Bundle upsell modal first.
@@ -473,10 +473,39 @@
     "@type": "Product",
     "name": "The Vanguard Launchpad",
     "description": "A 5-day system that takes solopreneurs from idea to launch-ready: brand, assets, landing page, high-impact offer, and complete funnel, all built with you. Systems that launchpad solopreneurs into the digital economy.",
+    "image": "https://vanguardos.com/og/og-card.jpg",
+    "url": "https://vanguardos.com/",
     "brand": { "@type": "Brand", "name": "VanguardOS" },
     "offers": [
-      { "@type": "Offer", "name": "The Vanguard Launchpad", "price": "129", "priceCurrency": "USD", "availability": "https://schema.org/InStock" }
+      {
+        "@type": "Offer",
+        "name": "The Vanguard Launchpad",
+        "price": "129",
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/InStock",
+        "url": "https://vanguardos.com/",
+        "priceValidUntil": "2026-12-31",
+        "hasMerchantReturnPolicy": {
+          "@type": "MerchantReturnPolicy",
+          "applicableCountry": "US",
+          "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+          "merchantReturnDays": 30,
+          "returnMethod": "https://schema.org/ReturnByMail",
+          "returnFees": "https://schema.org/FreeReturn"
+        }
+      }
     ]
+  })}
+  </script>
+  <script type="application/ld+json">
+  {JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "VanguardOS",
+    "url": "https://vanguardos.com/",
+    "logo": "https://vanguardos.com/brand/brand-mark-owl.svg",
+    "description": "VanguardOS builds systems that launch solopreneurs into the digital economy. The Vanguard Launchpad is the first.",
+    "email": "vanguardorchestration@gmail.com"
   })}
   </script>
   <script type="application/ld+json">
@@ -489,8 +518,8 @@
       { "@type": "Question", "name": "What AI tools do I need?", "acceptedAnswer": { "@type": "Answer", "text": "Just one capable model. The prompts work with ChatGPT, Claude, or Gemini, and Day 4 builds your landing page in Google Antigravity, which is free to start. Free tiers can complete the 5 days, but we strongly recommend a paid tier of one model (about $20 a month): you get longer sessions and access to the stronger models, and a stronger model means noticeably better output across all five days. There is no VanguardOS subscription on top." } },
       { "@type": "Question", "name": "How much extra will I spend on tools?", "acceptedAnswer": { "@type": "Answer", "text": "You can build and host for $0. Two upgrades are worth it: a paid AI tier for stronger output, and a custom domain (about $10 a year) so your site has a real, credible address you own. Neither is strictly required to finish, but both are worth the small spend." } },
       { "@type": "Question", "name": "Will this work for my niche?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. The system is niche-agnostic by design. The templates and patterns are the scaffolding; the Day 2 brand work and Day 4 landing copy are where your niche shapes the output." } },
-      { "@type": "Question", "name": "What if I'm already mid-launch?", "acceptedAnswer": { "@type": "Answer", "text": "Drop into whichever day matches where you are. Stuck on the offer? Day 1. Brand feels off? Day 2. No landing page? Day 4." } },
-      { "@type": "Question", "name": "Refund policy?", "acceptedAnswer": { "@type": "Answer", "text": "We call it the Ship-First Guarantee. Run the system and do the work. If you reach Day 5 and your brand, offer, and funnel are not launch-ready, email us within 30 days for a full refund. The only thing we will not refund is a download that was never opened." } }
+      { "@type": "Question", "name": "What if I'm already mid-launch?", "acceptedAnswer": { "@type": "Answer", "text": "Drop into whichever day matches where you are. Stuck on the offer? Day 1. Brand feels off? Day 2. No landing page? Day 4. The Launchpad is a system you re-enter whenever a leg is weak." } },
+      { "@type": "Question", "name": "Refund policy?", "acceptedAnswer": { "@type": "Answer", "text": "A full 30 days, no questions asked. Buy it, go through it, and if the Launchpad is not for you for any reason, email us within 30 days for a full refund. No forms, no hoops, no explanation needed." } }
     ]
   })}
   </script>
@@ -585,12 +614,17 @@
         A 5-day system. 7 designer-grade PDFs. The exact stack we use. For builders done planning.
       </p>
 
-      <!-- Value bridge: Day 1, Day 3, Day 5 -->
-      <div class="hero-item flex flex-col items-center gap-2 pt-1" style="opacity: 0">
-        <ul class="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-6 font-mono text-[11px] md:text-xs uppercase tracking-[0.28em] text-text/85">
-          <li><span class="text-gold">Day 1</span> &nbsp;·&nbsp; Ideate the offer</li>
-          <li><span class="text-gold">Day 3</span> &nbsp;·&nbsp; Build the page</li>
-          <li><span class="text-gold">Day 5</span> &nbsp;·&nbsp; Ship and price it</li>
+      <!-- Day-5 outcomes: tactile proof of the five deliverables you keep.
+           Renders day5Outcomes so the hero promise is concrete, not abstract.
+           The full day-by-day process lives in the dedicated 5-Day Journey section. -->
+      <div class="hero-item flex flex-col items-center gap-3 pt-1" style="opacity: 0">
+        <span class="font-mono text-[10px] md:text-[11px] uppercase tracking-[0.3em] text-muted-2">By Day 5, you'll have</span>
+        <ul class="flex flex-wrap items-center justify-center gap-2 md:gap-2.5 max-w-[780px] mx-auto">
+          {#each day5Outcomes as outcome}
+            <li class="inline-flex items-center gap-1.5 rounded-full border border-gold-line/60 bg-gold-soft/15 px-3 py-1.5 font-mono text-[10px] md:text-[11px] uppercase tracking-[0.16em] text-text/90">
+              <span class="text-gold leading-none" aria-hidden="true">✓</span>{outcome}
+            </li>
+          {/each}
         </ul>
       </div>
 
@@ -689,14 +723,14 @@
           The system, <span class="italic text-gold">plus six bonuses.</span>
         </h2>
         <p class="text-text text-lg md:text-xl mt-6 leading-relaxed">
-          The 5-Day Launchpad is the core: the entire build path from a hunch to a checkout page live on the internet. Then six finished systems stack on top, included free. Each one is something you would otherwise buy on its own. Together they are the difference between launching someday and launching this week.
+          The 5-Day Launchpad is the core: the whole path from a hunch in your notes app to a checkout page live on the internet, with the forty small decisions that stall most people already made for you. Then six finished systems stack on top, free. Each is something you would otherwise pay for, or lose a weekend building. Together they are the difference between launching someday and sending a friend the link this week.
         </p>
       </header>
 
       <!-- Conciseness callout -->
       <div class="reveal mb-10 md:mb-12 max-w-[820px] mx-auto rounded-[1.25rem] border-l-2 border-gold bg-surface/60 px-6 py-5 md:px-8 md:py-6">
         <p class="font-display italic text-lg md:text-xl text-text/90 leading-relaxed">
-          The main Launchpad is <span class="text-gold not-italic font-semibold">less than 30 pages</span>. Not 250. Action-first. Each Day fits on 3-4 pages. You're meant to finish a day in a single sitting, not study it for a week.
+          The entire Launchpad guide is <span class="text-gold not-italic font-semibold">exactly 32 pages</span>, split across the 5 days. Not 250. That is about six pages a day, action-first. You're meant to finish a day in a single sitting, not study it for a week.
         </p>
       </div>
 
@@ -761,7 +795,7 @@
           <span class="font-mono font-bold text-4xl md:text-5xl text-gold tracking-tight">$129</span>
         </div>
         <p class="text-base text-text/85 leading-relaxed mt-5 text-center">
-          Get the core system for $129, and the six bonuses, {'$' + bonusValue} of value, come completely free on top.
+          Counted on their own, the six bonuses come to {'$' + bonusValue}, more than five times the price, and they are free. You pay $129 for the system and keep all {'$' + stackValue}.
         </p>
         <a href={GUMROAD.launchpad} class="btn-primary flex items-center justify-center gap-2.5 mt-7 py-5 rounded-[2rem]">
           <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
@@ -873,11 +907,11 @@
             This is for you if<span class="text-gold">...</span>
           </h3>
           <ul class="flex flex-col gap-4 text-base md:text-lg text-text/90 leading-relaxed">
-            <li class="flex gap-3"><span class="text-gold mt-1">·</span><span>You have an idea in your head or notes app that you haven't shipped yet—or no idea at all, and you want our Day 1 matrix to extract a validated offer from your existing knowledge.</span></li>
-            <li class="flex gap-3"><span class="text-gold mt-1">·</span><span>You can dedicate five focused sessions (roughly 8 to 12 hours total) to actively build and package your digital product, rather than just reading about it.</span></li>
-            <li class="flex gap-3"><span class="text-gold mt-1">·</span><span>You want modern AI tools to compress weeks of copy, design, and funnel configuration into minutes of high-speed builder prompts.</span></li>
-            <li class="flex gap-3"><span class="text-gold mt-1">·</span><span>You are comfortable reading prompts, copying code templates, and editing what the AI generates to match your voice and brand.</span></li>
-            <li class="flex gap-3"><span class="text-gold mt-1">·</span><span>You want a real, payment-ready storefront and a live product on a custom URL by Day 5, not another certificate or passive course.</span></li>
+            <li class="flex gap-3"><span class="text-gold mt-1">·</span><span>You have a folder of unfinished ideas in your notes app, and you are ready to stop planning and get your first offer out of your head and onto a real page on the internet.</span></li>
+            <li class="flex gap-3"><span class="text-gold mt-1">·</span><span>You keep buying courses and watching tutorials but never ship, and you want a strict, step-by-step path that makes you build instead of just consume.</span></li>
+            <li class="flex gap-3"><span class="text-gold mt-1">·</span><span>You are overwhelmed by the volume of decisions a launch demands: naming, colors, type, copy, layout. You want a system that makes those calls for you.</span></li>
+            <li class="flex gap-3"><span class="text-gold mt-1">·</span><span>You refuse to launch a cheap, amateur-looking storefront, but you don't have $5,000 to waste on a brand designer or copywriter just to validate a brand-new idea.</span></li>
+            <li class="flex gap-3"><span class="text-gold mt-1">·</span><span>You want a real, payment-ready storefront, a structured funnel, and automated emails running on a live custom URL by Day 5, so you have something tangible to sell next week.</span></li>
           </ul>
         </div>
         <!-- NOT for you if... -->
@@ -889,11 +923,11 @@
             This is <span class="italic text-muted">not</span> for you if<span class="text-muted">...</span>
           </h3>
           <ul class="flex flex-col gap-4 text-base md:text-lg text-text/80 leading-relaxed">
-            <li class="flex gap-3"><span class="text-muted mt-1">·</span><span>You want it built for you. The AI does the heavy lifting, but the building is yours. That is why this is $129 and not a $12,000 agency invoice.</span></li>
-            <li class="flex gap-3"><span class="text-muted mt-1">·</span><span>You would rather keep planning than ship. This exists to end the planning and put a real page on the internet with your name on it.</span></li>
-            <li class="flex gap-3"><span class="text-muted mt-1">·</span><span>You want a guarantee of sales. You get launch-ready in five days; whether it sells is earned by your follow-through, and we would rather tell you that now.</span></li>
-            <li class="flex gap-3"><span class="text-muted mt-1">·</span><span>You cannot give it five focused evenings. Eight to twelve hours total, hands on the keys. Fast is not the same as effortless.</span></li>
-            <li class="flex gap-3"><span class="text-muted mt-1">·</span><span>You're hunting a passive-income hack. This builds a product you own, not a get-rich-quick funnel.</span></li>
+            <li class="flex gap-3"><span class="text-muted mt-1">·</span><span>You are looking for an agency to build it for you. We give you the complete machinery, but you have to turn the key. If you want white-glove service, you should pay a $12,000 agency invoice instead.</span></li>
+            <li class="flex gap-3"><span class="text-muted mt-1">·</span><span>You enjoy planning and buying domains more than shipping. This system exists to end the stalling and put your name on a live checkout, which can feel scary.</span></li>
+            <li class="flex gap-3"><span class="text-muted mt-1">·</span><span>You expect sales to happen automatically without promotion. The Launchpad builds the storefront and checkout funnel; driving traffic is your job, and we would rather be honest about that upfront.</span></li>
+            <li class="flex gap-3"><span class="text-muted mt-1">·</span><span>You want an effortless one-click button. The system is fast, but it still takes 8 to 12 hours of focused, hands-on work. Fast is not the same as effortless.</span></li>
+            <li class="flex gap-3"><span class="text-muted mt-1">·</span><span>You are hunting a get-rich-quick, passive-income loophole. This builds a real product you own, not a temporary hype funnel.</span></li>
           </ul>
         </div>
       </div>
@@ -1132,12 +1166,12 @@
     <div class="max-w-[860px] mx-auto reveal">
       <div class="rounded-[2.5rem] border border-gold-line bg-gold-soft/30 p-8 md:p-12 text-center"
         style="background-image: radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.10), transparent 70%);">
-        <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">The Ship-First Guarantee</span>
+        <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">30-Day Money-Back Guarantee</span>
         <h2 class="font-display text-3xl md:text-5xl leading-tight text-text mt-4 mb-5">
           Build it. <span class="italic text-gold">Then decide.</span>
         </h2>
         <p class="text-text text-lg md:text-xl leading-relaxed max-w-[640px] mx-auto">
-          <strong class="text-gold">30-day Ship-First guarantee.</strong> Run the 5 days. If your brand, offer, and funnel aren't launch-ready by Day 5, email us for a full refund. No forms, no hoops, no "sorry to see you go" sequence.
+          <strong class="text-gold">30-day money-back guarantee, no questions asked.</strong> Buy it, run the 5 days, and if the Launchpad is not for you, email us for a full refund. No forms, no hoops, no "sorry to see you go" sequence.
         </p>
         <p class="text-text text-base md:text-[17px] leading-relaxed max-w-[620px] mx-auto mt-4">
           And if you get stuck on a step, tell us where. We'd rather you finish your launch than have your money back.
