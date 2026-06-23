@@ -160,7 +160,18 @@
   ];
   // Index of the currently selected avatar; -1 = none selected (neutral prompt shown).
   let selectedAvatar = -1;
-  function selectAvatar(i) { selectedAvatar = selectedAvatar === i ? -1 : i; }
+  async function selectAvatar(i) {
+    selectedAvatar = selectedAvatar === i ? -1 : i;
+    if (selectedAvatar !== -1) {
+      await tick();
+      const el = document.getElementById('promise-container');
+      if (el) {
+        const yOffset = -100; // offset for sticky header
+        const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+        window.scrollTo({ top: y, behavior: 'smooth' });
+      }
+    }
+  }
 
   // ── LAUNCHPAD FAQ ────────────────────────────────────────────────
   const launchpadFaq = [
@@ -385,7 +396,12 @@
         fiveDayProgress = Math.max(0, Math.min(advanced / span, 1));
       }
     };
-    const onResize = () => { if (window.innerWidth >= 1024) menuOpen = false; };
+    const onResize = () => {
+      if (window.innerWidth >= 1024) {
+        menuOpen = false;
+        document.querySelectorAll('.day-card').forEach(el => el.classList.remove('is-active-card'));
+      }
+    };
     const onKey = (e) => {
       if (e.key !== 'Escape') return;
       if (specimenModalOpen) closeSpecimen();
@@ -457,11 +473,29 @@
     }, { threshold: 0.45 });
     document.querySelectorAll('[data-cc-demo]').forEach(el => ccDemoIo.observe(el));
 
+    // Highlight day cards as they scroll into the viewport center on mobile/tablet
+    const cardObserver = new IntersectionObserver(entries => {
+      const isMobile = window.innerWidth < 1024;
+      entries.forEach(e => {
+        if (isMobile && e.isIntersecting) {
+          document.querySelectorAll('.day-card').forEach(el => el.classList.remove('is-active-card'));
+          e.target.classList.add('is-active-card');
+        } else {
+          e.target.classList.remove('is-active-card');
+        }
+      });
+    }, {
+      rootMargin: '-40% 0px -40% 0px',
+      threshold: 0
+    });
+    document.querySelectorAll('.day-card').forEach(el => cardObserver.observe(el));
+
     return () => {
       window.removeEventListener('scroll', onScroll);
       window.removeEventListener('resize', onResize);
       window.removeEventListener('keydown', onKey);
       io.disconnect(); chatIo.disconnect(); sectionIo.disconnect(); ccDemoIo.disconnect();
+      cardObserver.disconnect();
     };
   });
 </script>
@@ -971,6 +1005,7 @@
       <ol class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 md:gap-5">
         {#each launchpadDays as day, idx}
           <li class="day-card reveal rounded-[1.5rem] border border-line bg-surface/60 p-5 md:p-6 flex flex-col gap-4 transition"
+            data-day-index={idx}
             style="transition-delay: {idx * 90}ms">
             <div class="relative aspect-square rounded-[1rem] overflow-hidden bg-base/40 border border-line/60">
               <!-- Branded artifact preview — pure-CSS mini-mockup of the day's deliverable.
@@ -1090,7 +1125,7 @@
       </ul>
 
       <!-- Tuned promise panel — swaps copy to the selected path; pure client state -->
-      <div class="mt-6 md:mt-8" aria-live="polite">
+      <div id="promise-container" class="mt-6 md:mt-8" aria-live="polite">
         {#if selectedAvatar === -1}
           <p class="text-center font-mono text-xs uppercase tracking-[0.25em] text-muted-2">
             Tap the one that's you ↑ and see exactly what the Launchpad does for your path.
@@ -2417,12 +2452,28 @@
 
   /* === DAY CARD === */
   .day-card {
-    transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
   }
   .day-card:hover {
     transform: translateY(-4px);
     border-color: rgba(212,175,55,0.55);
     box-shadow: 0 0 0 1px rgba(212,175,55,0.22), 0 18px 40px -18px rgba(212,175,55,0.40);
+  }
+  /* On mobile/touch devices, highlight the active card on scroll */
+  @media (max-width: 1023px) {
+    :global(.day-card.is-active-card) {
+      border-color: rgba(212,175,55,0.7);
+      box-shadow: 0 0 0 1px rgba(212,175,55,0.3), 0 12px 30px -12px rgba(212,175,55,0.5);
+      background-color: rgba(30, 27, 20, 0.8);
+      transform: translateY(-2px);
+    }
+    :global(.day-card.is-active-card) .day-img {
+      transform: scale(1.04);
+    }
+    :global(.day-card.is-active-card) .day-kicker {
+      color: #E7C66A;
+      text-shadow: 0 0 12px rgba(212,175,55,0.5);
+    }
   }
   .day-img {
     transition: transform 0.5s cubic-bezier(0.25,0.46,0.45,0.94);
@@ -2481,9 +2532,9 @@
 
   @media (prefers-reduced-motion: reduce) {
     .avatar-card, .day-card, .specimen-row, .day-img, .five-day-dot, .five-day-rail-fill { transition: none; }
-    .avatar-card:hover, .day-card:hover, .specimen-row:hover { transform: none; }
-    .day-card:hover .day-img { transform: none; }
-    .day-card:hover .day-kicker { text-shadow: none; }
+    .avatar-card:hover, .day-card:hover, .specimen-row:hover, :global(.day-card.is-active-card) { transform: none; }
+    .day-card:hover .day-img, :global(.day-card.is-active-card) .day-img { transform: none; }
+    .day-card:hover .day-kicker, :global(.day-card.is-active-card) .day-kicker { text-shadow: none; }
     .promise-panel { animation: none; }
     .specimen-card { animation: none; }
     .sticky-cta { transition: none; }
