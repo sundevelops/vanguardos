@@ -507,8 +507,8 @@
     "@type": "Product",
     "name": "The Vanguard Launchpad",
     "description": "A 5-day system that takes solopreneurs from idea to launch-ready: brand, assets, landing page, high-impact offer, and complete funnel, all built with you. Systems that launchpad solopreneurs into the digital economy.",
-    "image": "https://vanguardos.com/og/og-card.jpg",
-    "url": "https://vanguardos.com/",
+    "image": "https://vanguardos.co/og/og-card.jpg",
+    "url": "https://vanguardos.co/",
     "brand": { "@type": "Brand", "name": "VanguardOS" },
     "offers": [
       {
@@ -517,7 +517,7 @@
         "price": "129",
         "priceCurrency": "USD",
         "availability": "https://schema.org/InStock",
-        "url": "https://vanguardos.com/",
+        "url": "https://vanguardos.co/",
         "priceValidUntil": "2026-12-31",
         "hasMerchantReturnPolicy": {
           "@type": "MerchantReturnPolicy",
@@ -536,10 +536,10 @@
     "@context": "https://schema.org",
     "@type": "Organization",
     "name": "VanguardOS",
-    "url": "https://vanguardos.com/",
-    "logo": "https://vanguardos.com/brand/brand-mark-owl.svg",
+    "url": "https://vanguardos.co/",
+    "logo": "https://vanguardos.co/brand/brand-mark-owl.svg",
     "description": "VanguardOS builds systems that launch solopreneurs into the digital economy. The Vanguard Launchpad is the first.",
-    "email": "vanguardorchestration@gmail.com"
+    "email": "support@vanguardos.co"
   })}
   </script>
   <script type="application/ld+json">
@@ -1735,6 +1735,92 @@
        END LEGACY BLOCK
        ═══════════════════════════════════════════════════════════════ -->
 
+  <!-- ═══ MULTILINGUAL — IN YOUR LANGUAGE ═══ -->
+  <section id="languages" class="relative py-20 md:py-24 px-6 border-t border-line/60 overflow-hidden">
+    <div class="max-w-[1040px] mx-auto">
+      <header class="text-center reveal">
+        <div class="flex items-center justify-center gap-3 mb-8">
+          <div class="h-px w-16 bg-gold-line"></div>
+          <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">Six languages · One price</span>
+          <div class="h-px w-16 bg-gold-line"></div>
+        </div>
+        <h2 class="font-display text-4xl md:text-6xl leading-[0.98] text-text">
+          English isn't your first language? <span class="italic text-gold">You're covered.</span>
+        </h2>
+        <p class="text-text text-lg md:text-xl mt-6 max-w-[760px] mx-auto leading-relaxed">
+          The entire Launchpad is fully translated, not machine-skimmed. Every page of the 5-day guide, all six bonuses, the Notion Operations OS, and the Website System build file ship in your language. Same download, same $129, no add-on. Choose your language and build in it.
+        </p>
+      </header>
+
+      <div class="mt-12 grid grid-cols-2 sm:grid-cols-3 gap-4">
+        <!-- English -->
+        <div class="reveal flex items-center gap-3.5 bg-surface/60 border border-line rounded-2xl px-5 py-4 transition hover:border-gold-line hover:bg-gold-soft/10">
+          <span class="inline-block w-8 h-[21px] rounded-[3px] overflow-hidden ring-1 ring-black/25 shadow-sm flex-shrink-0">
+            <svg viewBox="0 0 60 40" class="block w-full h-full"><rect width="60" height="40" fill="#fff"/><g fill="#B22234"><rect width="60" height="3.1"/><rect y="6.2" width="60" height="3.1"/><rect y="12.3" width="60" height="3.1"/><rect y="18.5" width="60" height="3.1"/><rect y="24.6" width="60" height="3.1"/><rect y="30.8" width="60" height="3.1"/><rect y="36.9" width="60" height="3.1"/></g><rect width="26" height="21.5" fill="#3C3B6E"/><g fill="#fff"><circle cx="5" cy="4" r="1"/><circle cx="11" cy="4" r="1"/><circle cx="17" cy="4" r="1"/><circle cx="23" cy="4" r="1"/><circle cx="8" cy="8" r="1"/><circle cx="14" cy="8" r="1"/><circle cx="20" cy="8" r="1"/><circle cx="5" cy="12" r="1"/><circle cx="11" cy="12" r="1"/><circle cx="17" cy="12" r="1"/><circle cx="23" cy="12" r="1"/><circle cx="8" cy="16" r="1"/><circle cx="14" cy="16" r="1"/><circle cx="20" cy="16" r="1"/></g></svg>
+          </span>
+          <span class="flex flex-col leading-tight">
+            <span class="font-display text-lg md:text-xl text-text">English</span>
+            <span class="font-mono text-[10px] uppercase tracking-[0.2em] text-muted">Complete edition</span>
+          </span>
+        </div>
+        <!-- Español -->
+        <div class="reveal flex items-center gap-3.5 bg-surface/60 border border-line rounded-2xl px-5 py-4 transition hover:border-gold-line hover:bg-gold-soft/10">
+          <span class="inline-block w-8 h-[21px] rounded-[3px] overflow-hidden ring-1 ring-black/25 shadow-sm flex-shrink-0">
+            <svg viewBox="0 0 60 40" class="block w-full h-full"><rect width="60" height="40" fill="#AA151B"/><rect y="10" width="60" height="20" fill="#F1BF00"/></svg>
+          </span>
+          <span class="flex flex-col leading-tight">
+            <span class="font-display text-lg md:text-xl text-text">Español</span>
+            <span class="font-mono text-[10px] uppercase tracking-[0.2em] text-muted">Edición completa</span>
+          </span>
+        </div>
+        <!-- Português -->
+        <div class="reveal flex items-center gap-3.5 bg-surface/60 border border-line rounded-2xl px-5 py-4 transition hover:border-gold-line hover:bg-gold-soft/10">
+          <span class="inline-block w-8 h-[21px] rounded-[3px] overflow-hidden ring-1 ring-black/25 shadow-sm flex-shrink-0">
+            <svg viewBox="0 0 60 40" class="block w-full h-full"><rect width="60" height="40" fill="#009C3B"/><polygon points="30,5 55,20 30,35 5,20" fill="#FFDF00"/><circle cx="30" cy="20" r="8" fill="#002776"/></svg>
+          </span>
+          <span class="flex flex-col leading-tight">
+            <span class="font-display text-lg md:text-xl text-text">Português</span>
+            <span class="font-mono text-[10px] uppercase tracking-[0.2em] text-muted">Edição completa</span>
+          </span>
+        </div>
+        <!-- Français -->
+        <div class="reveal flex items-center gap-3.5 bg-surface/60 border border-line rounded-2xl px-5 py-4 transition hover:border-gold-line hover:bg-gold-soft/10">
+          <span class="inline-block w-8 h-[21px] rounded-[3px] overflow-hidden ring-1 ring-black/25 shadow-sm flex-shrink-0">
+            <svg viewBox="0 0 60 40" class="block w-full h-full"><rect width="20" height="40" fill="#0055A4"/><rect x="20" width="20" height="40" fill="#fff"/><rect x="40" width="20" height="40" fill="#EF4135"/></svg>
+          </span>
+          <span class="flex flex-col leading-tight">
+            <span class="font-display text-lg md:text-xl text-text">Français</span>
+            <span class="font-mono text-[10px] uppercase tracking-[0.2em] text-muted">Édition complète</span>
+          </span>
+        </div>
+        <!-- Deutsch -->
+        <div class="reveal flex items-center gap-3.5 bg-surface/60 border border-line rounded-2xl px-5 py-4 transition hover:border-gold-line hover:bg-gold-soft/10">
+          <span class="inline-block w-8 h-[21px] rounded-[3px] overflow-hidden ring-1 ring-black/25 shadow-sm flex-shrink-0">
+            <svg viewBox="0 0 60 40" class="block w-full h-full"><rect width="60" height="13.33" fill="#000"/><rect y="13.33" width="60" height="13.33" fill="#DD0000"/><rect y="26.66" width="60" height="13.34" fill="#FFCE00"/></svg>
+          </span>
+          <span class="flex flex-col leading-tight">
+            <span class="font-display text-lg md:text-xl text-text">Deutsch</span>
+            <span class="font-mono text-[10px] uppercase tracking-[0.2em] text-muted">Komplette Edition</span>
+          </span>
+        </div>
+        <!-- 中文 -->
+        <div class="reveal flex items-center gap-3.5 bg-surface/60 border border-line rounded-2xl px-5 py-4 transition hover:border-gold-line hover:bg-gold-soft/10">
+          <span class="inline-block w-8 h-[21px] rounded-[3px] overflow-hidden ring-1 ring-black/25 shadow-sm flex-shrink-0">
+            <svg viewBox="0 0 60 40" class="block w-full h-full"><rect width="60" height="40" fill="#DE2910"/><g fill="#FFDE00"><polygon points="12,4.5 13.9,10.4 20.1,10.4 15.1,14.0 17.0,19.9 12,16.3 7.0,19.9 8.9,14.0 3.9,10.4 10.1,10.4"/><circle cx="22" cy="5" r="1.2"/><circle cx="26" cy="8.5" r="1.2"/><circle cx="26" cy="13.5" r="1.2"/><circle cx="22" cy="17" r="1.2"/></g></svg>
+          </span>
+          <span class="flex flex-col leading-tight">
+            <span class="font-display text-lg md:text-xl text-text">中文</span>
+            <span class="font-mono text-[10px] uppercase tracking-[0.2em] text-muted">完整版</span>
+          </span>
+        </div>
+      </div>
+
+      <p class="text-center text-sm font-mono uppercase tracking-widest text-muted mt-10 reveal">
+        Fully translated · Same price · One download
+      </p>
+    </div>
+  </section>
+
   <!-- FAQ — Launchpad -->
   <section id="faq" class="py-20 md:py-28 px-6 max-w-[820px] mx-auto border-t border-line/60">
     <h2 class="font-display text-3xl md:text-5xl text-text text-center mb-12 reveal">Straight answers.</h2>
@@ -1791,7 +1877,7 @@
         <a href="#brand-work" class="hover:text-text transition">Brand Work</a>
         <a href="#five-day" class="hover:text-text transition">5-Day Journey</a>
         <a href="#faq" class="hover:text-text transition">FAQ</a>
-        <a href="mailto:vanguardorchestration@gmail.com" class="hover:text-text transition">Contact</a>
+        <a href="mailto:support@vanguardos.co" class="hover:text-text transition">Contact</a>
       </div>
     </div>
   </div>

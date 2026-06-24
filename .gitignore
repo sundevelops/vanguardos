@@ -13,3 +13,6 @@ dist
 vite.config.js.timestamp-*
 *.mjs
 *.js.map
+
+# wrangler
+.wrangler/
