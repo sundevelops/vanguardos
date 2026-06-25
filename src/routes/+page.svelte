@@ -31,6 +31,33 @@
     if (specimenLastFocus?.focus) specimenLastFocus.focus();
     specimenLastFocus = null;
   }
+
+  // ── CONTACT MODAL ────────────────────────────────────────────────
+  // Any "Contact" button opens a friendly popup with the support email
+  // instead of firing a raw mailto. The mailto href stays as a no-JS fallback.
+  let contactOpen = false;
+  let contactLastFocus = null;
+  let contactCopied = false;
+  function openContact(e) {
+    if (e) e.preventDefault();
+    contactLastFocus = typeof document !== 'undefined' ? document.activeElement : null;
+    menuOpen = false;
+    contactOpen = true;
+  }
+  function closeContact() {
+    contactOpen = false;
+    contactCopied = false;
+    if (contactLastFocus?.focus) contactLastFocus.focus();
+    contactLastFocus = null;
+  }
+  async function copyContactEmail() {
+    try {
+      await navigator.clipboard.writeText('support@vanguardos.co');
+      contactCopied = true;
+      setTimeout(() => { contactCopied = false; }, 2000);
+    } catch (_) {}
+  }
+
   // 'core' or 'upgrade' — drives dynamic modal copy + the original-CTA fallback URL
   let upsellSource = 'core';
   // Big premium opt-in checkbox; defaults to checked because the upsell math is
@@ -43,11 +70,11 @@
   // are retained because the old AI Assistant offer code is commented out, not deleted,
   // so re-enabling those sections later still finds the URLs in one place.
   const GUMROAD = {
-    launchpad: 'https://vanguardos.gumroad.com/l/launchpad',
+    launchpad: 'https://store.vanguardos.co/',
     // bundle/core/upgrade point at the Launchpad until those SKUs go live; sweep in real URLs later.
-    bundle:    'https://vanguardos.gumroad.com/l/launchpad',
-    core:      'https://vanguardos.gumroad.com/l/launchpad',
-    upgrade:   'https://vanguardos.gumroad.com/l/launchpad'
+    bundle:    'https://store.vanguardos.co/',
+    core:      'https://store.vanguardos.co/',
+    upgrade:   'https://store.vanguardos.co/'
   };
 
   // ── LAUNCHPAD OFFER STACK (high-impact) ───────────────────────────
@@ -404,7 +431,8 @@
     };
     const onKey = (e) => {
       if (e.key !== 'Escape') return;
-      if (specimenModalOpen) closeSpecimen();
+      if (contactOpen) closeContact();
+      else if (specimenModalOpen) closeSpecimen();
       else if (modalOpen) upsellClose();
     };
     window.addEventListener('scroll', onScroll, { passive: true });
@@ -577,6 +605,7 @@
       <a href="#offer-stack" class="text-xs font-mono uppercase tracking-wider text-muted hover:text-text transition">What's Inside</a>
       <a href="#five-day" class="text-xs font-mono uppercase tracking-wider text-muted hover:text-text transition">5-Day Journey</a>
       <a href="#faq" class="text-xs font-mono uppercase tracking-wider text-muted hover:text-text transition">FAQ</a>
+      <a href="mailto:support@vanguardos.co" on:click|preventDefault={openContact} class="text-xs font-mono uppercase tracking-wider text-muted hover:text-text transition">Contact</a>
       <a href={GUMROAD.launchpad} class="flex items-center gap-2 px-5 py-2 border border-gold-line hover:border-gold hover:bg-gold-soft text-gold text-xs font-semibold font-mono uppercase tracking-wider rounded-full transition hover:scale-[1.03]">
         <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
         Get The Launchpad →
@@ -595,6 +624,7 @@
     <a href="#offer-stack" on:click={() => menuOpen = false} class="block text-sm font-mono uppercase tracking-wider text-muted hover:text-text">What's Inside</a>
     <a href="#five-day" on:click={() => menuOpen = false} class="block text-sm font-mono uppercase tracking-wider text-muted hover:text-text">5-Day Journey</a>
     <a href="#faq" on:click={() => menuOpen = false} class="block text-sm font-mono uppercase tracking-wider text-muted hover:text-text">FAQ</a>
+    <a href="mailto:support@vanguardos.co" on:click|preventDefault={openContact} class="block text-sm font-mono uppercase tracking-wider text-muted hover:text-text">Contact</a>
     <a href={GUMROAD.launchpad} on:click={() => menuOpen = false} class="flex items-center justify-center gap-2 py-3 bg-gold text-base-2 font-bold font-mono uppercase text-xs tracking-wide rounded-full">
       <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
       Get The Launchpad →
@@ -1877,7 +1907,7 @@
         <a href="#brand-work" class="hover:text-text transition">Brand Work</a>
         <a href="#five-day" class="hover:text-text transition">5-Day Journey</a>
         <a href="#faq" class="hover:text-text transition">FAQ</a>
-        <a href="mailto:support@vanguardos.co" class="hover:text-text transition">Contact</a>
+        <a href="mailto:support@vanguardos.co" on:click|preventDefault={openContact} class="hover:text-text transition">Contact</a>
       </div>
     </div>
   </div>
@@ -1984,6 +2014,30 @@
         </button>
         <button on:click={upsellDecline} class="upsell-secondary">
           No thanks, just the {upsellSource === 'core' ? 'Playbook' : 'Upgrade'}
+        </button>
+      </div>
+    </div>
+  </div>
+{/if}
+
+{#if contactOpen}
+  <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+  <div class="upsell-overlay" on:click={closeContact}>
+    <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
+    <div class="upsell-card" on:click|stopPropagation role="dialog" aria-modal="true" aria-labelledby="contact-title" tabindex="-1">
+      <button class="upsell-x" on:click={closeContact} aria-label="Close">✕</button>
+      <img src="/brand/brand-mark-owl.svg" alt="" class="w-10 h-10 mx-auto mb-4" />
+      <h3 id="contact-title" class="upsell-headline">Happy to <em>help</em>.</h3>
+      <p class="upsell-sub">
+        A real person reads every message. Whether it's a question about the Launchpad, choosing your language edition, your download, or a refund, reach out and we'll get you sorted, usually within a day. We're glad to help with <strong class="upsell-gold">anything</strong>.
+      </p>
+      <div class="upsell-actions">
+        <a href="mailto:support@vanguardos.co" class="btn-primary upsell-primary flex items-center justify-center gap-2">
+          <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+          support@vanguardos.co
+        </a>
+        <button on:click={copyContactEmail} class="upsell-secondary">
+          {contactCopied ? '✓ Copied to clipboard' : 'Copy email address'}
         </button>
       </div>
     </div>
