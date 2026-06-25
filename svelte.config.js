@@ -10,7 +10,7 @@ export default {
       // Single-route site: render '/' only, don't crawl hrefs.
       // (Crawling chokes on the bracketed Gumroad placeholder URLs.)
       crawl: false,
-      entries: ['/'],
-    },
-  },
+      entries: ['/']
+    }
+  }
 };
