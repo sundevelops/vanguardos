@@ -1,0 +1,35 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="44%" r="80%">
+      <stop offset="0%" stop-color="#16171a"/>
+      <stop offset="55%" stop-color="#111212"/>
+      <stop offset="100%" stop-color="#08090a"/>
+    </radialGradient>
+    <radialGradient id="halo" cx="50%" cy="46%" r="48%">
+      <stop offset="0%" stop-color="#E7C66A" stop-opacity="0.30"/>
+      <stop offset="55%" stop-color="#D4AF37" stop-opacity="0.10"/>
+      <stop offset="100%" stop-color="#D4AF37" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="16"/>
+    </filter>
+  </defs>
+  <rect width="1024" height="1024" fill="url(#bg)"/>
+  <rect width="1024" height="1024" fill="url(#halo)"/>
+  <!-- soft gold glow copy of the real owl -->
+  <g transform="translate(-248,-324) scale(38)" fill="none" stroke-linejoin="round" filter="url(#glow)" opacity="0.55">
+    <path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="#E7C66A" stroke-width="1.4"/>
+    <circle cx="15.5" cy="19" r="2" stroke="#E7C66A" stroke-width="1.2"/>
+    <circle cx="24.5" cy="19" r="2" stroke="#E7C66A" stroke-width="1.2"/>
+    <path d="M20 22 L18 25 L22 25 Z" fill="#E7C66A" stroke="#E7C66A" stroke-width="1.2"/>
+  </g>
+  <!-- the real owl mark, crisp -->
+  <g transform="translate(-248,-324) scale(38)" fill="none" stroke-linejoin="round">
+    <path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="#D4AF37" stroke-width="1.4"/>
+    <circle cx="15.5" cy="19" r="2" stroke="#D4AF37" stroke-width="1.2"/>
+    <circle cx="24.5" cy="19" r="2" stroke="#D4AF37" stroke-width="1.2"/>
+    <circle cx="15.5" cy="19" r=".7" fill="#D4AF37"/>
+    <circle cx="24.5" cy="19" r=".7" fill="#D4AF37"/>
+    <path d="M20 22 L18 25 L22 25 Z" fill="#D4AF37" stroke="#D4AF37" stroke-width="1.2"/>
+  </g>
+</svg>

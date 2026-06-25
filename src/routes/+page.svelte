@@ -113,7 +113,7 @@
     'Landing page live',
     'High-impact offer',
     'Payment-ready funnel',
-    'Email sequence scheduled'
+    'Email sequence'
   ];
 
   // ── ASSET-PACK SPECIMENS ─────────────────────────────────────────
