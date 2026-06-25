@@ -16,3 +16,6 @@ vite.config.js.timestamp-*
 
 # wrangler
 .wrangler/
+
+.dev.vars*
+!.dev.vars.example
