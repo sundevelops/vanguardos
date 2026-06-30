@@ -204,6 +204,7 @@
   const launchpadFaq = [
     ['Do I need to be technical?', 'No. Every template, prompt, and pattern is copy-paste. The prompts ask you a few plain questions and do the rest. If you can follow a recipe, you can follow this.'],
     ["What if I don't have an idea yet?", 'Day 1 is the ideation system itself: a sequenced way to surface, validate, and price an idea you actually want to ship. You can start with nothing more than a hunch, or a blank page, and finish Day 1 with a locked offer.'],
+    ['How much time does each day take?', 'One focused sitting, not a day off work. The whole guide is 32 pages, about six a day, action-first, so most people finish a day in one to two hours after work. Plan on roughly 8 to 12 hours of hands-on building across the five days, and the AI does the heavy lifting inside each one.'],
     ['What AI tools do I need?', 'Just one capable model. The prompts work with ChatGPT, Claude, or Gemini, and Day 4 builds your landing page in Google Antigravity, which is free to start. Free tiers can complete the 5 days, but we strongly recommend a paid tier of one model (about $20 a month): you get longer sessions and access to the stronger models, and a stronger model means noticeably better output across all five days. There is no VanguardOS subscription on top.'],
     ['How much extra will I spend on tools?', 'You can build and host for $0. Two upgrades are worth it: a paid AI tier for stronger output, and a custom domain (about $10 a year) so your site has a real, credible address you own. Neither is strictly required to finish, but both are worth the small spend.'],
     ['Will this work for my niche?', "Yes. The system is niche-agnostic by design. The templates and patterns are the scaffolding; the Day 2 brand work and Day 4 landing copy are where your niche shapes the output."],
@@ -577,6 +578,7 @@
     "mainEntity": [
       { "@type": "Question", "name": "Do I need to be technical?", "acceptedAnswer": { "@type": "Answer", "text": "No. Every template, prompt, and pattern is copy-paste. The prompts ask you a few plain questions and do the rest. If you can follow a recipe, you can follow this." } },
       { "@type": "Question", "name": "What if I don't have an idea yet?", "acceptedAnswer": { "@type": "Answer", "text": "Day 1 is the ideation system itself: a sequenced way to surface, validate, and price an idea you actually want to ship. You can start with nothing more than a hunch, or a blank page, and finish Day 1 with a locked offer." } },
+      { "@type": "Question", "name": "How much time does each day take?", "acceptedAnswer": { "@type": "Answer", "text": "One focused sitting, not a day off work. The whole guide is 32 pages, about six a day, action-first, so most people finish a day in one to two hours after work. Plan on roughly 8 to 12 hours of hands-on building across the five days, and the AI does the heavy lifting inside each one." } },
       { "@type": "Question", "name": "What AI tools do I need?", "acceptedAnswer": { "@type": "Answer", "text": "Just one capable model. The prompts work with ChatGPT, Claude, or Gemini, and Day 4 builds your landing page in Google Antigravity, which is free to start. Free tiers can complete the 5 days, but we strongly recommend a paid tier of one model (about $20 a month): you get longer sessions and access to the stronger models, and a stronger model means noticeably better output across all five days. There is no VanguardOS subscription on top." } },
       { "@type": "Question", "name": "How much extra will I spend on tools?", "acceptedAnswer": { "@type": "Answer", "text": "You can build and host for $0. Two upgrades are worth it: a paid AI tier for stronger output, and a custom domain (about $10 a year) so your site has a real, credible address you own. Neither is strictly required to finish, but both are worth the small spend." } },
       { "@type": "Question", "name": "Will this work for my niche?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. The system is niche-agnostic by design. The templates and patterns are the scaffolding; the Day 2 brand work and Day 4 landing copy are where your niche shapes the output." } },
@@ -675,7 +677,7 @@
 
       <!-- Subhead: calmer, body serif -->
       <p class="hero-item font-sans text-muted text-lg md:text-2xl leading-snug max-w-[820px] mx-auto" style="opacity: 0">
-        A 5-day system. 7 designer-grade PDFs. The exact stack we use. For builders done planning.
+        A 5-day system. 7 designer-grade PDFs. The exact stack we use. One focused sitting a day, and the thing in your head is live.
       </p>
 
       <!-- Day-5 outcomes: tactile proof of the five deliverables you keep.
@@ -1884,7 +1886,7 @@
           Get The Launchpad · $129 →
         </a>
         <a href="#offer-stack" class="text-sm font-mono uppercase tracking-widest text-muted hover:text-text transition border-b border-gold-line/40 hover:border-gold pb-1">See what's inside ↓</a>
-        <p class="text-sm font-mono uppercase tracking-wider text-muted pt-2">30-day guarantee · One payment · Yours forever</p>
+        <p class="text-sm font-mono uppercase tracking-wider text-muted pt-2">Instant access, start Day 1 today · 30-day guarantee · One payment · Yours forever</p>
       </div>
     </div>
   </section>
