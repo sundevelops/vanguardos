@@ -33,3 +33,27 @@ Takeaways (applied):
 Next bite: Speed-to-value / removing friction from the buyer's path (post-purchase
 "what happens the moment you buy"), then $100M Leads hooks (more/better/new) for the
 hero eyebrow.
+
+---
+
+## 2026-06-30 — Speed-to-value / removing friction from the buyer's path
+Source: Hormozi "$100M Offers" Value Equation applications, via uplify.ai
+(hormozi-value-equation-made-easy and alex-hormozi-offer-breakdown summaries; search
+2026-06-30).
+
+Takeaways (applied):
+1. Friction at onboarding predicts friction throughout the engagement. The first steps
+   after "buy" are where intent leaks out, so the page should pre-walk that path and make
+   it feel frictionless before the click, not after.
+2. Easy always wins. Make buying, starting, and succeeding feel simple. Show the buyer a
+   short, concrete sequence ("pay, get the email, open Day 1") so the path reads as
+   already-solved, lowering the Effort & Sacrifice term.
+3. Speed to value: name the fast first result. Collapse Time Delay by showing first value
+   arriving in the same sitting, not "someday after onboarding."
+4. Ready-to-use beats build-from-scratch: emphasize that the system, templates, and prompts
+   are handed over done, so the buyer's job is to run, not to assemble.
+5. Put the path at the moment of decision (right after the guarantee, before the final CTA)
+   so the last thing a hesitant buyer reads is how easy the next 10 minutes are.
+
+Next bite: $100M Leads hooks (more/better/new) for the hero eyebrow, then the CLOSER /
+value-first copy-order pass.

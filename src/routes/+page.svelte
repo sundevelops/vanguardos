@@ -205,6 +205,7 @@
     ['Do I need to be technical?', 'No. Every template, prompt, and pattern is copy-paste. The prompts ask you a few plain questions and do the rest. If you can follow a recipe, you can follow this.'],
     ["What if I don't have an idea yet?", 'Day 1 is the ideation system itself: a sequenced way to surface, validate, and price an idea you actually want to ship. You can start with nothing more than a hunch, or a blank page, and finish Day 1 with a locked offer.'],
     ['How much time does each day take?', 'One focused sitting, not a day off work. The whole guide is 32 pages, about six a day, action-first, so most people finish a day in one to two hours after work. Plan on roughly 8 to 12 hours of hands-on building across the five days, and the AI does the heavy lifting inside each one.'],
+    ['How do I get it after I pay?', 'Instantly. The moment your $129 payment clears on Gumroad, the email lands with all 7 PDFs, the templates, and the prompt vault, ready to download and keep forever. No onboarding call, no waiting room. You can open Day 1 the same night.'],
     ['What AI tools do I need?', 'Just one capable model. The prompts work with ChatGPT, Claude, or Gemini, and Day 4 builds your landing page in Google Antigravity, which is free to start. Free tiers can complete the 5 days, but we strongly recommend a paid tier of one model (about $20 a month): you get longer sessions and access to the stronger models, and a stronger model means noticeably better output across all five days. There is no VanguardOS subscription on top.'],
     ['How much extra will I spend on tools?', 'You can build and host for $0. Two upgrades are worth it: a paid AI tier for stronger output, and a custom domain (about $10 a year) so your site has a real, credible address you own. Neither is strictly required to finish, but both are worth the small spend.'],
     ['Will this work for my niche?', "Yes. The system is niche-agnostic by design. The templates and patterns are the scaffolding; the Day 2 brand work and Day 4 landing copy are where your niche shapes the output."],
@@ -579,6 +580,7 @@
       { "@type": "Question", "name": "Do I need to be technical?", "acceptedAnswer": { "@type": "Answer", "text": "No. Every template, prompt, and pattern is copy-paste. The prompts ask you a few plain questions and do the rest. If you can follow a recipe, you can follow this." } },
       { "@type": "Question", "name": "What if I don't have an idea yet?", "acceptedAnswer": { "@type": "Answer", "text": "Day 1 is the ideation system itself: a sequenced way to surface, validate, and price an idea you actually want to ship. You can start with nothing more than a hunch, or a blank page, and finish Day 1 with a locked offer." } },
       { "@type": "Question", "name": "How much time does each day take?", "acceptedAnswer": { "@type": "Answer", "text": "One focused sitting, not a day off work. The whole guide is 32 pages, about six a day, action-first, so most people finish a day in one to two hours after work. Plan on roughly 8 to 12 hours of hands-on building across the five days, and the AI does the heavy lifting inside each one." } },
+      { "@type": "Question", "name": "How do I get it after I pay?", "acceptedAnswer": { "@type": "Answer", "text": "Instantly. The moment your $129 payment clears on Gumroad, the email lands with all 7 PDFs, the templates, and the prompt vault, ready to download and keep forever. No onboarding call, no waiting room. You can open Day 1 the same night." } },
       { "@type": "Question", "name": "What AI tools do I need?", "acceptedAnswer": { "@type": "Answer", "text": "Just one capable model. The prompts work with ChatGPT, Claude, or Gemini, and Day 4 builds your landing page in Google Antigravity, which is free to start. Free tiers can complete the 5 days, but we strongly recommend a paid tier of one model (about $20 a month): you get longer sessions and access to the stronger models, and a stronger model means noticeably better output across all five days. There is no VanguardOS subscription on top." } },
       { "@type": "Question", "name": "How much extra will I spend on tools?", "acceptedAnswer": { "@type": "Answer", "text": "You can build and host for $0. Two upgrades are worth it: a paid AI tier for stronger output, and a custom domain (about $10 a year) so your site has a real, credible address you own. Neither is strictly required to finish, but both are worth the small spend." } },
       { "@type": "Question", "name": "Will this work for my niche?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. The system is niche-agnostic by design. The templates and patterns are the scaffolding; the Day 2 brand work and Day 4 landing copy are where your niche shapes the output." } },
@@ -1244,6 +1246,41 @@
           And if you get stuck on a step, tell us where. We'd rather you finish your launch than have your money back.
         </p>
       </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SPEED TO VALUE — what happens the moment you buy
+       (Hormozi: collapse Time Delay + Effort by pre-walking the path)
+       ═══════════════════════════════════════════════════════════════ -->
+  <section class="relative py-20 md:py-24 px-6 border-t border-line/60">
+    <div class="max-w-[960px] mx-auto reveal">
+      <header class="text-center mb-10 md:mb-12">
+        <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">No waiting room</span>
+        <h2 class="font-display text-3xl md:text-5xl leading-tight text-text mt-3">
+          What happens the <span class="italic text-gold">moment you buy.</span>
+        </h2>
+        <p class="text-base md:text-lg text-text/85 leading-relaxed mt-4 max-w-[640px] mx-auto">
+          No onboarding call, no drip, no "your access is being set up." The whole thing is in your hands in about a minute, and Day 1 can start tonight.
+        </p>
+      </header>
+      <ol class="grid md:grid-cols-3 gap-5 md:gap-6">
+        <li class="rounded-[1.75rem] border border-line bg-surface/60 p-7">
+          <span class="font-mono text-sm text-gold/70">01</span>
+          <h3 class="font-display text-xl md:text-2xl text-text mt-3 mb-2">You check out</h3>
+          <p class="text-text/85 text-base leading-relaxed">One payment of $129 on Gumroad. About a minute. No code to hunt for, no upsell maze.</p>
+        </li>
+        <li class="rounded-[1.75rem] border border-line bg-surface/60 p-7">
+          <span class="font-mono text-sm text-gold/70">02</span>
+          <h3 class="font-display text-xl md:text-2xl text-text mt-3 mb-2">Everything lands</h3>
+          <p class="text-text/85 text-base leading-relaxed">The email arrives instantly with all 7 PDFs, the templates, and the prompt vault. Yours to download and keep forever.</p>
+        </li>
+        <li class="rounded-[1.75rem] border border-line bg-surface/60 p-7">
+          <span class="font-mono text-sm text-gold/70">03</span>
+          <h3 class="font-display text-xl md:text-2xl text-text mt-3 mb-2">You open Day 1</h3>
+          <p class="text-text/85 text-base leading-relaxed">First sitting, you lock the idea. The system is handed to you done, so your job is to run it, not build it. The AI does the heavy lifting.</p>
+        </li>
+      </ol>
     </div>
   </section>
 
