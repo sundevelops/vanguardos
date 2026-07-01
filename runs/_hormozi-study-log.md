@@ -57,3 +57,28 @@ Takeaways (applied):
 
 Next bite: $100M Leads hooks (more/better/new) for the hero eyebrow, then the CLOSER /
 value-first copy-order pass.
+
+---
+
+## 2026-07-01 — $100M Leads: hooks, "more, better, new," Hook-Retain-Reward
+Source: web search on Hormozi's hook-writing method and the "more, better, new" scaling
+multiplier (creator-economy summaries and a landing-page application piece; search
+2026-07-01).
+
+Takeaways (applied):
+1. The hook is the first five seconds of attention. For an organic visitor, that is the
+   literal search-result title and snippet, not the hero. A weak hook there means the buyer
+   never reaches the on-page copy at all.
+2. Winning pattern: "How to [dream outcome], even if [biggest insecurity]." The page's own
+   H1 already nails this; the `<title>`/meta description did not, they were a flat, unhooked
+   feature list, a weaker fallback hook living right next to a proven strong one.
+3. Call out the specific avatar by name. The locked avatar language ("solopreneur paralyzed
+   by all the steps") is a sharper hook than a generic "solopreneurs."
+4. "More, better, new": once a hook works, repeat it in more places rather than inventing a
+   second, weaker one per surface. Applied here by echoing the hero's exact hook into title,
+   OG, Twitter, and schema description instead of writing each independently.
+5. Naming the guarantee and price inside the hook description pre-qualifies the click,
+   raising completed-purchase rate per click even when raw CTR is flat.
+
+Next bite: CLOSER / value-first copy-order pass, checking the page reads problem → dream →
+proof → offer → risk reversal → path in the optimal order.

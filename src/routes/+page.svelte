@@ -536,7 +536,7 @@
     "@context": "https://schema.org",
     "@type": "Product",
     "name": "The Vanguard Launchpad",
-    "description": "A 5-day system that takes solopreneurs from idea to launch-ready: brand, assets, landing page, high-impact offer, and complete funnel, all built with you. Systems that launchpad solopreneurs into the digital economy.",
+    "description": "How to launch a digital product in 5 days, even if you have never shipped anything before. For solopreneurs paralyzed by planning: idea to launch-ready in one focused sitting a day, covering brand, assets, landing page, high-impact offer, and complete funnel, all built with you.",
     "image": "https://vanguardos.co/og/og-card.jpg",
     "url": "https://vanguardos.co/",
     "brand": { "@type": "Brand", "name": "VanguardOS" },

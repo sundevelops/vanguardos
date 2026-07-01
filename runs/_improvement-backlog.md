@@ -3,6 +3,14 @@
 Running list of done work + surfaced ideas. (Reconstructed 2026-06-29; file was missing.)
 
 ## Done (recent)
+- 2026-07-01: $100M Leads hooks bite. Rewrote `<title>`/`og:title`/`twitter:title` and the
+  three descriptions in `src/app.html` to echo the hero's proven "How to launch... even if
+  you've never shipped anything before" hook plus the "paralyzed by planning" avatar
+  call-out and the guarantee, up front; synced the Product JSON-LD `description` in
+  `+page.svelte` to match. No pricing/FAQ changes.
+- 2026-06-30: Speed-to-value bite. New "What happens the moment you buy" 3-step strip
+  (check out / everything lands / open Day 1) after the guarantee, before the dormant
+  block; matching "How do I get it after I pay?" FAQ (array + JSON-LD synced, 9 items).
 - 2026-06-29: Time Delay + Effort bite. Hero subhead now states "one focused sitting a
   day"; final CTA adds "Instant access, start Day 1 today"; new "How much time does each
   day take?" FAQ (array + JSON-LD in sync).
@@ -12,9 +20,13 @@ Running list of done work + surfaced ideas. (Reconstructed 2026-06-29; file was 
 - 2026-06-18: Offer-stack value ledger; guarantee eyebrow.
 
 ## Ideas to pick from (next runs)
-- Post-purchase "what happens the moment you buy" mini-strip (speed to value): instant
-  email, the 7 PDFs, start Day 1. Reduces friction at the decision point.
-- $100M Leads hooks pass on the hero eyebrow (more/better/new framing).
+- CLOSER / value-first copy-order pass: check the page reads problem → dream → proof →
+  offer → risk reversal → path in the optimal order; tighten any out-of-order beats. [NEXT BITE]
+- Refresh the `og-card.jpg` social image (and its alt text) to visually echo the new
+  "How to launch... even if..." hook now used in the title/meta, currently still says
+  the old "Systems that ship solopreneurs" framing in the image art itself.
+- Consider giving the new speed-to-value strip an id + an in-page anchor from the final
+  CTA reassurance ("see how fast you start ↓") if it tests well.
 - Social proof: the founding-buyer placeholder still has no real quotes; swap in the
   first real testimonial the moment one exists (schema-ready).
 - Avatar selector default A/B: default to the "paralyzed solopreneur" promise for
