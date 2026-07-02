@@ -3,6 +3,13 @@
 Running list of done work + surfaced ideas. (Reconstructed 2026-06-29; file was missing.)
 
 ## Done (recent)
+- 2026-07-02: CLOSER copy-order bite. Moved the "for-who" qualification section (Label)
+  from after Brand Work/before Five-Day Journey to directly after Problem/before
+  Offer-Stack, matching Clarify-then-Label-then-Overview. Reframed the "who" avatar
+  section's header copy ("Built For" / "If any of these is you...") to "See Your Outcome"
+  / "Tap your starting point, see your exact outcome" so it reads as Sell, not a second
+  Label. Defaulted `selectedAvatar` to 1 (the locked "paralyzed solopreneur" avatar) so the
+  personalized promise panel renders on load instead of behind a required click.
 - 2026-07-01: $100M Leads hooks bite. Rewrote `<title>`/`og:title`/`twitter:title` and the
   three descriptions in `src/app.html` to echo the hero's proven "How to launch... even if
   you've never shipped anything before" hook plus the "paralyzed by planning" avatar
@@ -20,8 +27,10 @@ Running list of done work + surfaced ideas. (Reconstructed 2026-06-29; file was 
 - 2026-06-18: Offer-stack value ledger; guarantee eyebrow.
 
 ## Ideas to pick from (next runs)
-- CLOSER / value-first copy-order pass: check the page reads problem → dream → proof →
-  offer → risk reversal → path in the optimal order; tighten any out-of-order beats. [NEXT BITE]
+- Second CLOSER pass: spot-check whether the-math's value-stack recap (right before the
+  guarantee) still earns its place, or whether it now reads as a third Overview beat after
+  offer-stack and the avatar promise panel. Also re-check avatar selector default (2026-07-02)
+  and Label move (2026-07-02) are actually lifting engagement once real data exists. [NEXT BITE]
 - Refresh the `og-card.jpg` social image (and its alt text) to visually echo the new
   "How to launch... even if..." hook now used in the title/meta, currently still says
   the old "Systems that ship solopreneurs" framing in the image art itself.

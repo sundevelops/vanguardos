@@ -186,7 +186,10 @@
       promise: "Your side thing works, but it looks like a side thing: duct-taped pages, no real offer, no funnel. The Launchpad upgrades it into something that reads as a real business, with a high-impact offer, a clean landing page, and an email sequence that runs while you sleep." }
   ];
   // Index of the currently selected avatar; -1 = none selected (neutral prompt shown).
-  let selectedAvatar = -1;
+  // Defaults to 1 ("Solopreneur paralyzed by all the steps," the locked primary avatar hook)
+  // so the personalized dream-outcome promise sells immediately on load instead of gating
+  // it behind a click — Hormozi Sell-the-vacation: don't make the buyer work to see the dream.
+  let selectedAvatar = 1;
   async function selectAvatar(i) {
     selectedAvatar = selectedAvatar === i ? -1 : i;
     if (selectedAvatar !== -1) {
@@ -770,8 +773,64 @@
       <p class="text-center text-lg md:text-xl text-text leading-relaxed max-w-[760px] mx-auto mt-10">
         The Launchpad is the total solution: every decision pre-made, every asset built with you, in order, in five days. You bring the idea. The system does the packaging.
       </p>
-      <div class="text-center mt-7">
-        <a href="#offer-stack" class="text-sm font-mono uppercase tracking-widest text-gold hover:text-gold-hi transition border-b border-gold-line hover:border-gold pb-1">See the whole system ↓</a>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       WHO THIS IS FOR / NOT FOR — qualification right after the pain,
+       before the offer reveal (Hormozi C.L.O.S.E.R.: Clarify, then Label
+       the serious buyer before Overview/Sell — moved 2026-07-02 from after
+       Brand Work, where it split the offer reveal from the 5-Day Journey)
+       ═══════════════════════════════════════════════════════════════ -->
+  <section id="for-who" class="relative py-20 md:py-24 px-6 border-t border-line/60">
+    <div class="max-w-[1080px] mx-auto reveal">
+      <header class="text-center max-w-[760px] mx-auto mb-12 md:mb-16">
+        <div class="flex items-center justify-center gap-3 mb-6">
+          <div class="h-px w-16 bg-gold-line"></div>
+          <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">Section · Who This Is For</span>
+          <div class="h-px w-16 bg-gold-line"></div>
+        </div>
+        <h2 class="font-display text-3xl md:text-5xl leading-tight text-text">
+          Honest qualification, <span class="italic text-gold">both ways</span>.
+        </h2>
+      </header>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-0 md:gap-0 rounded-[1.5rem] border border-line bg-surface/60 overflow-hidden">
+        <!-- For you if... -->
+        <div class="p-7 md:p-10 md:border-r md:border-gold-line border-b md:border-b-0 border-gold-line">
+          <div class="flex items-center gap-3 mb-5">
+            <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">For you if</span>
+          </div>
+          <h3 class="font-display text-2xl md:text-3xl text-text leading-tight mb-6">
+            This is for you if<span class="text-gold">...</span>
+          </h3>
+          <ul class="flex flex-col gap-4 text-base md:text-lg text-text/90 leading-relaxed">
+            <li class="flex gap-3"><span class="text-gold mt-1">·</span><span>You have a folder of unfinished ideas in your notes app, and you are ready to stop planning and get your first offer out of your head and onto a real page on the internet.</span></li>
+            <li class="flex gap-3"><span class="text-gold mt-1">·</span><span>You keep buying courses and watching tutorials but never ship, and you want a strict, step-by-step path that makes you build instead of just consume.</span></li>
+            <li class="flex gap-3"><span class="text-gold mt-1">·</span><span>You are overwhelmed by the volume of decisions a launch demands: naming, colors, type, copy, layout. You want a system that makes those calls for you.</span></li>
+            <li class="flex gap-3"><span class="text-gold mt-1">·</span><span>You refuse to launch a cheap, amateur-looking storefront, but you don't have $5,000 to waste on a brand designer or copywriter just to validate a brand-new idea.</span></li>
+            <li class="flex gap-3"><span class="text-gold mt-1">·</span><span>You want a real, payment-ready storefront, a structured funnel, and automated emails running on a live custom URL by Day 5, so you have something tangible to sell next week.</span></li>
+          </ul>
+        </div>
+        <!-- NOT for you if... -->
+        <div class="p-7 md:p-10">
+          <div class="flex items-center gap-3 mb-5">
+            <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-muted">Not for you if</span>
+          </div>
+          <h3 class="font-display text-2xl md:text-3xl text-text leading-tight mb-6">
+            This is <span class="italic text-muted">not</span> for you if<span class="text-muted">...</span>
+          </h3>
+          <ul class="flex flex-col gap-4 text-base md:text-lg text-text/80 leading-relaxed">
+            <li class="flex gap-3"><span class="text-muted mt-1">·</span><span>You are looking for an agency to build it for you. We give you the complete machinery, but you have to turn the key. If you want white-glove service, you should pay a $12,000 agency invoice instead.</span></li>
+            <li class="flex gap-3"><span class="text-muted mt-1">·</span><span>You enjoy planning and buying domains more than shipping. This system exists to end the stalling and put your name on a live checkout, which can feel scary.</span></li>
+            <li class="flex gap-3"><span class="text-muted mt-1">·</span><span>You expect sales to happen automatically without promotion. The Launchpad builds the storefront and checkout funnel; driving traffic is your job, and we would rather be honest about that upfront.</span></li>
+            <li class="flex gap-3"><span class="text-muted mt-1">·</span><span>You want an effortless one-click button. The system is fast, but it still takes 8 to 12 hours of focused, hands-on work. Fast is not the same as effortless.</span></li>
+            <li class="flex gap-3"><span class="text-muted mt-1">·</span><span>You are hunting a get-rich-quick, passive-income loophole. This builds a real product you own, not a temporary hype funnel.</span></li>
+          </ul>
+        </div>
+      </div>
+      <div class="text-center mt-8">
+        <a href="#offer-stack" class="text-sm font-mono uppercase tracking-widest text-gold hover:text-gold-hi transition border-b border-gold-line hover:border-gold pb-1">See exactly what's inside ↓</a>
       </div>
     </div>
   </section>
@@ -950,59 +1009,6 @@
   </section>
 
   <!-- ═══════════════════════════════════════════════════════════════
-       WHO THIS IS FOR / NOT FOR — qualification before the 5-day journey
-       ═══════════════════════════════════════════════════════════════ -->
-  <section id="for-who" class="relative py-20 md:py-28 px-6 border-t border-line/60">
-    <div class="max-w-[1080px] mx-auto reveal">
-      <header class="text-center max-w-[760px] mx-auto mb-12 md:mb-16">
-        <div class="flex items-center justify-center gap-3 mb-6">
-          <div class="h-px w-16 bg-gold-line"></div>
-          <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">Section · Who This Is For</span>
-          <div class="h-px w-16 bg-gold-line"></div>
-        </div>
-        <h2 class="font-display text-3xl md:text-5xl leading-tight text-text">
-          Honest qualification, <span class="italic text-gold">both ways</span>.
-        </h2>
-      </header>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-0 md:gap-0 rounded-[1.5rem] border border-line bg-surface/60 overflow-hidden">
-        <!-- For you if... -->
-        <div class="p-7 md:p-10 md:border-r md:border-gold-line border-b md:border-b-0 border-gold-line">
-          <div class="flex items-center gap-3 mb-5">
-            <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">For you if</span>
-          </div>
-          <h3 class="font-display text-2xl md:text-3xl text-text leading-tight mb-6">
-            This is for you if<span class="text-gold">...</span>
-          </h3>
-          <ul class="flex flex-col gap-4 text-base md:text-lg text-text/90 leading-relaxed">
-            <li class="flex gap-3"><span class="text-gold mt-1">·</span><span>You have a folder of unfinished ideas in your notes app, and you are ready to stop planning and get your first offer out of your head and onto a real page on the internet.</span></li>
-            <li class="flex gap-3"><span class="text-gold mt-1">·</span><span>You keep buying courses and watching tutorials but never ship, and you want a strict, step-by-step path that makes you build instead of just consume.</span></li>
-            <li class="flex gap-3"><span class="text-gold mt-1">·</span><span>You are overwhelmed by the volume of decisions a launch demands: naming, colors, type, copy, layout. You want a system that makes those calls for you.</span></li>
-            <li class="flex gap-3"><span class="text-gold mt-1">·</span><span>You refuse to launch a cheap, amateur-looking storefront, but you don't have $5,000 to waste on a brand designer or copywriter just to validate a brand-new idea.</span></li>
-            <li class="flex gap-3"><span class="text-gold mt-1">·</span><span>You want a real, payment-ready storefront, a structured funnel, and automated emails running on a live custom URL by Day 5, so you have something tangible to sell next week.</span></li>
-          </ul>
-        </div>
-        <!-- NOT for you if... -->
-        <div class="p-7 md:p-10">
-          <div class="flex items-center gap-3 mb-5">
-            <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-muted">Not for you if</span>
-          </div>
-          <h3 class="font-display text-2xl md:text-3xl text-text leading-tight mb-6">
-            This is <span class="italic text-muted">not</span> for you if<span class="text-muted">...</span>
-          </h3>
-          <ul class="flex flex-col gap-4 text-base md:text-lg text-text/80 leading-relaxed">
-            <li class="flex gap-3"><span class="text-muted mt-1">·</span><span>You are looking for an agency to build it for you. We give you the complete machinery, but you have to turn the key. If you want white-glove service, you should pay a $12,000 agency invoice instead.</span></li>
-            <li class="flex gap-3"><span class="text-muted mt-1">·</span><span>You enjoy planning and buying domains more than shipping. This system exists to end the stalling and put your name on a live checkout, which can feel scary.</span></li>
-            <li class="flex gap-3"><span class="text-muted mt-1">·</span><span>You expect sales to happen automatically without promotion. The Launchpad builds the storefront and checkout funnel; driving traffic is your job, and we would rather be honest about that upfront.</span></li>
-            <li class="flex gap-3"><span class="text-muted mt-1">·</span><span>You want an effortless one-click button. The system is fast, but it still takes 8 to 12 hours of focused, hands-on work. Fast is not the same as effortless.</span></li>
-            <li class="flex gap-3"><span class="text-muted mt-1">·</span><span>You are hunting a get-rich-quick, passive-income loophole. This builds a real product you own, not a temporary hype funnel.</span></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══════════════════════════════════════════════════════════════
        THE 5-DAY JOURNEY — visual day-by-day outcomes
        ═══════════════════════════════════════════════════════════════ -->
   <section id="five-day" class="relative py-20 md:py-28 px-6 border-t border-line/60 overflow-hidden"
@@ -1137,9 +1143,9 @@
   <section id="who" class="relative py-20 md:py-24 px-6 border-t border-line/60">
     <div class="max-w-[1180px] mx-auto reveal">
       <header class="text-center max-w-[760px] mx-auto mb-10 md:mb-14">
-        <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">Built For</span>
+        <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">See Your Outcome</span>
         <h2 class="font-display text-3xl md:text-5xl leading-tight text-text mt-3">
-          If any of these is you, <span class="italic text-gold">this is your system</span>.
+          Tap your starting point, <span class="italic text-gold">see your exact outcome</span>.
         </h2>
       </header>
 

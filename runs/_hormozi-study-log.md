@@ -82,3 +82,45 @@ Takeaways (applied):
 
 Next bite: CLOSER / value-first copy-order pass, checking the page reads problem → dream →
 proof → offer → risk reversal → path in the optimal order.
+
+---
+
+## 2026-07-02 — C.L.O.S.E.R.: the sales-script copy order applied to the page
+
+Source: web search on Alex Hormozi's C.L.O.S.E.R. framework (Clarify, Label, Overview,
+Sell the vacation, Explain away concerns, Reinforce the decision), via Accelerator
+University / Whatbox Digital summaries and Hormozi's own framework thread (search
+2026-07-02). Direct landing-page mapping guidance was thin in the sources, so the mapping
+below is my own application of the six beats to a one-page funnel.
+
+Takeaways (applied):
+1. C.L.O.S.E.R. is a live sales-call script, but its beat order maps cleanly to a landing
+   page: Clarify (name the pain) should be immediately followed by Label (identify the
+   serious, right-fit buyer) BEFORE Overview (what's actually included) and Sell (the
+   dream). Labeling early raises commitment going into the pitch; labeling late, after the
+   buyer already saw the full offer, is a weaker, redundant beat.
+2. Auditing the live page found the Label beat (the "for you if / not for you if"
+   qualification section) sitting AFTER Overview (offer-stack) and AFTER Brand Work proof,
+   sandwiched awkwardly between Brand Work and the Five-Day Journey (Sell). That is
+   C-O-Proof-L-S order, not C-L-O-S. Moved the qualification section to sit directly after
+   the Problem section and before the offer reveal.
+2b. A second, weaker Label beat existed further down (the "Built For" avatar-tap section),
+   effectively re-qualifying a buyer who was already qualified once. Once real Labeling
+   happens early, later avatar-selection UI should read as Sell (a personalized dream
+   outcome), not a second qualification gate. Reframed its header copy accordingly rather
+   than removing the interactive element.
+3. Sell the vacation should cost the buyer nothing to see. Gating the personalized dream
+   outcome behind a required click adds Effort for zero reason once the buyer has already
+   scrolled past two Label beats. Defaulted the avatar promise panel to the locked primary
+   avatar ("solopreneur paralyzed by all the steps") so the personalized sell renders on
+   load; the buyer can still tap a different avatar to see their own.
+4. Full-section reorders are the highest-risk edit type for a "small, focused" daily task:
+   verified first that `.reveal` and section-scroll animations use per-element
+   IntersectionObserver (order-independent) before moving anything, and confirmed no other
+   part of the page anchors to the moved section by DOM position.
+
+Next bite: continue the CLOSER pass (spot-check whether Overview/Sell/Explain/Reinforce
+sub-order is now clean, e.g. whether the-math's second value-stack beat still earns its
+place right before the guarantee) — or, if that reads clean on the next audit, move to
+look-and-feel polish or Core Web Vitals (both still unstudied bites on the original
+rotation).
