@@ -700,7 +700,7 @@
       <!-- Headline: How to [outcome], even if [pain] -->
       <h1 class="hero-item font-display font-medium text-text leading-[0.95] max-w-[1100px] mx-auto select-none" style="opacity: 0; letter-spacing: -0.025em;">
         <span class="block text-[2.75rem] sm:text-5xl md:text-7xl lg:text-[5.25rem] xl:text-[6rem]">
-          Your <span class="text-gold">online business</span>, up and running in <span class="text-gold">5 days</span>,
+          Your <span class="text-gold">online business</span> up and running in <span class="text-gold">5 days</span>,
         </span>
         <span class="block italic text-gold text-[2.25rem] sm:text-4xl md:text-6xl lg:text-[4.25rem] xl:text-[4.75rem] mt-3 md:mt-5">
           even if you've never shipped anything before.
