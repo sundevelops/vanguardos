@@ -539,7 +539,7 @@
     "@context": "https://schema.org",
     "@type": "Product",
     "name": "The Vanguard Launchpad",
-    "description": "How to launch a digital product in 5 days, even if you have never shipped anything before. For solopreneurs paralyzed by planning: idea to launch-ready in one focused sitting a day, covering brand, assets, landing page, high-impact offer, and complete funnel, all built with you.",
+    "description": "Your online business, up and running in 5 days, even if you have never shipped anything before. For solopreneurs paralyzed by planning: idea to launch-ready in one focused sitting a day, covering brand, assets, landing page, high-impact offer, and complete funnel, all built with you.",
     "image": "https://vanguardos.co/og/og-card.jpg",
     "url": "https://vanguardos.co/",
     "brand": { "@type": "Brand", "name": "VanguardOS" },
@@ -567,7 +567,7 @@
         "@type": "Review",
         "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
         "author": { "@type": "Person", "name": "Verified Buyer" },
-        "reviewBody": "As a full time college student, I felt like I never had enough time to figure out how to start an online business. Vanguard OS honestly helped simplify everything for me. It helped me go from overthinking my next move to following a system that led me to actually starting that business that I had put off for years."
+        "reviewBody": "As a full time college student, I felt like I never had enough time to figure out how to start an online business. Vanguard OS honestly helped simplify everything for me. It helped me go from overthinking my next move to following a system that lead me to actually starting that business that I had put off for years."
       }
     ],
     "offers": [
@@ -700,7 +700,7 @@
       <!-- Headline: How to [outcome], even if [pain] -->
       <h1 class="hero-item font-display font-medium text-text leading-[0.95] max-w-[1100px] mx-auto select-none" style="opacity: 0; letter-spacing: -0.025em;">
         <span class="block text-[2.75rem] sm:text-5xl md:text-7xl lg:text-[5.25rem] xl:text-[6rem]">
-          How to launch a premium digital product in 5 days,
+          Your online business, up and running in 5 days,
         </span>
         <span class="block italic text-gold text-[2.25rem] sm:text-4xl md:text-6xl lg:text-[4.25rem] xl:text-[4.75rem] mt-3 md:mt-5">
           even if you've never shipped anything before.
@@ -1262,11 +1262,13 @@
   </section>
 
   <!-- ═══════════════════════════════════════════════════════════════
-       SOCIAL PROOF — verified buyer reviews. Real, unedited apart from
-       light spelling fixes ("u" to "you", a typo). Names withheld
-       because the reviews were submitted anonymously on Gumroad, not
-       because they were invented. Placed right after the value math,
-       right before the guarantee: proof, then risk reversal.
+       SOCIAL PROOF — real verified-buyer reviews, quoted verbatim
+       (2026-07-02: reverted an earlier light spelling pass per Jamil,
+       left exactly as submitted, no corrections). Placed right after
+       the value math, right before the guarantee: proof, then risk
+       reversal. Subhead intentionally does not mention names, Gumroad,
+       or spelling; it amplifies the offer instead of explaining the
+       sourcing.
        ═══════════════════════════════════════════════════════════════ -->
   <section id="testimonials" class="relative py-20 md:py-24 px-6 border-t border-line/60">
     <div class="max-w-[1180px] mx-auto reveal">
@@ -1280,7 +1282,7 @@
           Five stars, from people <span class="italic text-gold">who actually built it</span>.
         </h2>
         <p class="text-text/85 text-base md:text-lg mt-5 leading-relaxed">
-          The actual reviews from verified Launchpad buyers on Gumroad, unedited apart from spelling. Names are withheld because the reviews came in anonymous, not because we wrote them.
+          Every one of them started exactly where you are: an idea, no plan, and months of stalling. Five days later, they had a live brand, a page, and a funnel. That's the whole promise, proven real.
         </p>
       </header>
 
@@ -1297,7 +1299,7 @@
         </div>
         <div class="rounded-[1.5rem] border border-line bg-surface/60 p-6 md:p-7 flex flex-col gap-4">
           <span class="text-gold text-lg tracking-[0.15em] leading-none" aria-label="Rated 5 out of 5 stars">★★★★★</span>
-          <p class="text-text/90 text-base leading-relaxed flex-1">"As a full time college student, I felt like I never had enough time to figure out how to start an online business. Every time I had a free moment, I would end up watching another YouTube video or buying into another idea, and I still felt like I was going in circles. Vanguard OS honestly helped simplify everything for me. Instead of feeling like I needed to do a hundred different things, I finally had a clear direction. It made starting feel a lot less overwhelming, which was exactly what I needed with everything else going on in my life. If you are busy, constantly second guessing yourself, or just tired of feeling stuck, I think it's worth checking out. It helped me go from overthinking my next move to following a system that led me to actually starting that business that I had put off for years. Feels really good seeing my business on an actual website with a checkout system!"</p>
+          <p class="text-text/90 text-base leading-relaxed flex-1">"As a full time college student, I felt like I never had enough time to figure out how to start an online business. Every time I had a free moment, I would end up watching another YouTube video or buying into another idea, and I still felt like I was going in circles. Vanguard OS honestly helped simplify everything for me. Instead of feeling like I needed to do a hundred different things, I finally had a clear direction. It made starting feel a lot less overwhelming, which was exactly what I needed with everything else going on in my life. If u are busy, constantly second guessing yourself, or just tired of feeling stuck, I think it's worth checking out. It helped me go from overthinking my next move to following a system that lead me to actually starting that business that I had put off for years. Feels really good seeing my business on an actual website with a checkout system!"</p>
           <span class="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-2 inline-flex items-center gap-1.5"><span class="text-gold" aria-hidden="true">✓</span> Verified Buyer · Full-time college student</span>
         </div>
       </div>
@@ -1322,41 +1324,6 @@
           And if you get stuck on a step, tell us where. We'd rather you finish your launch than have your money back.
         </p>
       </div>
-    </div>
-  </section>
-
-  <!-- ═══════════════════════════════════════════════════════════════
-       SPEED TO VALUE — what happens the moment you buy
-       (Hormozi: collapse Time Delay + Effort by pre-walking the path)
-       ═══════════════════════════════════════════════════════════════ -->
-  <section class="relative py-20 md:py-24 px-6 border-t border-line/60">
-    <div class="max-w-[960px] mx-auto reveal">
-      <header class="text-center mb-10 md:mb-12">
-        <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">No waiting room</span>
-        <h2 class="font-display text-3xl md:text-5xl leading-tight text-text mt-3">
-          What happens the <span class="italic text-gold">moment you buy.</span>
-        </h2>
-        <p class="text-base md:text-lg text-text/85 leading-relaxed mt-4 max-w-[640px] mx-auto">
-          No onboarding call, no drip, no "your access is being set up." The whole thing is in your hands in about a minute, and Day 1 can start tonight.
-        </p>
-      </header>
-      <ol class="grid md:grid-cols-3 gap-5 md:gap-6">
-        <li class="rounded-[1.75rem] border border-line bg-surface/60 p-7">
-          <span class="font-mono text-sm text-gold/70">01</span>
-          <h3 class="font-display text-xl md:text-2xl text-text mt-3 mb-2">You check out</h3>
-          <p class="text-text/85 text-base leading-relaxed">One payment of $129 on Gumroad. About a minute. No code to hunt for, no upsell maze.</p>
-        </li>
-        <li class="rounded-[1.75rem] border border-line bg-surface/60 p-7">
-          <span class="font-mono text-sm text-gold/70">02</span>
-          <h3 class="font-display text-xl md:text-2xl text-text mt-3 mb-2">Everything lands</h3>
-          <p class="text-text/85 text-base leading-relaxed">The email arrives instantly with all 7 PDFs, the templates, and the prompt vault. Yours to download and keep forever.</p>
-        </li>
-        <li class="rounded-[1.75rem] border border-line bg-surface/60 p-7">
-          <span class="font-mono text-sm text-gold/70">03</span>
-          <h3 class="font-display text-xl md:text-2xl text-text mt-3 mb-2">You open Day 1</h3>
-          <p class="text-text/85 text-base leading-relaxed">First sitting, you lock the idea. The system is handed to you done, so your job is to run it, not build it. The AI does the heavy lifting.</p>
-        </li>
-      </ol>
     </div>
   </section>
 
