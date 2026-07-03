@@ -543,6 +543,33 @@
     "image": "https://vanguardos.co/og/og-card.jpg",
     "url": "https://vanguardos.co/",
     "brand": { "@type": "Brand", "name": "VanguardOS" },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "5",
+      "bestRating": "5",
+      "worstRating": "1",
+      "reviewCount": "3"
+    },
+    "review": [
+      {
+        "@type": "Review",
+        "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
+        "author": { "@type": "Person", "name": "Verified Buyer" },
+        "reviewBody": "I'm really glad I decided to go through this process. I had a lot of ideas but wasn't sure how to put everything together in a way that made sense. What I appreciated most was that it gave me clarity and helped me organize my thoughts into something practical that I could actually move forward with. Instead of spending months trying to figure things out on my own, I came away with a clearer direction, a stronger brand foundation, and a funnel that I could start using right away."
+      },
+      {
+        "@type": "Review",
+        "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
+        "author": { "@type": "Person", "name": "Verified Buyer" },
+        "reviewBody": "I was so surprised by the quality of the final product. The system is super polished, easy to understand, and aesthetically it's a 10/10. It's been a great investment, and I would definitely recommend it to anyone hesitating to take the plunge."
+      },
+      {
+        "@type": "Review",
+        "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
+        "author": { "@type": "Person", "name": "Verified Buyer" },
+        "reviewBody": "As a full time college student, I felt like I never had enough time to figure out how to start an online business. Vanguard OS honestly helped simplify everything for me. It helped me go from overthinking my next move to following a system that led me to actually starting that business that I had put off for years."
+      }
+    ],
     "offers": [
       {
         "@type": "Offer",
@@ -713,7 +740,7 @@
       <!-- Trust strip: small mono row of credibility anchors -->
       <div class="hero-item pt-4" style="opacity: 0">
         <p class="font-mono text-[10px] md:text-[11px] uppercase tracking-[0.3em] text-muted-2 max-w-[860px] mx-auto leading-relaxed">
-          Instant download &nbsp;·&nbsp; $811 value, six bonuses included &nbsp;·&nbsp; No code required &nbsp;·&nbsp; 30-day guarantee
+          <a href="#testimonials" class="hover:text-gold transition">★★★★★ Verified buyers</a> &nbsp;·&nbsp; Instant download &nbsp;·&nbsp; $811 value, six bonuses included &nbsp;·&nbsp; No code required &nbsp;·&nbsp; 30-day guarantee
         </p>
       </div>
     </div>
@@ -1230,6 +1257,49 @@
           <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
           Get The Launchpad · $129 →
         </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       SOCIAL PROOF — verified buyer reviews. Real, unedited apart from
+       light spelling fixes ("u" to "you", a typo). Names withheld
+       because the reviews were submitted anonymously on Gumroad, not
+       because they were invented. Placed right after the value math,
+       right before the guarantee: proof, then risk reversal.
+       ═══════════════════════════════════════════════════════════════ -->
+  <section id="testimonials" class="relative py-20 md:py-24 px-6 border-t border-line/60">
+    <div class="max-w-[1180px] mx-auto reveal">
+      <header class="text-center max-w-[780px] mx-auto mb-12 md:mb-16">
+        <div class="flex items-center justify-center gap-3 mb-6">
+          <div class="h-px w-16 bg-gold-line"></div>
+          <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">Verified Buyers</span>
+          <div class="h-px w-16 bg-gold-line"></div>
+        </div>
+        <h2 class="font-display text-3xl md:text-5xl leading-tight text-text">
+          Five stars, from people <span class="italic text-gold">who actually built it</span>.
+        </h2>
+        <p class="text-text/85 text-base md:text-lg mt-5 leading-relaxed">
+          The actual reviews from verified Launchpad buyers on Gumroad, unedited apart from spelling. Names are withheld because the reviews came in anonymous, not because we wrote them.
+        </p>
+      </header>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6">
+        <div class="rounded-[1.5rem] border border-line bg-surface/60 p-6 md:p-7 flex flex-col gap-4">
+          <span class="text-gold text-lg tracking-[0.15em] leading-none" aria-label="Rated 5 out of 5 stars">★★★★★</span>
+          <p class="text-text/90 text-base leading-relaxed flex-1">"I'm really glad I decided to go through this process. I had a lot of ideas but wasn't sure how to put everything together in a way that made sense. What I appreciated most was that it gave me clarity and helped me organize my thoughts into something practical that I could actually move forward with. The whole experience felt straightforward and productive. Instead of spending months trying to figure things out on my own, I came away with a clearer direction, a stronger brand foundation, and a funnel that I could start using right away. For me, it was a worthwhile investment because it helped turn a lot of uncertainty into a concrete plan. I left feeling more confident about my business and the next steps I needed to take."</p>
+          <span class="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-2 inline-flex items-center gap-1.5"><span class="text-gold" aria-hidden="true">✓</span> Verified Buyer</span>
+        </div>
+        <div class="rounded-[1.5rem] border border-line bg-surface/60 p-6 md:p-7 flex flex-col gap-4">
+          <span class="text-gold text-lg tracking-[0.15em] leading-none" aria-label="Rated 5 out of 5 stars">★★★★★</span>
+          <p class="text-text/90 text-base leading-relaxed flex-1">"I was so surprised by the quality of the final product. Sometimes you buy things online and cross your fingers hoping it matches what's advertised on the website, and in this case, it was even better. The system is super polished, easy to understand, and aesthetically it's a 10/10. It's been a great investment, and I would definitely recommend it to anyone hesitating to take the plunge. If you want an already proofed system, this is it!"</p>
+          <span class="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-2 inline-flex items-center gap-1.5"><span class="text-gold" aria-hidden="true">✓</span> Verified Buyer</span>
+        </div>
+        <div class="rounded-[1.5rem] border border-line bg-surface/60 p-6 md:p-7 flex flex-col gap-4">
+          <span class="text-gold text-lg tracking-[0.15em] leading-none" aria-label="Rated 5 out of 5 stars">★★★★★</span>
+          <p class="text-text/90 text-base leading-relaxed flex-1">"As a full time college student, I felt like I never had enough time to figure out how to start an online business. Every time I had a free moment, I would end up watching another YouTube video or buying into another idea, and I still felt like I was going in circles. Vanguard OS honestly helped simplify everything for me. Instead of feeling like I needed to do a hundred different things, I finally had a clear direction. It made starting feel a lot less overwhelming, which was exactly what I needed with everything else going on in my life. If you are busy, constantly second guessing yourself, or just tired of feeling stuck, I think it's worth checking out. It helped me go from overthinking my next move to following a system that led me to actually starting that business that I had put off for years. Feels really good seeing my business on an actual website with a checkout system!"</p>
+          <span class="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-2 inline-flex items-center gap-1.5"><span class="text-gold" aria-hidden="true">✓</span> Verified Buyer · Full-time college student</span>
+        </div>
       </div>
     </div>
   </section>
@@ -1951,6 +2021,7 @@
         <a href="#offer-stack" class="hover:text-text transition">What's Inside</a>
         <a href="#brand-work" class="hover:text-text transition">Brand Work</a>
         <a href="#five-day" class="hover:text-text transition">5-Day Journey</a>
+        <a href="#testimonials" class="hover:text-text transition">Reviews</a>
         <a href="#faq" class="hover:text-text transition">FAQ</a>
         <a href="mailto:support@vanguardos.co" on:click|preventDefault={openContact} class="hover:text-text transition">Contact</a>
       </div>
