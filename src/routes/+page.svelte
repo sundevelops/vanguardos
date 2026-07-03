@@ -19,8 +19,30 @@
   let specimenKind = null;      // 'palette' | 'type'
   let specimenData = null;
   let specimenLastFocus = null;
+  // Specimen-only display faces (Fraunces, Source Serif 4, Geist, Geist Mono,
+  // Clash Display, Satoshi) used to be a render-blocking @import in the global
+  // <style>, fetched on every single pageview even though they only paint
+  // inside the click-to-inspect specimen modal. Loaded lazily here, on first
+  // open, instead: cuts two blocking font fetches off the critical path for
+  // the ~everyone who never opens the modal (2026-07-03 Core Web Vitals pass).
+  let specimenFontsLoaded = false;
+  function loadSpecimenFonts() {
+    if (specimenFontsLoaded || typeof document === 'undefined') return;
+    specimenFontsLoaded = true;
+    const urls = [
+      'https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Source+Serif+4:ital,wght@0,400;1,400&family=Geist:wght@500;600&family=Geist+Mono:wght@400;500&display=swap',
+      'https://api.fontshare.com/v2/css?f[]=clash-display@500,600&f[]=satoshi@400,500&display=swap'
+    ];
+    urls.forEach(href => {
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = href;
+      document.head.appendChild(link);
+    });
+  }
   function openSpecimen(kind, data, e) {
     if (e) e.preventDefault();
+    loadSpecimenFonts();
     specimenLastFocus = typeof document !== 'undefined' ? document.activeElement : null;
     specimenKind = kind;
     specimenData = data;
@@ -697,8 +719,21 @@
         </span>
       </div>
 
-      <!-- Headline: How to [outcome], even if [pain] -->
-      <h1 class="hero-item font-display font-medium text-text leading-[0.95] max-w-[1100px] mx-auto select-none" style="opacity: 0; letter-spacing: -0.025em;">
+      <!-- Headline: How to [outcome], even if [pain]
+           2026-07-03 Core Web Vitals fix: this <h1> is the page's LCP
+           candidate (by far the largest painted text block above the fold).
+           It used to share the `.hero-item` class, which the onMount()
+           motion.animate() call starts at opacity:0 and fades in after JS
+           hydrates, at the end of a 0.13s-per-item stagger. Chrome's LCP
+           algorithm does not count an element until it is visibly painted,
+           so gating the single biggest element behind a post-hydration JS
+           fade was directly inflating measured LCP, and made real buyers
+           wait to see the headline. Now excluded from that class/opacity
+           gate so it paints immediately at first paint (opacity defaults to
+           1); `.hero-h1` below gives it a CSS-only transform-in entrance
+           that never touches opacity, so the motion feel is kept without
+           the invisibility window. -->
+      <h1 class="hero-h1 font-display font-medium text-text leading-[0.95] max-w-[1100px] mx-auto select-none" style="letter-spacing: -0.025em;">
         <span class="block text-[2.75rem] sm:text-5xl md:text-7xl lg:text-[5.25rem] xl:text-[6rem]">
           Your <span class="text-gold">online business</span> up and running in <span class="text-gold">5 days</span>,
         </span>
@@ -2128,15 +2163,31 @@
 {/if}
 
 <style>
+  /* === HERO H1 — CSS-only entrance (no opacity gate, see LCP note above) ===
+     Transform-only keyframe: never sets opacity, so the element is a valid
+     LCP paint from the very first frame regardless of JS/hydration timing. */
+  .hero-h1 {
+    animation: heroH1In 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  }
+  @keyframes heroH1In {
+    from { transform: translateY(14px); }
+    to { transform: translateY(0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero-h1 { animation: none; }
+  }
+
   /* === TYPOGRAPHY PACK SPECIMEN FONTS ===
      Loads the actual display + body faces used by the three featured schemes
      so the preview cards render in the real typeface, not a fallback. The
      three are picked for body-font variety: sans (Satoshi), serif (Source
      Serif 4), mono (Geist Mono). Sources: Google Fonts (Fraunces, Source
      Serif 4, Geist, Geist Mono) + Fontshare (Clash Display, Satoshi). All
-     licenses verified in the pack. */
-  @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Source+Serif+4:ital,wght@0,400;1,400&family=Geist:wght@500;600&family=Geist+Mono:wght@400;500&display=swap');
-  @import url('https://api.fontshare.com/v2/css?f[]=clash-display@500,600&f[]=satoshi@400,500&display=swap');
+     licenses verified in the pack.
+     2026-07-03: these were a render-blocking @import fetched unconditionally
+     on every pageview. Moved to lazy <link> injection in loadSpecimenFonts()
+     (script section), triggered only when the specimen modal is actually
+     opened. Do not re-add an eager @import here. */
 
   .scheme-preview {
     transition: transform 0.18s ease, border-color 0.18s ease;
