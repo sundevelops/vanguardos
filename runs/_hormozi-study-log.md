@@ -124,3 +124,31 @@ sub-order is now clean, e.g. whether the-math's second value-stack beat still ea
 place right before the guarantee) — or, if that reads clean on the next audit, move to
 look-and-feel polish or Core Web Vitals (both still unstudied bites on the original
 rotation).
+
+---
+
+## 2026-07-03 — Scarcity and urgency, HONEST only
+
+Source: web search on Hormozi's `$100M Offers` scarcity/urgency framework (loxie.app,
+minchowcoders.com, thepowermoves.com summaries; search 2026-07-03).
+
+Takeaways:
+1. Three legitimate levers: limited supply ("only N spots"), limited time ("price rises
+   Friday"), limited bonuses ("first N buyers get X"). All three are real, checkable
+   constraints, never a UI trick.
+2. Honest scarcity outperforms fake scarcity over time; every claim must be true or it is
+   the fastest way to destroy trust, especially for a brand voice built on premium, calm
+   conviction rather than hype.
+3. Scarcity (how many) and urgency (how long) are different levers; don't blur them into a
+   vague "act now."
+4. Audited the live page against this: it currently has zero fake urgency (good, matches
+   the hard lock), but it also has none of the three real constraints, unlimited digital
+   delivery, no announced price-increase date, no time-boxed bonus stack, so there is
+   currently no honest scarcity/urgency lever available to pull.
+5. Did not add scarcity/urgency copy this run since inventing any of the three would be
+   fiction. Logged as a backlog idea for if/when a real constraint exists (e.g., if Jamil
+   confirms the current $811 bonus stack is specific to this launch and future VanguardOS
+   systems will ship their own stack, that would be an honest, checkable scarcity angle).
+
+Next bite: Lead magnets / give-before-you-ask (the only remaining unstudied curriculum
+item), or a second CLOSER audit pass if that reads higher-leverage first.
