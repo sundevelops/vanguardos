@@ -91,12 +91,17 @@
   // LAUNCHPAD is the current flagship product. Legacy slugs (core/bundle/upgrade)
   // are retained because the old AI Assistant offer code is commented out, not deleted,
   // so re-enabling those sections later still finds the URLs in one place.
+  // 2026-07-04: CTAs now go straight to the Gumroad checkout overlay
+  // (?wanted=true) instead of the Gumroad product page. The landing page
+  // already does the full sales job, so the product page was a redundant
+  // extra step between "I want this" and paying, pure Effort & Sacrifice
+  // with no upside. One click closer to checkout for every CTA on the page.
   const GUMROAD = {
-    launchpad: 'https://store.vanguardos.co/',
+    launchpad: 'https://vanguardos.gumroad.com/l/lgaxz?wanted=true',
     // bundle/core/upgrade point at the Launchpad until those SKUs go live; sweep in real URLs later.
-    bundle:    'https://store.vanguardos.co/',
-    core:      'https://store.vanguardos.co/',
-    upgrade:   'https://store.vanguardos.co/'
+    bundle:    'https://vanguardos.gumroad.com/l/lgaxz?wanted=true',
+    core:      'https://vanguardos.gumroad.com/l/lgaxz?wanted=true',
+    upgrade:   'https://vanguardos.gumroad.com/l/lgaxz?wanted=true'
   };
 
   // ── LAUNCHPAD OFFER STACK (high-impact) ───────────────────────────
