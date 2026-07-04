@@ -3,6 +3,43 @@
 Running list of done work + surfaced ideas. (Reconstructed 2026-06-29; file was missing.)
 
 ## Done (recent)
+- 2026-07-03 (manual, Jamil-requested, full accuracy audit, not a scheduled run): Jamil asked
+  for a full pass checking every claim on the page against what the Launchpad actually ships,
+  keeping persuasive copy intact. Read all of Day 1-5 source markdown plus the bonus specs
+  (Prompt Library/Vanguard Vault, Brand Palette Pack, Typography Pack, Funnel Pattern Library,
+  Notion Operations Spec, Landing Page Templates Spec) and the full `+page.svelte`. Found and
+  fixed four issues beyond the email-sequence wording above: (1) the Notion Operations OS
+  bonus blurb said "a 45-minute click-by-click build," but the shipped bonus is a published
+  Notion template buyers duplicate in about a minute (confirmed against the live template +
+  memory project_notion_operations_os); reworded to "One dashboard, four databases, duplicate
+  it in under a minute." (2) The Funnel Pattern Library blurb said "Modal code," but that file
+  is explicit ("There is no code anywhere in this file") — it ships copy/patterns and a prompt
+  that has Antigravity or the checkout platform generate the actual code; reworded to "Bundle
+  modal copy." (3) A math error: "the six bonuses come to $614, more than five times the
+  price" — $614 / $129 ≈ 4.76, which is LESS than five times, not more; corrected to "nearly
+  five times the price." (4) A dead-code bug, not a wording issue: a "Floating section
+  indicator" `<aside>` (was ~line 699, outside any `{#if false}` guard) rendered live on
+  screens ≥1480px wide and looped over the old `painkillers` array (60-Minute AI Assistant
+  content: INBOX, TAX, TRAVEL, EVENING, BRAND, COMMAND) — dots with zero connection to the
+  Launchpad page, and functionally inert besides (no visible `data-section-index` elements
+  left to drive `currentSection`, so it would have shown 5 static, wrong labels forever on
+  wide monitors). Deleted the aside entirely; left `painkillers`/`currentSection` in place
+  since they're harmless unused state and `painkillers` is still referenced inside the
+  legacy `{#if false}` block. Verified the 9-email sequence (Day 0/1/3/7/10/14/21/30/45),
+  the 13 order bumps, the 150 prompts, the 20 palettes, the 20 type systems, the 5 landing
+  templates, the 7 PDFs, and the 6 languages all check out exactly against source. Compile-
+  checked clean; not committed/pushed, left for Jamil/Antigravity.
+- 2026-07-03 (manual, Jamil-requested, not a scheduled run): Accuracy fix, not a Hormozi bite.
+  Jamil flagged that the copy implied VanguardOS activates/runs the buyer's email sequence for
+  them; in truth the Launchpad delivers the written 9-email sequence and Day 5 teaches the buyer
+  to wire it into their own ESP themselves. Reworded two spots in `+page.svelte`: the "Side
+  hustler" avatar promise (was "an email sequence that runs while you sleep" → now "a complete
+  9-email sequence, written and ready to load into your own email platform") and the "for-who"
+  qualification bullet (was "automated emails running on a live custom URL by Day 5" → now "a
+  complete email sequence ready to connect to your own platform, all on a live custom URL by Day
+  5"). Compile-checked clean (svelte/compiler, zero errors); not committed/pushed, left for
+  Jamil/Antigravity. Do not revert to the old "runs/automated" phrasing; see memory
+  feedback_email_sequence_scope.
 - 2026-07-03: Core Web Vitals bite. Hero `<h1>` (the page's actual LCP element) was gated
   behind `.hero-item`'s post-hydration JS opacity fade; pulled it out into its own
   `.hero-h1` class with a transform-only CSS keyframe (no opacity in the animation), so it

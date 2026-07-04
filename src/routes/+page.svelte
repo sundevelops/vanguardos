@@ -113,8 +113,8 @@
     { name: '5 Cloneable Landing Page Templates',      value: '$149', img: '/products/stack-03.webp', blurb: 'One master prompt builds any of the five. Hero, offer, FAQ, CTAs, already wired.' },
     { name: 'The Brand Palette Pack',                  value: '$79',  img: '/products/stack-04.webp', blurb: '20 ready-to-use palettes with the psychology behind each.' },
     { name: 'The Typography Pack',                     value: '$79',  img: '/products/stack-05.webp', blurb: '20 free-to-use premium type systems for solo brands.' },
-    { name: 'The Notion Operations OS',                value: '$61',  img: '/products/stack-06.webp', blurb: 'A 45-minute click-by-click build of the workspace you run the business from after launch.' },
-    { name: 'The Funnel Pattern Library',              value: '$99',  img: '/products/stack-07.webp', blurb: 'Modal code, the 9-email sequence, 13 order bumps. The conversion machinery.' }
+    { name: 'The Notion Operations OS',                value: '$61',  img: '/products/stack-06.webp', blurb: 'One dashboard, four databases, duplicate it in under a minute. The operations room you run the business from after launch.' },
+    { name: 'The Funnel Pattern Library',              value: '$99',  img: '/products/stack-07.webp', blurb: 'Bundle modal copy, the 9-email sequence, 13 order bumps. The conversion machinery.' }
   ];
   // Core vs bonus split + self-summing values (keeps the math honest: 197 + 614 = 811).
   const coreItem  = launchpadStack[0];
@@ -210,7 +210,7 @@
     { icon: '🚪', label: 'Knowledge worker leaving corporate',
       promise: "You're trading a salary for a question mark, and the scariest part is not knowing if the thing will even stand up. The Launchpad gives you a real brand, a real page, and a real funnel: proof you can hold up before you hand in notice. Build it on the side; walk out with it already live." },
     { icon: '⚡', label: 'Side hustler turning serious',
-      promise: "Your side thing works, but it looks like a side thing: duct-taped pages, no real offer, no funnel. The Launchpad upgrades it into something that reads as a real business, with a high-impact offer, a clean landing page, and an email sequence that runs while you sleep." }
+      promise: "Your side thing works, but it looks like a side thing: duct-taped pages, no real offer, no funnel. The Launchpad upgrades it into something that reads as a real business, with a high-impact offer, a clean landing page, and a complete 9-email sequence, written and ready to load into your own email platform." }
   ];
   // Index of the currently selected avatar; -1 = none selected (neutral prompt shown).
   // Defaults to 1 ("Solopreneur paralyzed by all the steps," the locked primary avatar hook)
@@ -696,15 +696,6 @@
   {/if}
 </header>
 
-<!-- Floating section indicator -->
-<aside class="hidden min-[1480px]:flex fixed right-6 2xl:right-10 top-1/2 -translate-y-1/2 z-[80] flex-col gap-3 text-[10px] font-mono uppercase tracking-widest text-muted-2 select-none pointer-events-none">
-  {#each painkillers as p, i}
-    <div class="flex items-center gap-2 transition-all duration-300 {currentSection === i ? 'text-gold' : ''}">
-      <span class="block h-px transition-all duration-300 {currentSection === i ? 'w-8 bg-gold' : 'w-3 bg-muted-2'}"></span>
-      <span>{p.num} · {p.kicker}</span>
-    </div>
-  {/each}
-</aside>
 
 <main id="top">
   <!-- HERO -->
@@ -876,7 +867,7 @@
             <li class="flex gap-3"><span class="text-gold mt-1">·</span><span>You keep buying courses and watching tutorials but never ship, and you want a strict, step-by-step path that makes you build instead of just consume.</span></li>
             <li class="flex gap-3"><span class="text-gold mt-1">·</span><span>You are overwhelmed by the volume of decisions a launch demands: naming, colors, type, copy, layout. You want a system that makes those calls for you.</span></li>
             <li class="flex gap-3"><span class="text-gold mt-1">·</span><span>You refuse to launch a cheap, amateur-looking storefront, but you don't have $5,000 to waste on a brand designer or copywriter just to validate a brand-new idea.</span></li>
-            <li class="flex gap-3"><span class="text-gold mt-1">·</span><span>You want a real, payment-ready storefront, a structured funnel, and automated emails running on a live custom URL by Day 5, so you have something tangible to sell next week.</span></li>
+            <li class="flex gap-3"><span class="text-gold mt-1">·</span><span>You want a real, payment-ready storefront, a structured funnel, and a complete email sequence ready to connect to your own platform, all on a live custom URL by Day 5, so you have something tangible to sell next week.</span></li>
           </ul>
         </div>
         <!-- NOT for you if... -->
@@ -989,7 +980,7 @@
           <span class="font-mono font-bold text-4xl md:text-5xl text-gold tracking-tight">$129</span>
         </div>
         <p class="text-base text-text/85 leading-relaxed mt-5 text-center">
-          Counted on their own, the six bonuses come to {'$' + bonusValue}, more than five times the price, and they are free. You pay $129 for the system and keep all {'$' + stackValue}.
+          Counted on their own, the six bonuses come to {'$' + bonusValue}, nearly five times the price, and they are free. You pay $129 for the system and keep all {'$' + stackValue}.
         </p>
         <a href={GUMROAD.launchpad} class="btn-primary flex items-center justify-center gap-2.5 mt-7 py-5 rounded-[2rem]">
           <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
