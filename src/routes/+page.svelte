@@ -21,7 +21,7 @@
   let specimenLastFocus = null;
   // Specimen-only display faces (Fraunces, Source Serif 4, Geist, Geist Mono,
   // Clash Display, Satoshi) used to be a render-blocking @import in the global
-  // <style>, fetched on every single pageview even though they only paint
+  // style block, fetched on every single pageview even though they only paint
   // inside the click-to-inspect specimen modal. Loaded lazily here, on first
   // open, instead: cuts two blocking font fetches off the critical path for
   // the ~everyone who never opens the modal (2026-07-03 Core Web Vitals pass).
