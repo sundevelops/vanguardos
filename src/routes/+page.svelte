@@ -127,7 +127,7 @@
   const launchpadDays = [
     { num: '01', kicker: 'IDEATE',        line: 'Lock your idea, validate, price.',         desc: 'Run the Problem-Validation Matrix to pick the one idea worth shipping, sketch a one-page portrait of the buyer who pays at 11pm, and set a price you can say out loud. You leave Day 1 with a locked offer in a single sentence.', img: '/products/day-1.png' },
     { num: '02', kicker: 'BRAND',         line: 'Name, voice, colors, fonts, logo.',        desc: 'Name it, find its voice in three words, and lock the palette and type from 20 ready-made pairings instead of a blank canvas. One page, one day, a brand book your future self will actually obey.', img: '/products/day-2.png' },
-    { num: '03', kicker: 'ASSETS',        line: 'Covers, banners, social. Premium.',        desc: 'Generate a hero image, a product mockup, and a full social set, all brand-locked, in one studio session. Art-directed to look like a brand a stranger remembers, not stock-photo filler.', img: '/products/day-3.png' },
+    { num: '03', kicker: 'ASSETS',        line: 'Covers, banners, social. Then build and package.',        desc: 'Generate a hero image, a product mockup, and a full social set, all brand-locked, in one studio session. Then write, structure, and package the product itself, with the exact cover and thumbnail your checkout needs.', img: '/products/day-3.png' },
     { num: '04', kicker: 'LANDING PAGE',  line: 'Hero, offer, CTAs, mobile.',                desc: 'Build a real page in plain English with a free AI builder, no code, then deploy it on a live URL. Hero, high-impact offer, proof, and CTAs, mobile-first, by tonight.', img: '/products/day-4.png' },
     { num: '05', kicker: 'FUNNEL',        line: 'Checkout, upsell, emails. Ready.',         desc: 'Wire the whole path from click to welcome: Gumroad checkout, an order bump, a bundle upsell, and a written email sequence. Make a test purchase, refund yourself, and you are shipped.', img: '/products/day-5.png' }
   ];
@@ -234,7 +234,7 @@
   const launchpadFaq = [
     ['Do I need to be technical?', 'No. Every template, prompt, and pattern is copy-paste. The prompts ask you a few plain questions and do the rest. If you can follow a recipe, you can follow this.'],
     ["What if I don't have an idea yet?", 'Day 1 is the ideation system itself: a sequenced way to surface, validate, and price an idea you actually want to ship. You can start with nothing more than a hunch, or a blank page, and finish Day 1 with a locked offer.'],
-    ['How much time does each day take?', 'One focused sitting, not a day off work. The whole guide is 32 pages, about six a day, action-first, so most people finish a day in one to two hours after work. Plan on roughly 8 to 12 hours of hands-on building across the five days, and the AI does the heavy lifting inside each one.'],
+    ['How much time does each day take?', 'One focused sitting, not a day off work. The whole guide is 35 pages, four to eight a day, action-first, so most people finish a day in one to two hours after work. Plan on roughly 8 to 12 hours of hands-on building across the five days, and the AI does the heavy lifting inside each one.'],
     ['How do I get it after I pay?', 'Instantly. The moment your $129 payment clears on Gumroad, the email lands with all 7 PDFs, the templates, and the prompt vault, ready to download and keep forever. No onboarding call, no waiting room. You can open Day 1 the same night.'],
     ['What AI tools do I need?', 'Just one capable model. The prompts work with ChatGPT, Claude, or Gemini, and Day 4 builds your landing page in Google Antigravity, which is free to start. Free tiers can complete the 5 days, but we strongly recommend a paid tier of one model (about $20 a month): you get longer sessions and access to the stronger models, and a stronger model means noticeably better output across all five days. There is no VanguardOS subscription on top.'],
     ['How much extra will I spend on tools?', 'You can build and host for $0. Two upgrades are worth it: a paid AI tier for stronger output, and a custom domain (about $10 a year) so your site has a real, credible address you own. Neither is strictly required to finish, but both are worth the small spend.'],
@@ -636,7 +636,7 @@
     "mainEntity": [
       { "@type": "Question", "name": "Do I need to be technical?", "acceptedAnswer": { "@type": "Answer", "text": "No. Every template, prompt, and pattern is copy-paste. The prompts ask you a few plain questions and do the rest. If you can follow a recipe, you can follow this." } },
       { "@type": "Question", "name": "What if I don't have an idea yet?", "acceptedAnswer": { "@type": "Answer", "text": "Day 1 is the ideation system itself: a sequenced way to surface, validate, and price an idea you actually want to ship. You can start with nothing more than a hunch, or a blank page, and finish Day 1 with a locked offer." } },
-      { "@type": "Question", "name": "How much time does each day take?", "acceptedAnswer": { "@type": "Answer", "text": "One focused sitting, not a day off work. The whole guide is 32 pages, about six a day, action-first, so most people finish a day in one to two hours after work. Plan on roughly 8 to 12 hours of hands-on building across the five days, and the AI does the heavy lifting inside each one." } },
+      { "@type": "Question", "name": "How much time does each day take?", "acceptedAnswer": { "@type": "Answer", "text": "One focused sitting, not a day off work. The whole guide is 35 pages, four to eight a day, action-first, so most people finish a day in one to two hours after work. Plan on roughly 8 to 12 hours of hands-on building across the five days, and the AI does the heavy lifting inside each one." } },
       { "@type": "Question", "name": "How do I get it after I pay?", "acceptedAnswer": { "@type": "Answer", "text": "Instantly. The moment your $129 payment clears on Gumroad, the email lands with all 7 PDFs, the templates, and the prompt vault, ready to download and keep forever. No onboarding call, no waiting room. You can open Day 1 the same night." } },
       { "@type": "Question", "name": "What AI tools do I need?", "acceptedAnswer": { "@type": "Answer", "text": "Just one capable model. The prompts work with ChatGPT, Claude, or Gemini, and Day 4 builds your landing page in Google Antigravity, which is free to start. Free tiers can complete the 5 days, but we strongly recommend a paid tier of one model (about $20 a month): you get longer sessions and access to the stronger models, and a stronger model means noticeably better output across all five days. There is no VanguardOS subscription on top." } },
       { "@type": "Question", "name": "How much extra will I spend on tools?", "acceptedAnswer": { "@type": "Answer", "text": "You can build and host for $0. Two upgrades are worth it: a paid AI tier for stronger output, and a custom domain (about $10 a year) so your site has a real, credible address you own. Neither is strictly required to finish, but both are worth the small spend." } },
@@ -884,6 +884,7 @@
             <li class="flex gap-3"><span class="text-muted mt-1">·</span><span>You expect sales to happen automatically without promotion. The Launchpad builds the storefront and checkout funnel; driving traffic is your job, and we would rather be honest about that upfront.</span></li>
             <li class="flex gap-3"><span class="text-muted mt-1">·</span><span>You want an effortless one-click button. The system is fast, but it still takes 8 to 12 hours of focused, hands-on work. Fast is not the same as effortless.</span></li>
             <li class="flex gap-3"><span class="text-muted mt-1">·</span><span>You are hunting a get-rich-quick, passive-income loophole. This builds a real product you own, not a temporary hype funnel.</span></li>
+            <li class="flex gap-3"><span class="text-muted mt-1">·</span><span>You are selling something physical you need to manufacture, stock, or ship. The Launchpad is built for digital products: guides, courses, templates, software. The checkout and delivery system is instant-download, not inventory or fulfillment.</span></li>
           </ul>
         </div>
       </div>
@@ -915,7 +916,7 @@
       <!-- Conciseness callout -->
       <div class="reveal mb-10 md:mb-12 max-w-[820px] mx-auto rounded-[1.25rem] border-l-2 border-gold bg-surface/60 px-6 py-5 md:px-8 md:py-6">
         <p class="font-display italic text-lg md:text-xl text-text/90 leading-relaxed">
-          The entire Launchpad guide is <span class="text-gold not-italic font-semibold">exactly 32 pages</span>, split across the 5 days. Not 250. That is about six pages a day, action-first. You're meant to finish a day in a single sitting, not study it for a week.
+          The entire Launchpad guide is <span class="text-gold not-italic font-semibold">exactly 35 pages</span>, split across the 5 days. Not 250. That is four to eight pages a day, action-first. You're meant to finish a day in a single sitting, not study it for a week.
         </p>
       </div>
 
@@ -2011,7 +2012,7 @@
         <img src="/brand/brand-mark-owl.svg" alt="VanguardOS owl mark" class="w-8 h-8" />
         <span class="font-display text-xl md:text-2xl leading-none"><span class="text-text">Vanguard</span><span class="italic text-gold">OS</span></span>
       </div>
-      <p class="font-display italic text-sm md:text-base" style="color: #D6D4CC;">Systems that launchpad solopreneurs into the digital economy.</p>
+      <p class="font-display italic text-sm md:text-base" style="color: #D6D4CC;">Systems that ship.</p>
     </div>
     <div class="pt-8 border-t border-line flex flex-col md:flex-row justify-between items-center gap-6">
       <div class="text-[10px] font-mono uppercase tracking-widest" style="color: #B5B5AE;">© 2026 VanguardOS</div>
