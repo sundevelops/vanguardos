@@ -5,9 +5,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="theme-color" content="#111212" />
 
+    <!-- Meta Pixel Code -->
+    <script>
+      !function(f,b,e,v,n,t,s)
+      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+      n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t,s)}(window, document,'script',
+      'https://connect.facebook.net/en_US/fbevents.js');
+      fbq('init', '915468030842339');
+      fbq('track', 'PageView');
+
+      // Optional custom event — CheckoutClick
+      document.addEventListener('click', function(e) {
+        const link = e.target.closest('a[href*="gumroad.com"]');
+        if (link && typeof fbq === 'function') {
+          fbq('trackCustom', 'CheckoutClick', {
+            content_name: 'The Vanguard Launchpad',
+            destination: 'gumroad'
+          });
+        }
+      }, true);
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+      src="https://www.facebook.com/tr?id=915468030842339&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Meta Pixel Code -->
+
     <!-- Primary SEO -->
-    <title>Your Online Business, Up And Running In 5 Days · VanguardOS</title>
-    <meta name="description" content="An interactive, guided build system for solopreneurs paralyzed by planning: your online business, up and running in 5 days, even if you've never shipped anything before. $129, 30-day guarantee." />
+    <title>Build and Launch Your Digital Product in 5 Days · VanguardOS</title>
+    <meta name="description" content="The Vanguard Launchpad is an interactive five-day system that guides you from idea to branded digital product, live sales page, Gumroad checkout, and follow-up funnel." />
     <meta name="keywords" content="solopreneur system, launch system, 5-day launch, high-impact offer, landing page templates, AI prompt library, brand palette pack, Notion launch template, solo business launchpad, funnel pattern library" />
     <meta name="author" content="VanguardOS" />
     <meta name="robots" content="index, follow, max-image-preview:large" />
@@ -16,8 +45,8 @@
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="VanguardOS" />
-    <meta property="og:title" content="Your Online Business, Up And Running In 5 Days · VanguardOS" />
-    <meta property="og:description" content="An interactive, guided build system for solopreneurs paralyzed by planning: your online business, up and running in 5 days, even if you've never shipped anything before. $129, 30-day guarantee." />
+    <meta property="og:title" content="Build and Launch Your Digital Product in 5 Days · VanguardOS" />
+    <meta property="og:description" content="The Vanguard Launchpad is an interactive five-day system that guides you from idea to branded digital product, live sales page, Gumroad checkout, and follow-up funnel." />
     <meta property="og:url" content="https://vanguardos.co/" />
     <meta property="og:image" content="https://vanguardos.co/og/og-card.jpg" />
     <meta property="og:image:width" content="1200" />
@@ -26,8 +55,8 @@
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Your Online Business, Up And Running In 5 Days · VanguardOS" />
-    <meta name="twitter:description" content="An interactive, guided build system for solopreneurs paralyzed by planning: your online business, up and running in 5 days, even if you've never shipped anything before. $129, 30-day guarantee." />
+    <meta name="twitter:title" content="Build and Launch Your Digital Product in 5 Days · VanguardOS" />
+    <meta name="twitter:description" content="The Vanguard Launchpad is an interactive five-day system that guides you from idea to branded digital product, live sales page, Gumroad checkout, and follow-up funnel." />
     <meta name="twitter:image" content="https://vanguardos.co/og/og-card.jpg" />
     <meta name="twitter:image:alt" content="The Vanguard Launchpad · 5-day system for solopreneurs" />
 

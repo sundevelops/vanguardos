@@ -6,8 +6,6 @@
   let scrollProgress = 0;
   let showStickyCta = false;   // persistent mobile CTA — appears once hero scrolls away
   let menuOpen = false;
-  let currentSection = 0;
-  let modalOpen = false;
   // Scroll-linked progress for the 5-day journey scrollytelling rail (0→1).
   let fiveDayProgress = 0;
 
@@ -84,67 +82,74 @@
     } catch (_) {}
   }
 
-  // 'core' or 'upgrade' — drives dynamic modal copy + the original-CTA fallback URL
-  let upsellSource = 'core';
-  // Big premium opt-in checkbox; defaults to checked because the upsell math is
-  // strictly in the buyer's favor ($30 more for both products / same price + more product).
-  let upsellOptIn = true;
-
   // ── GUMROAD FUNNEL ────────────────────────────────────────────────
-  // Replace the bracketed placeholders with your real Gumroad URLs.
-  // LAUNCHPAD is the current flagship product. Legacy slugs (core/bundle/upgrade)
-  // are retained because the old AI Assistant offer code is commented out, not deleted,
-  // so re-enabling those sections later still finds the URLs in one place.
+  // 2026-07-11: dropped the Bundle Upsell Modal (upsellSource/upsellOptIn/
+  // openUpsell/etc.) — it only ever served the old 60-Minute AI Assistant
+  // Core/Upgrade CTAs, which were removed with the dead legacy block.
+  // Every live CTA on this page links straight to GUMROAD.launchpad.
   // 2026-07-04: CTAs now go straight to the Gumroad checkout overlay
   // (?wanted=true) instead of the Gumroad product page. The landing page
   // already does the full sales job, so the product page was a redundant
   // extra step between "I want this" and paying, pure Effort & Sacrifice
   // with no upside. One click closer to checkout for every CTA on the page.
   const GUMROAD = {
-    launchpad: 'https://vanguardos.gumroad.com/l/lgaxz?wanted=true',
-    // bundle/core/upgrade point at the Launchpad until those SKUs go live; sweep in real URLs later.
-    bundle:    'https://vanguardos.gumroad.com/l/lgaxz?wanted=true',
-    core:      'https://vanguardos.gumroad.com/l/lgaxz?wanted=true',
-    upgrade:   'https://vanguardos.gumroad.com/l/lgaxz?wanted=true'
+    launchpad: 'https://vanguardos.gumroad.com/l/lgaxz?wanted=true'
   };
 
-  // ── LAUNCHPAD OFFER STACK (high-impact) ───────────────────────────
-  // 1 core system ($129) + 6 bonuses ($682). Total stacked $811, sells for $129.
-  // launchpadStack[0] is THE CORE; everything after is a stacked-on bonus.
+  // ── ANALYTICS (Pixel-ready, Pixel not installed) ───────────────────
+  // One centralized hook every purchase CTA calls on click. Does nothing
+  // destructive today — the actual Meta Pixel snippet/ID is not present in
+  // app.html yet, so this no-ops until the founder drops the real Pixel ID
+  // in. Once that snippet exists, every CTA below starts firing
+  // InitiateCheckout automatically with zero further template changes,
+  // because they all already call this one function instead of each
+  // wiring its own tracking call. `data-event` / `data-analytics-id` are
+  // also present in the markup so a Pixel, GA4, or GTM container can bind
+  // to them declaratively instead of via this hook, if preferred later.
+  function trackCheckoutClick(e) {
+    // 2026-07-13: Checked out click tracked via delegated listener in app.html.
+    // InitiateCheckout is not tracked here to avoid double-firing or conflicts
+    // with Gumroad's domain-level events.
+  }
+
+  // ── LAUNCHPAD OFFER STACK ──────────────────────────────────────────
+  // launchpadStack[0] is THE CORE; everything after is a companion resource.
+  // Dollar `value` fields kept on each item for internal reference only —
+  // no template displays per-item or stacked dollar values (2026-07-11).
   const launchpadStack = [
-    { name: 'The 5-Day Launchpad',                     value: '$197', img: '/products/stack-01.webp', blurb: 'The interactive, guided build system. Open it in your browser and it walks you from idea to launch-ready, one screen at a time, by Day 5.' },
-    { name: 'The Vanguard Vault',                      value: '$147', img: '/products/stack-02.webp', blurb: '150 paste-and-go AI prompts. Paste one, answer up to three plain questions, get finished work. Works with ChatGPT, Claude, and Gemini.' },
-    { name: '5 Cloneable Landing Page Templates',      value: '$149', img: '/products/stack-03.webp', blurb: 'One master prompt builds any of the five. Hero, offer, FAQ, CTAs, already wired.' },
-    { name: 'The Brand Palette Pack',                  value: '$79',  img: '/products/stack-04.webp', blurb: '20 ready-to-use palettes with the psychology behind each.' },
-    { name: 'The Typography Pack',                     value: '$79',  img: '/products/stack-05.webp', blurb: '20 free-to-use premium type systems for solo brands.' },
-    { name: 'The Notion Operations OS',                value: '$61',  img: '/products/stack-06.webp', blurb: 'One dashboard, four databases, duplicate it in under a minute. The operations room you run the business from after launch.' },
-    { name: 'The Funnel Pattern Library',              value: '$99',  img: '/products/stack-07.webp', blurb: 'Bundle modal copy, the 9-email sequence, upsell templates for Gumroad. The conversion machinery.' }
+    { name: 'The 5-Day Launchpad',                     img: '/products/stack-01.webp', blurb: 'The interactive, guided build system. Open it in your browser and it walks you from idea to launch-ready, one screen at a time, by Day 5.' },
+    { name: 'The Vanguard Vault',                      img: '/products/stack-02.webp', blurb: '150 paste-and-go AI prompts. Paste one, answer up to three plain questions, get finished work. Works with ChatGPT, Claude, and Gemini.' },
+    { name: '5 Cloneable Landing Page Templates',      img: '/products/stack-03.webp', blurb: 'One master prompt builds any of the five. Hero, offer, FAQ, CTAs, already wired.' },
+    { name: 'The Brand Palette Pack',                  img: '/products/stack-04.webp', blurb: '20 ready-to-use palettes with the psychology behind each.' },
+    { name: 'The Typography Pack',                     img: '/products/stack-05.webp', blurb: '20 free-to-use premium type systems for solo brands.' },
+    { name: 'The Notion Operations OS',                img: '/products/stack-06.webp', blurb: 'One dashboard, four databases, duplicate it in under a minute. The operations room you run the business from after launch.' },
+    { name: 'The Funnel Pattern Library',              img: '/products/stack-07.webp', blurb: 'Bundle modal copy, the 9-email sequence, upsell templates for Gumroad. The conversion machinery.' }
   ];
-  // Core vs bonus split + self-summing values (keeps the math honest: 197 + 614 = 811).
   const coreItem  = launchpadStack[0];
   const bonusItems = launchpadStack.slice(1);
-  const dollars = (v) => parseInt(String(v).replace(/[^0-9]/g, ''), 10) || 0;
-  const bonusValue = bonusItems.reduce((sum, i) => sum + dollars(i.value), 0);   // 614
-  const stackValue = launchpadStack.reduce((sum, i) => sum + dollars(i.value), 0); // 811
 
   // ── 5-DAY JOURNEY ────────────────────────────────────────────────
+  // Condensed 2026-07-11: dropped per-day screenshot cards + long
+  // descriptions (Visual Reveal Rule — no five-card gallery here) down to
+  // one line per day. img/desc fields removed since nothing renders them
+  // anymore; kicker still feeds the compact list + rail dots.
   const launchpadDays = [
-    { num: '01', kicker: 'IDEATE',        line: 'Lock your idea, validate, price.',         desc: 'Run the Problem-Validation Matrix to pick the one idea worth shipping, sketch a one-page portrait of the buyer who pays at 11pm, and set a price you can say out loud. You leave Day 1 with a locked offer in a single sentence.', img: '/products/day-1.png' },
-    { num: '02', kicker: 'BRAND',         line: 'Name, voice, colors, fonts, logo.',        desc: 'Name it, find its voice in three words, and lock the palette and type from 20 ready-made pairings instead of a blank canvas. One page, one day, a brand book your future self will actually obey.', img: '/products/day-2.png' },
-    { num: '03', kicker: 'ASSETS',        line: 'Covers, banners, social. Then build and package.',        desc: 'Generate a hero image, a product mockup, and a full social set, all brand-locked, in one studio session. Then write, structure, and package the product itself, with the exact cover and thumbnail your checkout needs.', img: '/products/day-3.png' },
-    { num: '04', kicker: 'LANDING PAGE',  line: 'Hero, offer, CTAs, mobile.',                desc: 'Build a real page in plain English with a free AI builder, no code, then deploy it on a live URL. Hero, high-impact offer, proof, and CTAs, mobile-first, by tonight.', img: '/products/day-4.png' },
-    { num: '05', kicker: 'FUNNEL',        line: 'Checkout, upsell, emails. Ready.',         desc: 'Wire the whole path from click to welcome: set up your Gumroad checkout, layer in the bundle upsell, and write your complete follow-up email sequence right inside the app’s Day 5 screens. Make a test purchase, refund yourself, and you are shipped.', img: '/products/day-5.png' }
+    { num: '01', kicker: 'IDEATE',       line: 'Lock the idea, buyer, offer, and price.' },
+    { num: '02', kicker: 'BRAND',        line: 'Build the brand foundation.' },
+    { num: '03', kicker: 'ASSETS',       line: 'Create and package the digital product.' },
+    { num: '04', kicker: 'LANDING PAGE', line: 'Build and deploy the landing page.' },
+    { num: '05', kicker: 'FUNNEL',       line: 'Connect Gumroad, the upsell, delivery, and follow-up emails.' }
   ];
 
   // ── HERO DAY-5 OUTCOME CHIPS ─────────────────────────────────────
   // Concrete, tactile proof of the "5 deliverables in 5 days" promise.
   // Rendered as a row of checked chips directly under the hero subhead.
   const day5Outcomes = [
-    'Brand + logo',
-    'Landing page live',
-    'High-impact offer',
-    'Payment-ready funnel',
-    'Email sequence'
+    'Validated digital product',
+    'Brand and sales assets',
+    'Live sales page',
+    'Gumroad checkout',
+    'Follow-up emails'
   ];
 
   // ── ASSET-PACK SPECIMENS ─────────────────────────────────────────
@@ -152,7 +157,7 @@
   // invisible on the page. These render a *taste* of each, inline, with
   // pure CSS — no external image assets required. Proof of substance.
   const specimenPalettes = [
-    { name: 'Midnight Vanguard', colors: ['#0A0B0B', '#111212', '#D4AF37', '#E7C66A', '#ECEAE4'] },
+    { name: 'Equestrian',        colors: ['#1B1E2E', '#1F2C4A', '#6A3A1F', '#B59044', '#F2ECDD'] },
     { name: 'Cold Lab',          colors: ['#000000', '#141414', '#E6F84B', '#FF5C39', '#F5F5F4'] },
     { name: 'Atelier Noir',      colors: ['#0F0B09', '#1A1411', '#7A1F20', '#B8893A', '#F1E8D8'] },
     { name: 'Nightshift',        colors: ['#070B12', '#0C111B', '#5BC0EB', '#A0E7FF', '#E8ECF3'] },
@@ -222,41 +227,6 @@
     }
   ];
 
-  // ── AUDIENCE AVATARS ─────────────────────────────────────────────
-  // Each avatar is clickable; selecting one swaps the promise paragraph below
-  // to copy tuned for that path. Pure Svelte state — no server, no tracking.
-  // icon: a short mono kicker code, not an emoji — brand rules forbid emoji
-  // anywhere on the page (2026-07-10 audit fix).
-  const launchpadAvatars = [
-    { icon: 'PRO', label: 'Busy professional with an idea',
-      promise: "You don't have nights and weekends to burn learning design, copywriting, and funnels. You have an idea and a narrow window. The Launchpad collapses the whole build into five focused sessions, so the thing in your head is live on the internet before the window closes." },
-    { icon: 'MAKE', label: 'Aspiring creator',
-      promise: "You can make the thing. What stops you is the machinery around it: the brand, the page, the offer, the checkout. The Launchpad hands you that machinery pre-wired. You bring the taste; it brings the system. By Day 5 your work has a storefront, not just a folder." },
-    { icon: 'SOLO', label: 'Solopreneur paralyzed by all the steps',
-      promise: "The reason you haven't shipped isn't laziness. 'Launch a product' is forty invisible decisions stacked on top of each other. The Launchpad turns the pile into one ordered path: do today's day, get today's deliverable, move on. Paralysis dies when the next step is the only step." },
-    { icon: 'EXIT', label: 'Knowledge worker leaving corporate',
-      promise: "You're trading a salary for a question mark, and the scariest part is not knowing if the thing will even stand up. The Launchpad gives you a real brand, a real page, and a real funnel: proof you can hold up before you hand in notice. Build it on the side; walk out with it already live." },
-    { icon: 'SIDE', label: 'Side hustler turning serious',
-      promise: "Your side thing works, but it looks like a side thing: duct-taped pages, no real offer, no funnel. The Launchpad upgrades it into something that reads as a real business, with a high-impact offer, a clean landing page, and a complete 9-email sequence, written and ready to load into your own email platform." }
-  ];
-  // Index of the currently selected avatar; -1 = none selected (neutral prompt shown).
-  // Defaults to 1 ("Solopreneur paralyzed by all the steps," the locked primary avatar hook)
-  // so the personalized dream-outcome promise sells immediately on load instead of gating
-  // it behind a click — Hormozi Sell-the-vacation: don't make the buyer work to see the dream.
-  let selectedAvatar = 1;
-  async function selectAvatar(i) {
-    selectedAvatar = selectedAvatar === i ? -1 : i;
-    if (selectedAvatar !== -1) {
-      await tick();
-      const el = document.getElementById('promise-container');
-      if (el) {
-        const yOffset = -100; // offset for sticky header
-        const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
-        window.scrollTo({ top: y, behavior: 'smooth' });
-      }
-    }
-  }
-
   // ── LAUNCHPAD FAQ ────────────────────────────────────────────────
   const launchpadFaq = [
     ['Do I need to be technical?', 'No. Every template, prompt, and pattern is copy-paste. The prompts ask you a few plain questions and do the rest. If you can follow a recipe, you can follow this.'],
@@ -270,330 +240,27 @@
     ['Refund policy?', 'A full 30 days, no questions asked. Buy it, go through it, and if the Launchpad is not for you for any reason, email us within 30 days for a full refund. No forms, no hoops, no explanation needed.']
   ];
 
-  // Any non-Bundle CTA (Core or Upgrade) opens the Bundle upsell modal first.
-  // The user can opt in to the Bundle or decline and continue to their original CTA.
-  // Focus management — keyboard users land inside the modal on open and
-  // return to the CTA they clicked when it closes (a11y + zero-friction UX).
-  let upsellPrimaryBtn;
-  let lastFocusedEl = null;
-  function openUpsell(source, e) {
-    if (e) e.preventDefault();
-    lastFocusedEl = typeof document !== 'undefined' ? document.activeElement : null;
-    upsellSource = source;
-    upsellOptIn = true;          // reset to default each open
-    modalOpen = true;
-    tick().then(() => upsellPrimaryBtn?.focus());
-  }
-  function restoreFocus() {
-    if (lastFocusedEl?.focus) lastFocusedEl.focus();
-    lastFocusedEl = null;
-  }
-  function go(url) { window.location.href = url; }
-  function originalCtaUrl() {
-    return upsellSource === 'core' ? GUMROAD.core : GUMROAD.upgrade;
-  }
-  function upsellContinue() {
-    modalOpen = false;
-    go(upsellOptIn ? GUMROAD.bundle : originalCtaUrl());
-  }
-  function upsellDecline() {
-    modalOpen = false;
-    go(originalCtaUrl());
-  }
-  function upsellClose() {
-    modalOpen = false;            // X — pure dismiss, no routing
-    restoreFocus();
-  }
-
-  // Each painkiller is a long-form editorial spread with a Telegram-style chat mockup.
-  const painkillers = [
-    {
-      num: '01',
-      kicker: 'INBOX',
-      title: 'The Ghostwritten Inbox',
-      trigger: `"what's urgent"`,
-      lede: 'Three reply drafts waiting in Gmail before your coffee cools.',
-      body: 'You text two words. It reads every unread email, finds the three that actually need you, and writes the replies in your voice. You glance and send. The other 208 emails never touch your morning.',
-      time: '9:14',
-      messages: [
-        { from: 'user', text: `what's urgent` },
-        { from: 'bot', text: '211 unread. 3 actually need you today —' },
-        { from: 'bot', text: '📧 Sarah — contract expires 5PM · draft ready' },
-        { from: 'bot', text: '📧 Daniel (board) — Q3 deck by EOD · draft ready' },
-        { from: 'bot', text: '📧 IRS — response due Fri · draft ready' },
-        { from: 'bot', text: 'All three replies written in your voice, in Drafts. You spend 90 seconds. The other 208 emails never touch your morning.' }
-      ]
-    },
-    {
-      num: '02',
-      kicker: 'TAX',
-      title: 'The 1-Text Tax Vault',
-      trigger: 'Send a receipt photo',
-      lede: 'One photo in. One clean line in your expense log out.',
-      body: 'Snap the receipt the second it hits your hand. It reads the vendor, amount, and category, and files it forever. By April, the shoebox is empty and the year is already done.',
-      time: '12:48',
-      messages: [
-        { from: 'user', text: '🧾 [receipt photo]' },
-        { from: 'bot', text: '🧾 Logged: Delta — $148.20 (Travel).' },
-        { from: 'bot', text: 'Filed, categorized, tax-ready. YTD: $17,280.' },
-        { from: 'bot', text: "That's one fewer line your accountant bills you to chase in April. The shoebox is already empty." },
-        { from: 'user', text: 'show me my money' },
-        { from: 'bot', text: '📊 Dashboard open on your screen — $2,940 this month. Scroll down, this is the exact view.' }
-      ]
-    },
-    {
-      num: '03',
-      kicker: 'TRAVEL',
-      title: 'The Flight Lifeline',
-      trigger: 'Forward your confirmation',
-      lede: 'Never refresh an airline app at 11 PM again.',
-      body: 'Forward one confirmation email and forget it exists. It watches the check-in window, opens it the moment it can, and texts you the seat. The next time you think about check-in is when your phone buzzes with the boarding pass.',
-      time: '6:02',
-      messages: [
-        { from: 'bot', text: '✈ Tracking Delta 1422 — JFK → SFO, Thu.' },
-        { from: 'bot', text: "I'll open check-in the exact second the window does. You can stop thinking about it now." },
-        { from: 'bot', text: '✅ Checked in. Seat 4C — aisle, like you prefer. Boarding pass on your phone.' },
-        { from: 'user', text: "didn't even think about it 🙏" },
-        { from: 'bot', text: "That's the whole point. No 11PM app-refresh. No middle seat." }
-      ]
-    },
-    {
-      num: '04',
-      kicker: 'EVENING',
-      title: 'Date-Night Auto-Pilot',
-      trigger: `"plan date night"`,
-      lede: 'A real, bookable evening — built before you finish the question.',
-      body: 'Romance does not die from lack of love. It dies from lack of logistics. It scans what is open near you, fits it to your sitter window, and hands you a plan with live booking links. You make the final tap.',
-      time: '4:21',
-      messages: [
-        { from: 'user', text: 'plan date night' },
-        { from: 'bot', text: 'On it. Friday, your area, ~7PM?' },
-        { from: 'user', text: 'yes' },
-        { from: 'bot', text: '🌙 One plan, two backups —' },
-        { from: 'bot', text: '🍽 Osteria Marco · 7:00 · cozy → Reserve ›' },
-        { from: 'bot', text: '🎬 Dune III · 9:15 · AMC 16 → Tickets ›' },
-        { from: 'bot', text: 'Fits your sitter window. Home by 11:30. You make the final tap — 8 seconds vs. 12 browser tabs.' }
-      ]
-    },
-    {
-      num: '05',
-      kicker: 'BRAND',
-      title: 'The Drive-Time Brand Engine',
-      trigger: 'Send a voice memo',
-      lede: 'Talk for two minutes on the drive home. Park with two finished drafts.',
-      body: 'Your best ideas hit in the car and evaporate by the time you are parked. Hold the mic, ramble for a minute. It pulls out the one real idea and writes a LinkedIn post and a newsletter — in your voice, ready to publish.',
-      time: '5:47',
-      messages: [
-        { from: 'user', text: '🎙 [voice memo · 2:04]' },
-        { from: 'bot', text: 'Got it. Found your one real idea in the ramble.' },
-        { from: 'bot', text: '✍ LinkedIn post (340 w) — in Drafts' },
-        { from: 'bot', text: '📰 Newsletter + subject line — in Drafts' },
-        { from: 'bot', text: 'A ghostwriter charges $300 for this. You did it from the car. Twice a week = ~100 posts a year, for free.' }
-      ]
-    },
-    {
-      num: '06',
-      kicker: 'COMMAND',
-      title: 'The Command Center',
-      trigger: `"morning briefing"`,
-      lede: 'Your inbox, money, flights, and day — assembled in one calm screen.',
-      body: 'The flagship. Everything the other five do, rolled into one morning standup the way a great chief of staff slides it across your desk with your coffee. One text, and your whole day is handled before you open the laptop.',
-      time: '6:42',
-      flagship: true,
-      messages: [
-        { from: 'user', text: 'morning briefing' },
-        { from: 'bot', text: "Your whole day — handled before you opened the laptop:" },
-        { from: 'bot', text: '📩 Inbox · 3 need you · all drafted' },
-        { from: 'bot', text: '💰 Money · $2,940 this month · $17,280 YTD' },
-        { from: 'bot', text: '✈ Travel · SFO Thu · check-in handled' },
-        { from: 'bot', text: '📅 10a board · 2p Liz · 4:15 pickup' },
-        { from: 'bot', text: '📊 Full Command Center is live in your browser → scroll down, this is the exact screen.' }
-      ]
-    }
-  ];
-
-  // Living Money Dashboard data (real figures from the product).
-  const categories = [
-    { name: 'Travel',   amt: 5420, len: 157.7, off: 0,     color: '#D4AF37' },
-    { name: 'Meals',    amt: 3810, len: 110.8, off: -157.7, color: '#E7C66A' },
-    { name: 'Software', amt: 3120, len: 90.8,  off: -268.5, color: '#B8941F' },
-    { name: 'Office',   amt: 2740, len: 79.7,  off: -359.3, color: '#8C6E1E' },
-    { name: 'Other',    amt: 2190, len: 63.7,  off: -439.0, color: '#5E5A4E' }
-  ];
-  const months = [
-    { m: 'Jan', v: 2480 }, { m: 'Feb', v: 2910 }, { m: 'Mar', v: 3050 },
-    { m: 'Apr', v: 2760 }, { m: 'May', v: 3140 }, { m: 'Jun', v: 2940 }
-  ];
-  const maxMonth = 3140;
-
-  const products = [
-    { key: 'core', src: '/products/core-thumbnail.webp', name: 'The 60-Minute AI Assistant', retail: '$410', price: '$49',
-      caption: 'The fastest way from "I should use AI" to staff on your phone tonight.',
-      cta: 'Learn More — $49',
-      includes: [
-        'The 8-chapter playbook (zero coding)',
-        '5 painkiller skills — Inbox, Tax Vault, Flights, Date-Night, Brand Engine',
-        'The Command Center + Living Money Dashboard',
-        'The Ironclad Privacy Lock',
-        'One-Page Cheat Sheet + Troubleshooting Guide'
-      ] },
-    { key: 'bundle', src: '/products/bundle-thumbnail.webp', name: 'The Orchestrator Bundle', retail: '$821', price: '$79',
-      caption: 'Everything we make — Playbook + Upgrade + The Toolbox in one stack, for the same $79 as the Upgrade alone.',
-      cta: 'Deploy Your System', featured: true,
-      includes: [
-        'Everything in the 60-Minute AI Assistant Playbook',
-        'Everything in the Chief of Staff Upgrade (30 skills total)',
-        '★ The Toolbox — builds new skills just by talking',
-        'Family Multiplier License + Always-On Kit',
-        'Same $79 as the Upgrade alone — Playbook is the value-add'
-      ] },
-    { key: 'upgrade', src: '/products/upgrade-thumbnail.webp', name: 'The Chief of Staff Upgrade', retail: '$264', price: '$79',
-      caption: 'For buyers who already own the Playbook and want all 30 skills + The Toolbox.',
-      cta: 'Claim the Upgrade',
-      includes: [
-        'The 25-Skill Mega-Vault across six departments',
-        'Done-Tonight Activation Guide (7-day rollout)',
-        '★ The Toolbox — builds new skills just by talking',
-        'The Always-On & Usage-Smart Kit',
-        'The Family Multiplier License'
-      ] }
-  ];
-
-  function ctaHref(key) { return key === 'core' ? GUMROAD.core : key === 'bundle' ? GUMROAD.bundle : GUMROAD.upgrade; }
-
-  onMount(() => {
-    const onScroll = () => {
-      scrolled = window.scrollY > 20;
-      // Reveal the persistent mobile CTA once the hero (and its inline CTA) is
-      // mostly scrolled past, so there's always a tap-target without it
-      // overlapping the hero's own button.
-      showStickyCta = window.scrollY > window.innerHeight * 0.85;
-      const max = document.documentElement.scrollHeight - window.innerHeight;
-      scrollProgress = max > 0 ? Math.min(window.scrollY / max, 1) : 0;
-      // 5-day journey rail: fill as the section travels through the viewport.
-      const fd = document.getElementById('five-day');
-      if (fd) {
-        const r = fd.getBoundingClientRect();
-        const vh = window.innerHeight;
-        // Fill completes while the day cards are still on screen: the gauge
-        // reaches 100% (5th dot lit) just before the section scrolls past.
-        const span = r.height * 0.45 + vh * 0.45;
-        const advanced = vh * 0.85 - r.top;
-        fiveDayProgress = Math.max(0, Math.min(advanced / span, 1));
-      }
-    };
-    const onResize = () => {
-      if (window.innerWidth >= 1024) {
-        menuOpen = false;
-        document.querySelectorAll('.day-card').forEach(el => el.classList.remove('is-active-card'));
-      }
-    };
-    const onKey = (e) => {
-      if (e.key !== 'Escape') return;
-      if (contactOpen) closeContact();
-      else if (specimenModalOpen) closeSpecimen();
-      else if (modalOpen) upsellClose();
-    };
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onResize);
-    window.addEventListener('keydown', onKey);
-
-    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (!reducedMotion) {
-      animate('.hero-item', { opacity: [0, 1], y: [20, 0] },
-        { duration: 0.9, delay: stagger(0.13), easing: [0.25, 0.46, 0.45, 0.94] });
-    } else {
-      document.querySelectorAll('.hero-item').forEach(el => { el.style.opacity = '1'; });
-    }
-
-    const io = new IntersectionObserver(entries => {
-      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in-view'); io.unobserve(e.target); } });
-    }, { rootMargin: '0px 0px -8% 0px' });
-    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
-
-    const chatIo = new IntersectionObserver(entries => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          const bubbles = e.target.querySelectorAll('.bubble');
-          if (!reducedMotion) {
-            animate(bubbles, { opacity: [0, 1], y: [12, 0] },
-              { duration: 0.45, delay: stagger(0.22), easing: [0.25, 0.46, 0.45, 0.94] });
-          } else {
-            bubbles.forEach(b => { b.style.opacity = '1'; });
-          }
-          chatIo.unobserve(e.target);
-        }
-      });
-    }, { threshold: 0.35 });
-    document.querySelectorAll('.chat-window').forEach(el => chatIo.observe(el));
-
-    const sectionIo = new IntersectionObserver(entries => {
-      entries.forEach(e => { if (e.isIntersecting) currentSection = parseInt(e.target.dataset.index, 10); });
-    }, { threshold: 0.5 });
-    document.querySelectorAll('[data-section-index]').forEach(el => sectionIo.observe(el));
-
-    // Command Center "regenerate on trigger" demo — plays once on scroll into view.
-    const ccDemoIo = new IntersectionObserver(entries => {
-      entries.forEach(e => {
-        if (!e.isIntersecting) return;
-        ccDemoIo.unobserve(e.target);
-        const b1 = e.target.querySelector('[data-cc="b1"]');
-        const b2 = e.target.querySelector('[data-cc="b2"]');
-        const save = e.target.querySelector('[data-cc="save"]');
-        const chip = e.target.querySelector('[data-cc="chip"]');
-        const bars = document.querySelectorAll('#command .bar');
-        if (reducedMotion) {
-          [b1, b2, save].forEach(el => el && (el.style.opacity = '1'));
-          chip && chip.classList.add('glow');
-          return;
-        }
-        const seq = async () => {
-          await animate(b1, { opacity: [0, 1], y: [10, 0] }, { duration: 0.4 }).finished;
-          await animate(b2, { opacity: [0, 1], y: [10, 0] }, { duration: 0.4, delay: 0.45 }).finished;
-          // dashboard rebuilds: bars redraw from the baseline
-          animate(bars, { scaleY: [0.12, 1] }, { duration: 0.7, delay: stagger(0.07), easing: [0.25, 0.46, 0.45, 0.94] });
-          chip && chip.classList.add('glow');
-          await animate(save, { opacity: [0, 1], y: [8, 0] }, { duration: 0.5, delay: 0.25 }).finished;
-        };
-        seq();
-      });
-    }, { threshold: 0.45 });
-    document.querySelectorAll('[data-cc-demo]').forEach(el => ccDemoIo.observe(el));
-
-    // Highlight day cards as they scroll into the viewport center on mobile/tablet
-    const cardObserver = new IntersectionObserver(entries => {
-      const isMobile = window.innerWidth < 1024;
-      entries.forEach(e => {
-        if (isMobile && e.isIntersecting) {
-          document.querySelectorAll('.day-card').forEach(el => el.classList.remove('is-active-card'));
-          e.target.classList.add('is-active-card');
-        } else {
-          e.target.classList.remove('is-active-card');
-        }
-      });
-    }, {
-      rootMargin: '-40% 0px -40% 0px',
-      threshold: 0
-    });
-    document.querySelectorAll('.day-card').forEach(el => cardObserver.observe(el));
-
-    return () => {
-      window.removeEventListener('scroll', onScroll);
-      window.removeEventListener('resize', onResize);
-      window.removeEventListener('keydown', onKey);
-      io.disconnect(); chatIo.disconnect(); sectionIo.disconnect(); ccDemoIo.disconnect();
-      cardObserver.disconnect();
-    };
-  });
-</script>
-
-<svelte:head>
-  <script type="application/ld+json">
-  {JSON.stringify({
+  // ── STRUCTURED DATA ─────────────────────────────────────────────────
+  // Built as plain JS objects, then serialized via an @html block below.
+  // A literal ld+json script tag written directly in Svelte markup does
+  // NOT evaluate mustache expressions inside it, since HTML parsers treat
+  // script tag content as raw text — so JSON.stringify(...) used to render
+  // as literal unparsed text instead of real JSON. Wrapping a template
+  // literal (built from these objects) in an @html directive is the fix:
+  // Svelte evaluates the interpolation first, then injects the resulting
+  // string as raw HTML, after the parser has already moved past this point.
+  // NOTE: avoid writing the literal open/close script-tag substrings
+  // anywhere in this comment block, even inside a JS comment — the HTML
+  // tokenizer that finds this script block's own boundary scans for that
+  // raw text and does not know this is a comment, so it will end the block
+  // early if those substrings appear here.
+  // The FAQPage schema below maps directly over launchpadFaq so the
+  // visible FAQ accordion and the FAQ schema can never drift apart.
+  const productJsonLd = {
     "@context": "https://schema.org",
     "@type": "Product",
     "name": "The Vanguard Launchpad",
-    "description": "Your online business, up and running in 5 days, even if you have never shipped anything before. For solopreneurs paralyzed by planning: idea to launch-ready in one focused sitting a day, covering brand, assets, landing page, high-impact offer, and complete funnel, all built with you.",
+    "description": "The Vanguard Launchpad is an interactive five-day system that guides you from idea to branded digital product, live sales page, Gumroad checkout, and follow-up funnel.",
     "image": "https://vanguardos.co/og/og-card.jpg",
     "url": "https://vanguardos.co/",
     "brand": { "@type": "Brand", "name": "VanguardOS" },
@@ -643,10 +310,9 @@
         }
       }
     ]
-  })}
-  </script>
-  <script type="application/ld+json">
-  {JSON.stringify({
+  };
+
+  const organizationJsonLd = {
     "@context": "https://schema.org",
     "@type": "Organization",
     "name": "VanguardOS",
@@ -654,25 +320,82 @@
     "logo": "https://vanguardos.co/brand/brand-mark-owl.svg",
     "description": "VanguardOS builds systems that launch solopreneurs into the digital economy. The Vanguard Launchpad is the first.",
     "email": "support@vanguardos.co"
-  })}
-  </script>
-  <script type="application/ld+json">
-  {JSON.stringify({
+  };
+
+  const faqJsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    "mainEntity": [
-      { "@type": "Question", "name": "Do I need to be technical?", "acceptedAnswer": { "@type": "Answer", "text": "No. Every template, prompt, and pattern is copy-paste. The prompts ask you a few plain questions and do the rest. If you can follow a recipe, you can follow this." } },
-      { "@type": "Question", "name": "What if I don't have an idea yet?", "acceptedAnswer": { "@type": "Answer", "text": "Yes, that's what Day 1 is for. Start with nothing more than a hunch, or a blank page: Day 1 is a sequenced way to surface, validate, and price an idea, and you finish it with a locked offer." } },
-      { "@type": "Question", "name": "How much time does each day take?", "acceptedAnswer": { "@type": "Answer", "text": "One focused sitting, not a day off work. The Launchpad is 72 guided steps across Welcome plus five days, action-first, so most people finish a day in one to two hours after work. Plan on roughly 8 to 12 hours of hands-on building across the five days, and the AI does the heavy lifting inside each screen." } },
-      { "@type": "Question", "name": "How do I get it after I pay?", "acceptedAnswer": { "@type": "Answer", "text": "Instantly. The moment your $129 payment clears on Gumroad, the email lands with a single file: the Launchpad itself, an interactive build system you open in your browser, plus the six bonus PDFs and the prompt vault, ready to keep forever. No onboarding call, no waiting room, nothing to install. You can open Day 1 the same night." } },
-      { "@type": "Question", "name": "What AI tools do I need?", "acceptedAnswer": { "@type": "Answer", "text": "Free tools are enough to finish. The free tiers of ChatGPT, Claude, or Gemini run the prompts, Day 4 builds your landing page in Google Antigravity (free to start), and GitHub, Cloudflare Pages, and Gumroad handle hosting and checkout at no cost. A paid AI tier (about $20 a month) is optional polish, not a requirement: it buys longer sessions and a stronger model, which shows up as noticeably better output. There is no VanguardOS subscription on top, ever." } },
-      { "@type": "Question", "name": "How much extra will I spend on tools?", "acceptedAnswer": { "@type": "Answer", "text": "You can build and host for $0. Two upgrades are worth it: a paid AI tier for stronger output, and a custom domain (about $10 a year) so your site has a real, credible address you own. Neither is strictly required to finish, but both are worth the small spend." } },
-      { "@type": "Question", "name": "Will this work for my niche?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. The system is niche-agnostic by design. The templates and patterns are the scaffolding; the Day 2 brand work and Day 4 landing copy are where your niche shapes the output." } },
-      { "@type": "Question", "name": "What if I'm already mid-launch?", "acceptedAnswer": { "@type": "Answer", "text": "Drop into whichever day matches where you are. Stuck on the offer? Day 1. Brand feels off? Day 2. No landing page? Day 4. The Launchpad is a system you re-enter whenever a leg is weak." } },
-      { "@type": "Question", "name": "Refund policy?", "acceptedAnswer": { "@type": "Answer", "text": "A full 30 days, no questions asked. Buy it, go through it, and if the Launchpad is not for you for any reason, email us within 30 days for a full refund. No forms, no hoops, no explanation needed." } }
-    ]
-  })}
-  </script>
+    "mainEntity": launchpadFaq.map(([q, a]) => ({
+      "@type": "Question",
+      "name": q,
+      "acceptedAnswer": { "@type": "Answer", "text": a }
+    }))
+  };
+
+  const jsonLdScripts =
+    `<script type="application/ld+json">${JSON.stringify(productJsonLd)}<\/script>` +
+    `<script type="application/ld+json">${JSON.stringify(organizationJsonLd)}<\/script>` +
+    `<script type="application/ld+json">${JSON.stringify(faqJsonLd)}<\/script>`;
+
+  onMount(() => {
+    const onScroll = () => {
+      scrolled = window.scrollY > 20;
+      // Reveal the persistent mobile CTA once the hero (and its inline CTA) is
+      // mostly scrolled past, so there's always a tap-target without it
+      // overlapping the hero's own button.
+      showStickyCta = window.scrollY > window.innerHeight * 0.85;
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      scrollProgress = max > 0 ? Math.min(window.scrollY / max, 1) : 0;
+      // 5-day journey rail: fill as the section travels through the viewport.
+      const fd = document.getElementById('five-day');
+      if (fd) {
+        const r = fd.getBoundingClientRect();
+        const vh = window.innerHeight;
+        // Fill completes while the day cards are still on screen: the gauge
+        // reaches 100% (5th dot lit) just before the section scrolls past.
+        const span = r.height * 0.45 + vh * 0.45;
+        const advanced = vh * 0.85 - r.top;
+        fiveDayProgress = Math.max(0, Math.min(advanced / span, 1));
+      }
+    };
+    const onResize = () => {
+      if (window.innerWidth >= 1024) {
+        menuOpen = false;
+      }
+    };
+    const onKey = (e) => {
+      if (e.key !== 'Escape') return;
+      if (contactOpen) closeContact();
+      else if (specimenModalOpen) closeSpecimen();
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onResize);
+    window.addEventListener('keydown', onKey);
+
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!reducedMotion) {
+      animate('.hero-item', { opacity: [0, 1], y: [20, 0] },
+        { duration: 0.9, delay: stagger(0.13), easing: [0.25, 0.46, 0.45, 0.94] });
+    } else {
+      document.querySelectorAll('.hero-item').forEach(el => { el.style.opacity = '1'; });
+    }
+
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in-view'); io.unobserve(e.target); } });
+    }, { rootMargin: '0px 0px -8% 0px' });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onResize);
+      window.removeEventListener('keydown', onKey);
+      io.disconnect();
+    };
+  });
+</script>
+
+<svelte:head>
+  {@html jsonLdScripts}
 </svelte:head>
 
 <!-- Scroll progress — thin gold hairline along the very top (godly.website-style polish) -->
@@ -694,7 +417,7 @@
       <a href="#five-day" class="text-xs font-mono uppercase tracking-wider text-muted hover:text-text transition">5-Day Journey</a>
       <a href="#faq" class="text-xs font-mono uppercase tracking-wider text-muted hover:text-text transition">FAQ</a>
       <a href="mailto:support@vanguardos.co" on:click|preventDefault={openContact} class="text-xs font-mono uppercase tracking-wider text-muted hover:text-text transition">Contact</a>
-      <a href={GUMROAD.launchpad} class="flex items-center gap-2 px-5 py-2 border border-gold-line hover:border-gold hover:bg-gold-soft text-gold text-xs font-semibold font-mono uppercase tracking-wider rounded-full transition hover:scale-[1.03]">
+      <a href={GUMROAD.launchpad} data-event="initiate_checkout" data-analytics-id="nav-cta" on:click={trackCheckoutClick} class="flex items-center gap-2 px-5 py-2 border border-gold-line hover:border-gold hover:bg-gold-soft text-gold text-xs font-semibold font-mono uppercase tracking-wider rounded-full transition hover:scale-[1.03]">
         <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
         Start the Launchpad →
       </a>
@@ -713,7 +436,7 @@
     <a href="#five-day" on:click={() => menuOpen = false} class="block text-sm font-mono uppercase tracking-wider text-muted hover:text-text">5-Day Journey</a>
     <a href="#faq" on:click={() => menuOpen = false} class="block text-sm font-mono uppercase tracking-wider text-muted hover:text-text">FAQ</a>
     <a href="mailto:support@vanguardos.co" on:click|preventDefault={openContact} class="block text-sm font-mono uppercase tracking-wider text-muted hover:text-text">Contact</a>
-    <a href={GUMROAD.launchpad} on:click={() => menuOpen = false} class="flex items-center justify-center gap-2 py-3 bg-gold text-base-2 font-bold font-mono uppercase text-xs tracking-wide rounded-full">
+    <a href={GUMROAD.launchpad} data-event="initiate_checkout" data-analytics-id="mobile-nav-cta" on:click={(e) => { menuOpen = false; trackCheckoutClick(e); }} class="flex items-center justify-center gap-2 py-3 bg-gold text-base-2 font-bold font-mono uppercase text-xs tracking-wide rounded-full">
       <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
       Start the Launchpad →
     </a>
@@ -726,23 +449,19 @@
 
 <main id="top">
   <!-- HERO -->
-  <section class="relative pt-36 pb-28 md:pt-44 md:pb-32 px-6 flex flex-col items-center text-center overflow-hidden"
+  <section class="relative pt-24 pb-12 md:pt-44 md:pb-32 px-6 flex flex-col items-center text-center overflow-hidden"
     style="background-image: radial-gradient(ellipse at 80% -10%, rgba(212,175,55,0.10), transparent 60%);">
-    <div class="max-w-[1100px] mx-auto space-y-9">
-      <div class="hero-item inline-flex items-center gap-3" style="opacity: 0">
+    <div class="max-w-[1100px] mx-auto space-y-5 md:space-y-9">
+      <!-- Logo lockup hidden on mobile: the fixed navbar already carries the
+           brand there, and every pixel of vertical space matters for
+           getting the CTA into the first 390×844 viewport (2026-07-11). -->
+      <div class="hero-item hidden md:inline-flex items-center gap-3" style="opacity: 0">
         <img src="/brand/brand-mark-owl.svg" alt="VanguardOS owl mark" class="w-10 h-10" />
         <span class="font-display text-lg md:text-xl leading-none">
           <span class="text-text">Vanguard</span><span class="italic text-gold">OS</span>
         </span>
       </div>
-      <!-- Pain eyebrow: leads with the pattern the buyer recognizes -->
-      <div class="hero-item" style="opacity: 0">
-        <span class="font-mono text-[11px] md:text-xs uppercase tracking-[0.3em] text-gold">
-          You don't need another course. You need to ship the one you already paid for.
-        </span>
-      </div>
-
-      <!-- Headline: How to [outcome], even if [pain]
+      <!-- Headline
            2026-07-03 Core Web Vitals fix: this <h1> is the page's LCP
            candidate (by far the largest painted text block above the fold).
            It used to share the `.hero-item` class, which the onMount()
@@ -755,91 +474,105 @@
            gate so it paints immediately at first paint (opacity defaults to
            1); `.hero-h1` below gives it a CSS-only transform-in entrance
            that never touches opacity, so the motion feel is kept without
-           the invisibility window. -->
+           the invisibility window. Mobile base sizes trimmed 2026-07-11 so
+           the full two-line headline reads as ~4 lines on a 390px viewport
+           instead of 6-7, per the mobile-hero brief. -->
       <h1 class="hero-h1 font-display font-medium text-text leading-[0.95] max-w-[1100px] mx-auto select-none" style="letter-spacing: -0.025em;">
-        <span class="block text-[2.75rem] sm:text-5xl md:text-7xl lg:text-[5.25rem] xl:text-[6rem]">
-          Build your first <span class="text-gold">digital product, page,</span>
+        <span class="block text-3xl sm:text-5xl md:text-7xl lg:text-[5.25rem] xl:text-[6rem]">
+          Build and launch your first digital product
         </span>
-        <span class="block italic text-gold text-[2.25rem] sm:text-4xl md:text-6xl lg:text-[4.25rem] xl:text-[4.75rem] mt-3 md:mt-5">
-          checkout, and funnel in five focused days.
+        <span class="block italic text-gold text-3xl sm:text-4xl md:text-6xl lg:text-[4.25rem] xl:text-[4.75rem] mt-2 md:mt-5">
+          in five focused days.
         </span>
       </h1>
 
+      <!-- Pain eyebrow: leads with the pattern the buyer recognizes. Sits
+           below the headline (2026-07-11) so the h1 paints right under the
+           logo instead of being pushed down by this line. -->
+      <div class="hero-item" style="opacity: 0">
+        <span class="font-mono text-[11px] md:text-xs uppercase tracking-[0.3em] text-gold">
+          You don't need more information. You need the next exact step.
+        </span>
+      </div>
+
       <!-- Subhead: calmer, body serif -->
-      <p class="hero-item font-sans text-muted text-lg md:text-2xl leading-snug max-w-[820px] mx-auto" style="opacity: 0">
-        The Vanguard Launchpad is an interactive build system for people with ideas sitting in notes, drafts, and tabs. It walks you one screen at a time from idea to brand, product, landing page, checkout, and follow-up funnel.
+      <p class="hero-item font-sans text-muted text-base md:text-2xl leading-snug max-w-[820px] mx-auto" style="opacity: 0">
+        The Vanguard Launchpad guides you from a rough idea to a branded product, live sales page, Gumroad checkout, and follow-up funnel, one screen at a time.
       </p>
 
-      <!-- Day-5 outcomes: tactile proof of the five deliverables you keep.
-           Renders day5Outcomes so the hero promise is concrete, not abstract.
-           The full day-by-day process lives in the dedicated 5-Day Journey section. -->
+      <!-- Outcome chips: tactile proof of the five deliverables you keep.
+           Renders day5Outcomes so the hero promise is concrete, not abstract. -->
       <div class="hero-item flex flex-col items-center gap-3 pt-1" style="opacity: 0">
-        <span class="font-mono text-[10px] md:text-[11px] uppercase tracking-[0.3em] text-muted-2">By Day 5, you'll have</span>
         <ul class="flex flex-wrap items-center justify-center gap-2 md:gap-2.5 max-w-[780px] mx-auto">
           {#each day5Outcomes as outcome}
-            <li class="inline-flex items-center gap-1.5 rounded-full border border-gold-line/60 bg-gold-soft/15 px-3 py-1.5 font-mono text-[10px] md:text-[11px] uppercase tracking-[0.16em] text-text/90">
+            <li class="inline-flex items-center gap-1.5 rounded-full border border-gold-line/60 bg-gold-soft/15 px-2.5 py-1 md:px-3 md:py-1.5 font-mono text-[9px] md:text-[11px] uppercase tracking-[0.14em] md:tracking-[0.16em] text-text/90">
               <span class="text-gold leading-none" aria-hidden="true">✓</span>{outcome}
             </li>
           {/each}
         </ul>
       </div>
 
-      <!-- Primary CTA: gold, prominent, all caps. Secondary "See inside" is the
-           lower-commitment path: anchor-scrolls to the screenshot/proof section
-           instead of straight to checkout. -->
-      <div class="hero-item flex flex-col items-center gap-4 pt-3" style="opacity: 0">
+      <!-- Primary CTA: gold, prominent, all caps. Secondary "See How It Works"
+           is the lower-commitment path: anchor-scrolls to the mechanism
+           section instead of straight to checkout. -->
+      <div class="hero-item flex flex-col items-center gap-4 pt-2 md:pt-3" style="opacity: 0">
         <div class="flex flex-col sm:flex-row items-center gap-3 sm:gap-4">
-          <a href={GUMROAD.launchpad} class="btn-primary inline-flex items-center justify-center gap-3 px-12 py-5 rounded-[2rem] font-mono text-sm md:text-base uppercase tracking-[0.18em]">
+          <a href={GUMROAD.launchpad} data-event="initiate_checkout" data-analytics-id="hero-primary" on:click={trackCheckoutClick} class="btn-primary inline-flex items-center justify-center gap-3 px-12 py-5 rounded-[2rem] font-mono text-sm md:text-base uppercase tracking-[0.18em]">
             <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
-            Get The Launchpad &nbsp;·&nbsp; $129 →
+            Start My 5-Day Build &nbsp;·&nbsp; $129
           </a>
-          <a href="#inside-look" class="btn-secondary inline-flex items-center justify-center gap-2 px-9 py-5 rounded-[2rem] font-mono text-sm md:text-base uppercase tracking-[0.18em]">
-            See inside ↓
+          <a href="#five-day" class="btn-secondary inline-flex items-center justify-center gap-2 px-9 py-5 rounded-[2rem] font-mono text-sm md:text-base uppercase tracking-[0.18em]">
+            See How It Works
           </a>
         </div>
-        <p class="text-xs md:text-sm font-mono uppercase tracking-wider text-muted">
-          One payment. No subscription. Yours forever.
+      </div>
+
+      <!-- Trust line: no dollar-value claims, just the four things a skeptical
+           cold-traffic click needs to hear before scrolling further. -->
+      <div class="hero-item pt-1" style="opacity: 0">
+        <p class="font-mono text-[10px] md:text-[11px] uppercase tracking-[0.25em] md:tracking-[0.3em] text-muted-2 max-w-[860px] mx-auto leading-relaxed">
+          Interactive &nbsp;·&nbsp; Mobile-friendly &nbsp;·&nbsp; Progress autosaves &nbsp;·&nbsp; 30-day guarantee
         </p>
       </div>
 
-      <!-- Trust strip: small mono row of credibility anchors -->
-      <div class="hero-item pt-4" style="opacity: 0">
-        <p class="font-mono text-[10px] md:text-[11px] uppercase tracking-[0.3em] text-muted-2 max-w-[860px] mx-auto leading-relaxed">
-          <a href="#testimonials" class="hover:text-gold transition">★★★★★ Verified buyers</a> &nbsp;·&nbsp; $811 in value for $129 &nbsp;·&nbsp; Live in five days, or your money back
-        </p>
-      </div>
-
-      <!-- Hero product shot: the animated onboarding intro, the first thing a
-           buyer sees after opening the file. Proof this is a real app, not a PDF. -->
-      <div class="hero-item pt-6 md:pt-8" style="opacity: 0">
-        <div class="max-w-[760px] mx-auto rounded-[1.5rem] md:rounded-[2rem] border border-gold-line/50 bg-surface/40 p-2 md:p-3 shadow-2xl shadow-black/40">
-          <img src="/screenshots/hero-onboarding.webp" alt="The Vanguard Launchpad's animated onboarding intro screen, opened in a browser" class="w-full rounded-[1rem] md:rounded-[1.5rem] border border-line/60" width="1200" height="917" loading="eager" decoding="async" />
+      <!-- Hero visual: the restrained five-day-path animation (not a full
+           screenshot — see Visual Reveal Rule), reused from the same motion
+           markup as the mechanism section below. Answers one objection:
+           "is this a real interactive system, not a PDF?" Ends on a static
+           confirmation line rather than a second screenshot. -->
+      <div class="hero-item pt-4 md:pt-8" style="opacity: 0">
+        <div class="max-w-[640px] mx-auto">
+          <div class="motion-viz motion-panel rounded-[1.5rem] border border-line bg-surface/40">
+            <span class="motion-label">Idea to live checkout</span>
+            <div class="mv-day-row">
+              <div class="mv-day-chip"><span>Day 1</span><strong>Idea</strong></div>
+              <div class="mv-day-chip"><span>Day 2</span><strong>Brand</strong></div>
+              <div class="mv-day-chip"><span>Day 3</span><strong>Product</strong></div>
+              <div class="mv-day-chip"><span>Day 4</span><strong>Page</strong></div>
+              <div class="mv-day-chip"><span>Day 5</span><strong>Checkout</strong></div>
+            </div>
+            <div class="mv-path-line"></div>
+            <div class="mv-day-scan"><i></i></div>
+          </div>
+          <p class="font-mono text-[10px] md:text-[11px] uppercase tracking-[0.25em] text-muted-2 mt-4">
+            <span class="text-gold" aria-hidden="true">✓</span> Live checkout, confirmed.
+          </p>
         </div>
-        <p class="font-mono text-[10px] md:text-[11px] uppercase tracking-[0.25em] text-muted-2 mt-4">
-          The onboarding intro · one of 7 screens before Day 1's 72-step build begins
-        </p>
       </div>
     </div>
   </section>
 
-  <!-- PROOF / ANCHOR STRIP -->
+  <!-- COMPACT EARLY PROOF — three exact verified-buyer excerpts, right after
+       the hero, before any pain copy. Same reviews as the full Testimonials
+       section near the end; these are shorter cuts for a fast credibility
+       hit before the buyer has invested any reading time (2026-07-11). -->
   <section class="border-y border-line/60 bg-base-2/40 reveal">
-    <div class="max-w-[1180px] mx-auto px-6 py-14 md:py-16 grid grid-cols-2 md:grid-cols-4 gap-10 md:gap-14 text-center anchor-strip">
-      <div class="anchor-item">
-        <div class="font-display text-4xl md:text-5xl text-gold leading-none">5 days</div>
-        <div class="anchor-label">Idea to launch-ready</div>
-      </div>
-      <div class="anchor-item">
-        <div class="font-display text-4xl md:text-5xl text-gold leading-none">1 system</div>
-        <div class="anchor-label">Every launch after this one</div>
-      </div>
-      <div class="anchor-item">
-        <div class="font-display text-4xl md:text-5xl text-gold leading-none">Universal</div>
-        <div class="anchor-label">ChatGPT · Claude · Gemini</div>
-      </div>
-      <div class="anchor-item">
-        <div class="font-display text-4xl md:text-5xl text-gold leading-none">Yours forever</div>
-        <div class="anchor-label">No subscription</div>
+    <div class="max-w-[1100px] mx-auto px-6 py-10 md:py-12">
+      <p class="text-center font-mono text-[10px] uppercase tracking-[0.3em] text-gold mb-6">★★★★★ Verified Buyers</p>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 text-center">
+        <p class="text-sm md:text-[15px] text-text/85 leading-relaxed">"I came away with a clearer direction, a stronger brand foundation, and a funnel that I could start using right away."</p>
+        <p class="text-sm md:text-[15px] text-text/85 leading-relaxed">"The system is super polished, easy to understand, and aesthetically it's a 10/10."</p>
+        <p class="text-sm md:text-[15px] text-text/85 leading-relaxed">"Feels really good seeing my business on an actual website with a checkout system!"</p>
       </div>
     </div>
   </section>
@@ -864,254 +597,20 @@
       </header>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5">
         <div class="rounded-[1.5rem] border border-line bg-surface/60 p-6 md:p-7">
-          <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">01 · Stuck in Notes</span>
-          <p class="text-base md:text-lg text-text/90 leading-relaxed mt-3">Your idea lives in the Notes app, three bullet points deep, exactly where you left it three months ago. Opening it back up doesn't tell you what to do next.</p>
+          <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">01 · The idea is still sitting in Notes</span>
+          <p class="text-base md:text-lg text-text/90 leading-relaxed mt-3">You know what you want to build. You still cannot see the exact sequence between the idea and a working checkout.</p>
         </div>
         <div class="rounded-[1.5rem] border border-line bg-surface/60 p-6 md:p-7">
-          <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">02 · Fifteen open tabs</span>
-          <p class="text-base md:text-lg text-text/90 leading-relaxed mt-3">A logo generator, a Notion template, two competitor sites, a landing-page tutorial. Hours of research that never converges into one finished thing.</p>
+          <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">02 · Every answer creates five more decisions</span>
+          <p class="text-base md:text-lg text-text/90 leading-relaxed mt-3">Name, offer, colors, product files, page copy, hosting, checkout, emails. Nothing is individually impossible. Together, they keep the launch unfinished.</p>
         </div>
         <div class="rounded-[1.5rem] border border-line bg-surface/60 p-6 md:p-7">
-          <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">03 · No way to get paid</span>
-          <p class="text-base md:text-lg text-text/90 leading-relaxed mt-3">Even on the day you finish, there's no working checkout link and no follow-up sequence waiting for the person who says yes. The sale has nowhere to land.</p>
+          <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">03 · There is still nowhere for the sale to land</span>
+          <p class="text-base md:text-lg text-text/90 leading-relaxed mt-3">Even when the product is nearly finished, the page, payment link, delivery, and follow-up system are still disconnected.</p>
         </div>
       </div>
       <p class="text-center text-lg md:text-xl text-text leading-relaxed max-w-[760px] mx-auto mt-10">
-        The Launchpad closes every one of those gaps at once, inside one guided app: idea, brand, product, page, checkout, and follow-up sequence, each built with you in order. You bring the idea. The system does the packaging.
-      </p>
-    </div>
-  </section>
-
-  <!-- ═══════════════════════════════════════════════════════════════
-       WHO THIS IS FOR / NOT FOR — qualification right after the pain,
-       before the offer reveal (Hormozi C.L.O.S.E.R.: Clarify, then Label
-       the serious buyer before Overview/Sell — moved 2026-07-02 from after
-       Brand Work, where it split the offer reveal from the 5-Day Journey)
-       ═══════════════════════════════════════════════════════════════ -->
-  <section id="for-who" class="relative py-20 md:py-24 px-6 border-t border-line/60">
-    <div class="max-w-[1080px] mx-auto reveal">
-      <header class="text-center max-w-[760px] mx-auto mb-12 md:mb-16">
-        <div class="flex items-center justify-center gap-3 mb-6">
-          <div class="h-px w-16 bg-gold-line"></div>
-          <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">Section · Who This Is For</span>
-          <div class="h-px w-16 bg-gold-line"></div>
-        </div>
-        <h2 class="font-display text-3xl md:text-5xl leading-tight text-text">
-          Honest qualification, <span class="italic text-gold">both ways</span>.
-        </h2>
-      </header>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-0 md:gap-0 rounded-[1.5rem] border border-line bg-surface/60 overflow-hidden">
-        <!-- For you if... -->
-        <div class="p-7 md:p-10 md:border-r md:border-gold-line border-b md:border-b-0 border-gold-line">
-          <div class="flex items-center gap-3 mb-5">
-            <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">For you if</span>
-          </div>
-          <h3 class="font-display text-2xl md:text-3xl text-text leading-tight mb-6">
-            This is for you if<span class="text-gold">...</span>
-          </h3>
-          <ul class="flex flex-col gap-4 text-base md:text-lg text-text/90 leading-relaxed">
-            <li class="flex gap-3"><span class="text-gold mt-1">·</span><span>You have a folder of unfinished ideas in your notes app, and you are ready to stop planning and get your first offer out of your head and onto a real page on the internet.</span></li>
-            <li class="flex gap-3"><span class="text-gold mt-1">·</span><span>You keep buying courses and watching tutorials but never ship, and you want a strict, step-by-step path that makes you build instead of just consume.</span></li>
-            <li class="flex gap-3"><span class="text-gold mt-1">·</span><span>You are overwhelmed by the volume of decisions a launch demands: naming, colors, type, copy, layout. You want a system that makes those calls for you.</span></li>
-            <li class="flex gap-3"><span class="text-gold mt-1">·</span><span>You refuse to launch a cheap, amateur-looking storefront, but you don't have $5,000 to waste on a brand designer or copywriter just to validate a brand-new idea.</span></li>
-            <li class="flex gap-3"><span class="text-gold mt-1">·</span><span>You want a real, payment-ready storefront, a structured funnel, and a complete email sequence ready to connect to your own platform, all on a live custom URL by Day 5, so you have something tangible to sell next week.</span></li>
-          </ul>
-        </div>
-        <!-- NOT for you if... -->
-        <div class="p-7 md:p-10">
-          <div class="flex items-center gap-3 mb-5">
-            <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-muted">Not for you if</span>
-          </div>
-          <h3 class="font-display text-2xl md:text-3xl text-text leading-tight mb-6">
-            This is <span class="italic text-muted">not</span> for you if<span class="text-muted">...</span>
-          </h3>
-          <ul class="flex flex-col gap-4 text-base md:text-lg text-text/80 leading-relaxed">
-            <li class="flex gap-3"><span class="text-muted mt-1">·</span><span>You are looking for an agency to build it for you. We give you the complete machinery, but you have to turn the key. If you want someone else's hands on the keyboard, it makes more sense to pay a $12,000 agency invoice.</span></li>
-            <li class="flex gap-3"><span class="text-muted mt-1">·</span><span>You enjoy planning and buying domains more than shipping. This system exists to end the stalling and put your name on a live checkout, which can feel scary.</span></li>
-            <li class="flex gap-3"><span class="text-muted mt-1">·</span><span>You expect sales to happen automatically without promotion. The Launchpad builds the storefront and checkout funnel; driving traffic is your job, and we would rather be honest about that upfront.</span></li>
-            <li class="flex gap-3"><span class="text-muted mt-1">·</span><span>You want an effortless one-click button. The system is fast, but it still takes 8 to 12 hours of focused, hands-on work. Fast is not the same as effortless.</span></li>
-            <li class="flex gap-3"><span class="text-muted mt-1">·</span><span>You are hunting a get-rich-quick, passive-income loophole. This builds a real product you own, not a temporary hype funnel.</span></li>
-            <li class="flex gap-3"><span class="text-muted mt-1">·</span><span>You are selling something physical you need to manufacture, stock, or ship. The Launchpad is built for digital products: guides, courses, templates, software. The checkout and delivery system is instant-download, not inventory or fulfillment.</span></li>
-          </ul>
-        </div>
-      </div>
-      <div class="text-center mt-8">
-        <a href="#offer-stack" class="text-sm font-mono uppercase tracking-widest text-gold hover:text-gold-hi transition border-b border-gold-line hover:border-gold pb-1">See exactly what's inside ↓</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══════════════════════════════════════════════════════════════
-       LAUNCHPAD OFFER STACK — The high-impact value reveal
-       ═══════════════════════════════════════════════════════════════ -->
-  <section id="offer-stack" class="relative py-20 md:py-28 px-6 border-t border-line/60">
-    <div class="max-w-[1100px] mx-auto reveal">
-      <header class="text-center max-w-[820px] mx-auto mb-12 md:mb-16">
-        <div class="flex items-center justify-center gap-3 mb-6">
-          <div class="h-px w-16 bg-gold-line"></div>
-          <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">What's In The Launchpad</span>
-          <div class="h-px w-16 bg-gold-line"></div>
-        </div>
-        <h2 class="font-display text-4xl md:text-6xl lg:text-7xl leading-[0.95] text-text">
-          The system, <span class="italic text-gold">plus six bonuses.</span>
-        </h2>
-        <p class="text-text text-lg md:text-xl mt-6 leading-relaxed">
-          The 5-Day Launchpad is the core: the whole path from a hunch in your notes app to a checkout page live on the internet, with the forty small decisions that stall most people already made for you. Then six finished systems stack on top, free. Each is something you would otherwise pay for, or lose a weekend building. Together they are the difference between launching someday and sending a friend the link this week.
-        </p>
-      </header>
-
-      <!-- Conciseness callout -->
-      <div class="reveal mb-10 md:mb-12 max-w-[820px] mx-auto rounded-[1.25rem] border-l-2 border-gold bg-surface/60 px-6 py-5 md:px-8 md:py-6">
-        <p class="font-display italic text-lg md:text-xl text-text/90 leading-relaxed">
-          The entire Launchpad is <span class="text-gold not-italic font-semibold">72 guided steps</span>, split across Welcome and the 5 days, inside one interactive app you open in your browser. Not a 250-page manual to study. You're meant to finish a day in a single sitting, one screen at a time.
-        </p>
-      </div>
-
-      <!-- THE CORE SYSTEM: visually dominant, the one thing you came for -->
-      <div class="reveal rounded-[1.75rem] border-2 border-gold bg-gold-soft/20 p-6 md:p-8"
-        style="background-image: radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.12), transparent 70%);">
-        <div class="flex items-center justify-between gap-4 mb-4">
-          <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">The core system</span>
-          <span class="font-mono text-base text-gold/70 line-through whitespace-nowrap">Value {coreItem.value}</span>
-        </div>
-        <div class="flex items-start gap-4 md:gap-6">
-          <img src={coreItem.img} alt="{coreItem.name} cover art" class="w-20 h-20 md:w-28 md:h-28 rounded-[1rem] border border-gold-line/60 object-cover shrink-0" loading="lazy" decoding="async" />
-          <div class="flex flex-col gap-2 min-w-0">
-            <h3 class="font-display text-2xl md:text-4xl text-text leading-tight">{coreItem.name}</h3>
-            <p class="text-base md:text-lg text-text/85 leading-relaxed">{coreItem.blurb} This is the whole system. The six below are stacked on top of it.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- BONUS-STACK DIVIDER: makes the pile-on unmistakable to a skimmer -->
-      <div class="reveal flex items-center justify-center gap-4 my-8 md:my-10">
-        <div class="h-px flex-1 bg-gold-line/40"></div>
-        <span class="font-mono text-[10px] md:text-xs uppercase tracking-[0.3em] text-gold text-center whitespace-nowrap">Then six bonuses, free · {'$' + bonusValue} of value</span>
-        <div class="h-px flex-1 bg-gold-line/40"></div>
-      </div>
-
-      <ul class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
-        {#each bonusItems as item}
-          <li class="reveal rounded-[1.5rem] border border-line bg-surface/60 p-6 md:p-7 hover:border-gold-line transition flex flex-col gap-3">
-            <div class="flex items-center justify-between gap-4">
-              <span class="font-mono text-[9px] uppercase tracking-[0.25em] text-gold border border-gold/40 bg-gold-soft/20 rounded-full px-2.5 py-1">Bonus</span>
-              <span class="font-mono text-base text-gold/60 line-through whitespace-nowrap">Value {item.value}</span>
-            </div>
-            <div class="flex items-start gap-4">
-              <img src={item.img} alt="{item.name} cover art" class="w-16 h-16 md:w-20 md:h-20 rounded-[0.9rem] border border-line/60 object-cover shrink-0" loading="lazy" decoding="async" />
-              <div class="flex flex-col gap-2 min-w-0">
-                <h3 class="font-display text-2xl md:text-[28px] text-text leading-tight">{item.name}</h3>
-                <p class="text-base text-text/85 leading-relaxed">{item.blurb}</p>
-              </div>
-            </div>
-          </li>
-        {/each}
-      </ul>
-
-      <!-- Value math: core $129 + six bonuses $682 = $811 stacked → today $129 -->
-      <div class="reveal mt-10 md:mt-12 rounded-[2rem] border-2 border-gold bg-gold-soft/20 p-8 md:p-10"
-        style="background-image: radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.10), transparent 70%);">
-        <div class="flex items-baseline justify-between text-text/80">
-          <span class="font-mono text-sm uppercase tracking-widest">The 5-day system</span>
-          <span class="font-mono text-base md:text-lg tracking-tight">{coreItem.value}</span>
-        </div>
-        <div class="flex items-baseline justify-between mt-2.5 text-text/80">
-          <span class="font-mono text-sm uppercase tracking-widest">Six bonuses, stacked on top</span>
-          <span class="font-mono text-base md:text-lg tracking-tight">{'+$' + bonusValue}</span>
-        </div>
-        <div class="flex items-baseline justify-between mt-3 pt-3 border-t border-gold-line/40">
-          <span class="font-mono text-sm uppercase tracking-widest text-muted">Stacked value</span>
-          <span class="font-mono font-bold text-2xl md:text-3xl text-gold/60 line-through tracking-tight">{'$' + stackValue}</span>
-        </div>
-        <div class="flex items-baseline justify-between mt-3 pt-3 border-t border-gold-line/40">
-          <span class="font-mono text-sm uppercase tracking-widest text-text">Today, one payment</span>
-          <span class="font-mono font-bold text-4xl md:text-5xl text-gold tracking-tight">$129</span>
-        </div>
-        <p class="text-base text-text/85 leading-relaxed mt-5 text-center">
-          Counted on their own, the six bonuses come to {'$' + bonusValue}, nearly five times the price, and they are free. You pay $129 for the system and keep all {'$' + stackValue}.
-        </p>
-        <a href={GUMROAD.launchpad} class="btn-primary flex items-center justify-center gap-2.5 mt-7 py-5 rounded-[2rem]">
-          <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
-          Get The Launchpad · $129 →
-        </a>
-        <p class="text-sm font-mono uppercase tracking-widest text-muted mt-3 text-center">One payment. Universal AI. Yours forever.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══════════════════════════════════════════════════════════════
-       ASSET-PACK SPECIMENS — make the Palette + Typography packs visible
-       ═══════════════════════════════════════════════════════════════ -->
-  <section id="brand-work" class="relative py-20 md:py-24 px-6 border-t border-line/60">
-    <div class="max-w-[1100px] mx-auto reveal">
-      <header class="text-center max-w-[760px] mx-auto mb-10 md:mb-14">
-        <div class="flex items-center justify-center gap-3 mb-6">
-          <div class="h-px w-16 bg-gold-line"></div>
-          <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">Brand Work</span>
-          <div class="h-px w-16 bg-gold-line"></div>
-        </div>
-        <h2 class="font-display text-3xl md:text-5xl leading-tight text-text">
-          The brand work, <span class="italic text-gold">already done for you</span>.
-        </h2>
-        <p class="text-text text-lg md:text-xl mt-5 leading-relaxed">
-          Two of the seven systems are pure design firepower: palettes and type pairings you'd otherwise pay a brand studio for. Here's a sample of what's inside.
-        </p>
-        <p class="text-gold text-base md:text-lg mt-5 font-medium">Go ahead and click any palette or type pairing below to open it and inspect the exact hex codes, fonts, and weights.</p>
-      </header>
-
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 md:gap-6">
-        <!-- Brand Palette Pack specimen -->
-        <div class="rounded-[1.5rem] border border-line bg-surface/60 p-5 sm:p-6 md:p-8 flex flex-col h-full">
-          <div class="flex items-baseline justify-between gap-4 mb-5">
-            <h3 class="font-display text-2xl text-text leading-tight">The Brand Palette Pack</h3>
-            <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold whitespace-nowrap">5 of 20</span>
-          </div>
-          <ul class="flex flex-col justify-between flex-1 gap-4 lg:gap-0">
-            {#each specimenPalettes as palette}
-              <li>
-                <button type="button" on:click={(e) => openSpecimen('palette', palette, e)}
-                  class="specimen-row flex items-center gap-3 w-full text-left rounded-lg py-1 sm:py-1.5"
-                  aria-label="Expand the {palette.name} palette to see its hex values">
-                  <div class="flex flex-1 h-10 sm:h-12 rounded-lg overflow-hidden border border-line/60">
-                    {#each palette.colors as c}
-                      <span class="flex-1" style="background-color: {c};"></span>
-                    {/each}
-                  </div>
-                  <span class="font-mono text-[9px] sm:text-[10px] uppercase tracking-[0.15em] sm:tracking-[0.2em] text-muted w-24 sm:w-28 text-right shrink-0 whitespace-nowrap">{palette.name}</span>
-                </button>
-              </li>
-            {/each}
-          </ul>
-        </div>
-
-        <!-- Typography Pack specimen -->
-        <div class="rounded-[1.5rem] border border-line bg-surface/60 p-5 sm:p-6 md:p-8 flex flex-col h-full">
-          <div class="flex items-baseline justify-between gap-4 mb-5">
-            <h3 class="font-display text-2xl text-text leading-tight">The Typography Pack</h3>
-            <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold whitespace-nowrap">3 of 20 inside</span>
-          </div>
-          <ul class="flex flex-col gap-4">
-            {#each specimenType as t}
-              <li>
-                <button type="button" on:click={(e) => openSpecimen('type', t, e)}
-                  class="specimen-row scheme-preview rounded-[1rem] border border-line/60 bg-base/30 px-4 py-4 sm:px-5 sm:py-5 w-full text-left"
-                  aria-label="Expand the {t.pair} type pairing to see it at display size">
-                  <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 sm:gap-3 mb-2 sm:mb-1">
-                    <span class="meta">Scheme {String(t.schemeNo).padStart(2,'0')} · {t.tag}</span>
-                    <span class="font-mono text-[9px] uppercase tracking-[0.25em] text-muted-2 whitespace-nowrap">{t.display} × {t.body} × {t.accent}</span>
-                  </div>
-                  <p class="display text-text" style="font-family: {t.fontDisplay}; font-weight: {t.displayWeight};">{t.sample}</p>
-                  <p class="body text-muted" style="font-family: {t.fontBody};">{t.cardNote}</p>
-                  <p class="font-mono text-[9px] uppercase tracking-[0.22em] text-gold mt-2" style="font-family: {t.fontAccent}; font-weight: {t.accentWeight};">{t.kicker}</p>
-                </button>
-              </li>
-            {/each}
-          </ul>
-        </div>
-      </div>
-      <p class="text-center font-mono text-[11px] uppercase tracking-[0.25em] text-muted-2 mt-8">
-        20 palettes + 20 type systems ship inside the Launchpad · Sources: Fontshare + Google Fonts + The League of Moveable Type
+        The problem was never your ability. It was trying to solve every part of the launch at the same time. The Launchpad puts those decisions into one fixed order.
       </p>
     </div>
   </section>
@@ -1145,21 +644,20 @@
           <div class="mv-day-row">
             <div class="mv-day-chip"><span>Day 1</span><strong>Idea</strong></div>
             <div class="mv-day-chip"><span>Day 2</span><strong>Brand</strong></div>
-            <div class="mv-day-chip"><span>Day 3</span><strong>Assets</strong></div>
+            <div class="mv-day-chip"><span>Day 3</span><strong>Product</strong></div>
             <div class="mv-day-chip"><span>Day 4</span><strong>Page</strong></div>
-            <div class="mv-day-chip"><span>Day 5</span><strong>Funnel</strong></div>
+            <div class="mv-day-chip"><span>Day 5</span><strong>Checkout</strong></div>
           </div>
           <div class="mv-path-line"></div>
           <div class="mv-day-scan"><i></i></div>
         </div>
         <p class="font-mono text-[10px] md:text-[11px] uppercase tracking-[0.25em] text-muted-2 mt-4 text-center">
-          Five days, one fixed sequence. No skipping ahead.
+          One screen at a time. One finished outcome each day.
         </p>
       </div>
 
       <!-- Scrollytelling rail — fills as the section scrolls past; day markers
-           light up in sequence. Shown on all breakpoints: on mobile it reads as a
-           standalone 5-step progress indicator above the stacked day cards. -->
+           light up in sequence. -->
       <div class="five-day-rail block" aria-hidden="true">
         <div class="five-day-rail-track">
           <div class="five-day-rail-fill" style="transform: scaleX({fiveDayProgress})"></div>
@@ -1171,336 +669,242 @@
         </div>
       </div>
 
-      <ol class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 md:gap-5">
+      <!-- Compact day list — one line per day, no screenshots or CSS mockup
+           cards (Visual Reveal Rule: the mechanism is told, not toured). -->
+      <ol class="max-w-[720px] mx-auto flex flex-col gap-3 mt-10 md:mt-12">
         {#each launchpadDays as day, idx}
-          <li class="day-card reveal rounded-[1.5rem] border border-line bg-surface/60 p-5 md:p-6 flex flex-col gap-4 transition"
-            data-day-index={idx}
-            style="transition-delay: {idx * 90}ms">
-            <div class="relative aspect-square rounded-[1rem] overflow-hidden bg-base/40 border border-line/60">
-              <!-- Branded artifact preview — pure-CSS mini-mockup of the day's deliverable.
-                   Shows as visual proof until a real day-N.png mockup replaces it. -->
-              <div class="day-fallback absolute inset-0 p-3 select-none overflow-hidden"
-                style="background-image: radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.12), transparent 70%);" aria-hidden="true">
-                <div class="absolute top-2 left-2.5 flex items-baseline gap-1 z-10">
-                  <span class="font-mono font-bold text-base text-gold/90 leading-none tracking-tight">{day.num}</span>
-                  <span class="font-mono text-[7px] uppercase tracking-[0.25em] text-muted-2">{day.kicker}</span>
-                </div>
-                {#if day.num === '01'}
-                  <!-- IDEATE: validated-idea checklist + price -->
-                  <div class="absolute inset-0 flex flex-col justify-center gap-1.5 px-5 pt-5">
-                    {#each [0,1,2] as r}
-                      <div class="flex items-center gap-1.5">
-                        <span class="w-3 h-3 rounded-full bg-gold/25 border border-gold/50 flex items-center justify-center text-gold text-[7px] leading-none">✓</span>
-                        <span class="h-1.5 flex-1 rounded-full bg-gold/20"></span>
-                      </div>
-                    {/each}
-                    <span class="mt-1.5 self-start text-[8px] font-mono text-gold/80 border border-gold/40 rounded px-1.5 py-0.5">$129 · validated</span>
-                  </div>
-                {:else if day.num === '02'}
-                  <!-- BRAND: monogram + palette swatches + type lines -->
-                  <div class="absolute inset-0 flex flex-col items-center justify-center gap-2 px-4 pt-4">
-                    <div class="w-8 h-8 rounded-lg border border-gold/50 bg-gold/10 flex items-center justify-center font-display text-gold text-sm leading-none">V</div>
-                    <div class="flex gap-1">
-                      {#each ['#0B0F14','#3E6E8E','#7FB0CB','#D4AF37','#E8F1F6'] as c}
-                        <span class="w-3 h-3 rounded-sm" style="background:{c}"></span>
-                      {/each}
-                    </div>
-                    <div class="flex flex-col items-center gap-1 mt-0.5">
-                      <span class="h-1.5 w-16 rounded-full bg-text/30"></span>
-                      <span class="h-1 w-11 rounded-full bg-text/15"></span>
-                    </div>
-                  </div>
-                {:else if day.num === '03'}
-                  <!-- ASSETS: grid of generated asset tiles -->
-                  <div class="absolute inset-0 grid grid-cols-2 grid-rows-2 gap-1.5 p-4 pt-8">
-                    <span class="rounded-md border border-gold/20 bg-gradient-to-br from-gold/25 to-transparent"></span>
-                    <span class="rounded-md border border-line bg-gradient-to-br from-text/15 to-transparent"></span>
-                    <span class="rounded-md border border-line bg-gradient-to-tr from-gold/15 to-transparent"></span>
-                    <span class="rounded-md border border-gold/20 bg-gradient-to-tr from-text/20 to-transparent"></span>
-                  </div>
-                {:else if day.num === '04'}
-                  <!-- LANDING PAGE: wireframe with hero, gold CTA, content rows -->
-                  <div class="absolute inset-0 flex flex-col gap-1.5 p-4 pt-8">
-                    <div class="flex items-center justify-between">
-                      <span class="w-4 h-1.5 rounded-full bg-gold/60"></span>
-                      <span class="w-6 h-1.5 rounded-full bg-text/15"></span>
-                    </div>
-                    <span class="h-2 w-3/4 rounded bg-text/30 mt-1"></span>
-                    <span class="h-1.5 w-1/2 rounded bg-text/15"></span>
-                    <span class="mt-1 h-3 w-12 rounded-full bg-gold/70"></span>
-                    <div class="mt-auto grid grid-cols-3 gap-1">
-                      <span class="h-4 rounded bg-text/10"></span>
-                      <span class="h-4 rounded bg-text/10"></span>
-                      <span class="h-4 rounded bg-text/10"></span>
-                    </div>
-                  </div>
-                {:else}
-                  <!-- FUNNEL: descending funnel bars + checkout chip -->
-                  <div class="absolute inset-0 flex flex-col items-center justify-center gap-1 px-4 pt-4">
-                    <span class="h-2.5 w-20 rounded-sm bg-gold/60"></span>
-                    <span class="h-2.5 w-14 rounded-sm bg-gold/40"></span>
-                    <span class="h-2.5 w-9 rounded-sm bg-gold/25"></span>
-                    <span class="mt-1.5 text-[8px] font-mono text-gold/80 border border-gold/40 rounded px-1.5 py-0.5">Checkout ✓</span>
-                  </div>
-                {/if}
-              </div>
-              <img src={day.img} alt="Day {idx + 1}: {day.kicker}" class="day-img relative w-full h-full object-cover" loading="lazy" decoding="async" on:error={(e) => e.currentTarget.style.opacity='0'} />
-            </div>
-            <div class="flex items-center gap-2">
-              <span class="font-mono text-[10px] uppercase tracking-[0.4em] text-gold day-kicker">Day {day.num}</span>
-              <span class="h-px flex-1 bg-gold-line/60"></span>
-            </div>
-            <h3 class="font-display text-2xl text-text leading-tight">{day.kicker}</h3>
-            <p class="text-base text-text/90 leading-snug font-medium">{day.line}</p>
-            <p class="text-sm text-muted leading-relaxed">{day.desc}</p>
+          <li class="reveal flex items-baseline gap-4 rounded-[1rem] border border-line bg-surface/60 px-5 py-4 md:px-6 md:py-4.5" style="transition-delay: {idx * 70}ms">
+            <span class="font-mono text-[11px] uppercase tracking-[0.25em] text-gold shrink-0">Day {day.num}</span>
+            <span class="text-base md:text-lg text-text/90 leading-snug">{day.line}</span>
           </li>
         {/each}
       </ol>
 
-      <div class="text-center mt-12 reveal">
-        <a href={GUMROAD.launchpad} class="btn-primary inline-flex items-center justify-center gap-2.5 px-10 py-5 rounded-[2rem]">
+      <div class="text-center mt-10 reveal">
+        <a href={GUMROAD.launchpad} data-event="initiate_checkout" data-analytics-id="five-day-cta" on:click={trackCheckoutClick} class="btn-primary inline-flex items-center justify-center gap-2.5 px-10 py-5 rounded-[2rem]">
           <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
-          Start The 5-Day Build · $129 →
+          Start My 5-Day Build · $129 →
         </a>
       </div>
     </div>
   </section>
 
   <!-- ═══════════════════════════════════════════════════════════════
-       INSIDE THE LAUNCHPAD — real product screenshots, each paired with
-       one concrete claim (onboarding/mobile, three-prompt system, website
-       copy system, progress/backup/restore, completion). Not a gallery.
+       SELECTIVE PRODUCT REVEAL — the page's one main real-product
+       screenshot. Visual Reveal Rule: cropped/edge-masked, not a full
+       screen, and not part of a gallery. Answers exactly one objection —
+       "is this a real interactive product, and is it easy to follow?" —
+       without showing the full prompt text, the complete navigation, or
+       every screen. Condensed 2026-07-11 from a 5-row screenshot gallery.
        ═══════════════════════════════════════════════════════════════ -->
-  <section id="inside-look" class="relative py-20 md:py-24 px-6 border-t border-line/60">
-    <div class="max-w-[1080px] mx-auto reveal">
-      <header class="text-center max-w-[780px] mx-auto mb-14 md:mb-16">
+  <section id="reveal" class="relative py-20 md:py-24 px-6 border-t border-line/60">
+    <div class="max-w-[900px] mx-auto reveal text-center">
+      <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">The Three-Prompt System</span>
+      <h2 class="font-display text-3xl md:text-5xl leading-tight text-text mt-3 mb-4">
+        Three master prompts a day. <span class="italic text-gold">No prompt maze.</span>
+      </h2>
+      <p class="text-text text-lg md:text-xl leading-relaxed max-w-[720px] mx-auto mb-10">
+        Each day consolidates the thinking into three guided prompts. Copy one, answer its short questions, save the result, and continue. The system keeps the depth while removing the feeling of juggling a hundred instructions.
+      </p>
+      <div class="reveal-crop relative max-w-[720px] mx-auto rounded-[1.5rem] md:rounded-[2rem] border border-gold-line/50 bg-surface/40 p-2 md:p-3 shadow-2xl shadow-black/40 overflow-hidden">
+        <img src="/screenshots/three-prompts.webp" alt="One day inside the Vanguard Launchpad: Prompt #1, #2, and #3 each with their own copy button, next to the Complete Step and day-progress controls" class="w-full rounded-[1rem] md:rounded-[1.5rem] border border-line/60 object-cover" style="aspect-ratio: 4 / 3; object-position: center 15%;" width="1200" height="900" loading="lazy" decoding="async" />
+      </div>
+      <p class="font-mono text-[10px] md:text-[11px] uppercase tracking-[0.25em] text-muted-2 mt-4">
+        Prompt #1 · Prompt #2 · Prompt #3 · one copy button each
+      </p>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       OUTCOME SECTION — what exists five days from now, concretely
+       ═══════════════════════════════════════════════════════════════ -->
+  <section id="outcomes" class="relative py-20 md:py-24 px-6 border-t border-line/60">
+    <div class="max-w-[900px] mx-auto reveal text-center">
+      <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">Five Days From Now</span>
+      <h2 class="font-display text-3xl md:text-5xl leading-tight text-text mt-3">
+        The idea has somewhere to live, <span class="italic text-gold">and somewhere to get paid.</span>
+      </h2>
+    </div>
+    <ul class="reveal max-w-[820px] mx-auto grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4 mt-10 md:mt-12">
+      {#each [
+        'A validated product idea, not just a hunch in your notes app',
+        'A locked brand: name, palette, typography, logo direction',
+        'The core product itself, built and organized',
+        'A live, branded sales page at a real URL',
+        'A working Gumroad checkout, ready to take payment',
+        'A written follow-up email sequence',
+        'Copy that explains the offer in plain language',
+        'A backup file, so none of the work can be lost',
+        'A system you reuse for free on every product after this one'
+      ] as outcome}
+        <li class="flex items-start gap-3 text-left">
+          <span class="text-gold mt-0.5 shrink-0" aria-hidden="true">✓</span>
+          <span class="text-base md:text-lg text-text/90 leading-snug">{outcome}</span>
+        </li>
+      {/each}
+    </ul>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       OFFER — condensed. No dollar-value math, no oversized bonus cards.
+       Includes one compact brand-asset sample (palette + type pairing).
+       ═══════════════════════════════════════════════════════════════ -->
+  <section id="offer-stack" class="relative py-20 md:py-24 px-6 border-t border-line/60">
+    <div class="max-w-[900px] mx-auto reveal">
+      <header class="text-center max-w-[760px] mx-auto mb-10 md:mb-12">
         <div class="flex items-center justify-center gap-3 mb-6">
           <div class="h-px w-16 bg-gold-line"></div>
-          <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">Inside The App</span>
+          <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">What's Included</span>
           <div class="h-px w-16 bg-gold-line"></div>
         </div>
-        <h2 class="font-display text-4xl md:text-6xl leading-[0.98] text-text">
-          What you actually see <span class="italic text-gold">once you open it</span>.
+        <h2 class="font-display text-3xl md:text-5xl lg:text-6xl leading-[1.02] text-text">
+          Everything required to finish the first launch, <span class="italic text-gold">included.</span>
         </h2>
         <p class="text-text text-lg md:text-xl mt-6 leading-relaxed">
-          The Launchpad is a single interactive file you open in your browser, not a PDF you scroll. Here's exactly what's inside.
+          {coreItem.blurb} Six companion resources come with it, ready the moment you need them: brand assets, copy references, and the tool paths already built into the five days.
         </p>
       </header>
 
-      <div class="flex flex-col gap-2">
-        <!-- Row 1: onboarding + mobile -->
-        <div class="reveal grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10 items-center py-8 md:py-10 border-b border-line/40">
-          <div class="flex flex-col gap-4 lg:order-1">
-            <div class="rounded-[1.5rem] border border-line bg-surface/40 p-2 md:p-3">
-              <img src="/screenshots/mobile-onboarding.webp" alt="The Vanguard Launchpad onboarding sequence, shown responsive on a mobile-width browser window" class="w-full rounded-[1rem] border border-line/60" width="1200" height="917" loading="lazy" decoding="async" />
+      <ul class="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
+        {#each bonusItems as item}
+          <li class="reveal flex items-start gap-3 rounded-[1rem] border border-line bg-surface/60 px-5 py-4">
+            <span class="font-mono text-[9px] uppercase tracking-[0.2em] text-gold shrink-0 mt-0.5">·</span>
+            <div class="flex flex-col gap-1 min-w-0">
+              <h3 class="font-display text-lg text-text leading-tight">{item.name}</h3>
+              <p class="text-sm text-text/75 leading-snug">{item.blurb}</p>
             </div>
-            <div class="motion-viz motion-panel rounded-[1.5rem] border border-line bg-surface/40">
-              <span class="motion-label">Mobile friendly</span>
-              <div class="mv-phone">
-                <div class="mv-phone-shell">
-                  <div class="mv-phone-notch"></div>
-                  <div class="mv-phone-progress"><i></i></div>
-                  <div class="mv-phone-step"></div>
-                  <div class="mv-phone-step short"></div>
-                  <div class="mv-phone-action">
-                    Next
-                    <span class="mv-phone-signal s1"></span>
-                    <span class="mv-phone-signal s2"></span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="lg:order-2">
-            <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">Onboarding · Mobile</span>
-            <h3 class="font-display text-2xl md:text-3xl text-text leading-tight mt-2 mb-3">Seven onboarding screens, and every one works on your phone.</h3>
-            <p class="text-base md:text-lg text-text/85 leading-relaxed">The animated intro you saw above is the first of seven onboarding screens. The whole system is built mobile-friendly from that first screen on, so a day can start on your phone at lunch and finish on your laptop that night. Tap Next, Back, or an onboarding dot and the screen scrolls itself back to the top, so you're never hunting for your place after a fast phone session.</p>
-          </div>
-        </div>
-
-        <!-- Row 2: three-prompt system -->
-        <div class="reveal grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10 items-center py-8 md:py-10 border-b border-line/40">
-          <div class="flex flex-col gap-4 lg:order-2">
-            <div class="rounded-[1.5rem] border border-line bg-surface/40 p-2 md:p-3">
-              <img src="/screenshots/three-prompts.webp" alt="The three-master-prompt system inside a Launchpad day, each with a one-click copy button" class="w-full rounded-[1rem] border border-line/60" width="1200" height="917" loading="lazy" decoding="async" />
-            </div>
-            <div class="motion-viz motion-panel rounded-[1.5rem] border border-line bg-surface/40">
-              <span class="motion-label">Three-prompt system</span>
-              <div class="mv-prompt-list">
-                <div class="mv-prompt-card"><span>Prompt #1</span><strong>Lock the foundation</strong></div>
-                <div class="mv-prompt-card"><span>Prompt #2</span><strong>Build the core asset</strong></div>
-                <div class="mv-prompt-card"><span>Prompt #3</span><strong>Assemble and check</strong></div>
-              </div>
-            </div>
-          </div>
-          <div class="lg:order-1">
-            <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">The Three-Prompt System</span>
-            <h3 class="font-display text-2xl md:text-3xl text-text leading-tight mt-2 mb-3">Three master prompts a day. Fifteen total. Each one copy-ready.</h3>
-            <p class="text-base md:text-lg text-text/85 leading-relaxed">Every day breaks into Prompt #1, Prompt #2, and Prompt #3, each with its own one-click copy button. Paste one into ChatGPT, Claude, or Gemini, answer the plain questions it asks back, and move to the next.</p>
-          </div>
-        </div>
-
-        <!-- Row 3: website copy system -->
-        <div class="reveal grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10 items-center py-8 md:py-10 border-b border-line/40">
-          <div class="rounded-[1.5rem] border border-line bg-surface/40 p-2 md:p-3 lg:order-1">
-            <img src="/screenshots/website-system.webp" alt="The Day 4 Website System module, a structured markdown copy block with a one-click copy button" class="w-full rounded-[1rem] border border-line/60" width="1200" height="917" loading="lazy" decoding="async" />
-          </div>
-          <div class="lg:order-2">
-            <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">The Website System</span>
-            <h3 class="font-display text-2xl md:text-3xl text-text leading-tight mt-2 mb-3">Day 4 hands you a finished copy.md, structured and ready to paste.</h3>
-            <p class="text-base md:text-lg text-text/85 leading-relaxed">Hero, offer, proof, and CTAs, written and organized into a single markdown block inside the app. One copy button, then paste the whole thing into your AI page builder and build the real page.</p>
-          </div>
-        </div>
-
-        <!-- Row 4: progress, backup, restore -->
-        <div class="reveal grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10 items-center py-8 md:py-10 border-b border-line/40">
-          <div class="flex flex-col gap-4 lg:order-2">
-            <div class="rounded-[1.5rem] border border-line bg-surface/40 p-2 md:p-3">
-              <img src="/screenshots/backup-restore.webp" alt="The Backup Progress and Restore Progress controls inside the Vanguard Launchpad" class="w-full rounded-[1rem] border border-line/60" width="1200" height="917" loading="lazy" decoding="async" />
-            </div>
-            <div class="motion-viz motion-panel rounded-[1.5rem] border border-line bg-surface/40">
-              <span class="motion-label">Backup and restore</span>
-              <div class="mv-devices">
-                <div class="mv-device">Launchpad<i></i><i></i></div>
-                <div class="mv-device mv-device-mid">Drive<i></i><i></i></div>
-                <div class="mv-device">Restore<i></i><i></i></div>
-              </div>
-              <div class="mv-transfer-track"><div class="mv-file-token"></div></div>
-            </div>
-          </div>
-          <div class="lg:order-1">
-            <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">Progress, Backed Up</span>
-            <h3 class="font-display text-2xl md:text-3xl text-text leading-tight mt-2 mb-3">Autosaves as you go. Backs up when you tell it to.</h3>
-            <p class="text-base md:text-lg text-text/85 leading-relaxed">Every screen autosaves to your browser automatically. Hit <strong class="text-text">Backup Progress</strong> any time to export a portable file of everything you've built, then <strong class="text-text">Restore Progress</strong> to load it back on another device or browser. Nothing lives in only one tab.</p>
-          </div>
-        </div>
-
-        <!-- Row 5: completion -->
-        <div class="reveal grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10 items-center py-8 md:py-10">
-          <div class="rounded-[1.5rem] border border-gold-line/50 bg-surface/40 p-2 md:p-3 lg:order-1">
-            <img src="/screenshots/completion.webp" alt="The 100% completion screen inside the Vanguard Launchpad, shown after finishing all five days" class="w-full rounded-[1rem] border border-line/60" width="1200" height="917" loading="lazy" decoding="async" />
-          </div>
-          <div class="lg:order-2">
-            <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">Day 5, Done</span>
-            <h3 class="font-display text-2xl md:text-3xl text-text leading-tight mt-2 mb-3">Finish all five days and the completion screen confirms it.</h3>
-            <p class="text-base md:text-lg text-text/85 leading-relaxed">Cross 100% and the app shows a completion screen with two options: back up your finished progress, or start your next product from Day 1. The proof that you actually shipped isn't a certificate, it's the live checkout you just built.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══════════════════════════════════════════════════════════════
-       TOOLS — free path first, premium tiers are optional polish
-       ═══════════════════════════════════════════════════════════════ -->
-  <section id="tools" class="relative py-16 md:py-20 px-6 border-t border-line/60">
-    <div class="max-w-[1040px] mx-auto reveal grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10 items-center">
-      <div class="rounded-[1.5rem] border border-line bg-surface/40 p-2 md:p-3">
-        <img src="/screenshots/tools-output.webp" alt="A Vanguard Launchpad output screen, showing the cleaner result a stronger AI model produces from the same prompt" class="w-full rounded-[1rem] border border-line/60" width="1200" height="917" loading="lazy" decoding="async" />
-      </div>
-      <div>
-        <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">Free Tools Get You There</span>
-        <h3 class="font-display text-2xl md:text-3xl text-text leading-tight mt-2 mb-3">The free tier finishes all five days. Paid tiers are polish.</h3>
-        <p class="text-base md:text-lg text-text/85 leading-relaxed">Everything the Launchpad asks for runs on tools with a real free tier: the free plan of ChatGPT, Claude, or Gemini for the prompts, Google Antigravity to build your page, GitHub and Cloudflare Pages to host it live, and Gumroad to sell it. That's a complete, working path to Day 5 for $0 in tools.</p>
-        <p class="text-base md:text-lg text-text/85 leading-relaxed mt-4">A paid AI tier, a Higgsfield subscription for premium visuals, and a custom domain are optional. None of them decide whether you finish Day 5. What they buy is polish: crisper visuals, longer AI sessions, a URL that looks like a real business instead of a free subdomain.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══════════════════════════════════════════════════════════════
-       WHO THIS IS FOR — avatar selector
-       ═══════════════════════════════════════════════════════════════ -->
-  <section id="who" class="relative py-20 md:py-24 px-6 border-t border-line/60">
-    <div class="max-w-[1180px] mx-auto reveal">
-      <header class="text-center max-w-[760px] mx-auto mb-10 md:mb-14">
-        <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">See Your Outcome</span>
-        <h2 class="font-display text-3xl md:text-5xl leading-tight text-text mt-3">
-          Tap your starting point, <span class="italic text-gold">see your exact outcome</span>.
-        </h2>
-      </header>
-
-      <ul class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4">
-        {#each launchpadAvatars as avatar, i}
-          <li class="reveal">
-            <button
-              type="button"
-              on:click={() => selectAvatar(i)}
-              aria-pressed={selectedAvatar === i}
-              class="avatar-card w-full h-full rounded-[1.25rem] border bg-surface/60 p-5 md:p-6 text-center flex flex-col items-center gap-3 cursor-pointer {selectedAvatar === i ? 'border-gold avatar-card-active' : 'border-line'}">
-              <span class="font-mono text-[11px] md:text-xs uppercase tracking-[0.2em] text-gold leading-none px-2.5 py-1 rounded-full border border-gold-line" aria-hidden="true">{avatar.icon}</span>
-              <p class="text-sm md:text-base text-text leading-snug" style="color: #ECEAE4;">{avatar.label}</p>
-            </button>
           </li>
         {/each}
       </ul>
 
-      <!-- Tuned promise panel — swaps copy to the selected path; pure client state -->
-      <div id="promise-container" class="mt-6 md:mt-8" aria-live="polite">
-        {#if selectedAvatar === -1}
-          <p class="text-center font-mono text-xs uppercase tracking-[0.25em] text-muted-2">
-            Tap the one that's you ↑ and see exactly what the Launchpad does for your path.
-          </p>
-        {:else}
-          {#key selectedAvatar}
-            <div class="promise-panel max-w-[760px] mx-auto rounded-[1.5rem] border border-gold-line bg-gold-soft/20 p-6 md:p-8 text-center"
-              style="background-image: radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.10), transparent 70%);">
-              <div class="flex items-center justify-center gap-3 mb-4">
-                <span class="font-mono text-[10px] uppercase tracking-[0.2em] text-gold leading-none px-2.5 py-1 rounded-full border border-gold-line" aria-hidden="true">{launchpadAvatars[selectedAvatar].icon}</span>
-                <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">{launchpadAvatars[selectedAvatar].label}</span>
-              </div>
-              <p class="text-text text-lg md:text-xl leading-relaxed">{launchpadAvatars[selectedAvatar].promise}</p>
-              <a href={GUMROAD.launchpad} class="btn-primary inline-flex items-center justify-center gap-2.5 mt-6 px-8 py-4 rounded-[2rem]">
-                <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
-                Get The Launchpad · $129 →
-              </a>
-            </div>
-          {/key}
-        {/if}
+      <!-- Compact brand-asset sample: one palette, one type pairing -->
+      <div class="reveal mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
+        <button type="button" on:click={(e) => openSpecimen('palette', specimenPalettes[0], e)}
+          class="specimen-row flex items-center gap-3 rounded-[1rem] border border-line bg-surface/60 px-5 py-4 text-left"
+          aria-label="Expand a sample palette from the Brand Palette Pack">
+          <div class="flex h-9 w-16 rounded-md overflow-hidden border border-line/60 shrink-0">
+            {#each specimenPalettes[0].colors as c}
+              <span class="flex-1" style="background-color: {c};"></span>
+            {/each}
+          </div>
+          <span class="text-sm text-text/85">One of 20 palettes inside the Brand Palette Pack</span>
+        </button>
+        <button type="button" on:click={(e) => openSpecimen('type', specimenType[0], e)}
+          class="specimen-row flex items-center gap-3 rounded-[1rem] border border-line bg-surface/60 px-5 py-4 text-left"
+          aria-label="Expand a sample type pairing from the Typography Pack">
+          <span class="font-display italic text-gold text-xl shrink-0" style="font-family: {specimenType[0].fontDisplay};">Aa</span>
+          <span class="text-sm text-text/85">One of 20 type systems inside the Typography Pack</span>
+        </button>
+      </div>
+
+      <div class="reveal mt-10 md:mt-12 rounded-[1.75rem] border border-gold-line bg-surface/40 p-7 md:p-9 text-center">
+        <a href={GUMROAD.launchpad} data-event="initiate_checkout" data-analytics-id="offer-stack-cta" on:click={trackCheckoutClick} class="btn-primary inline-flex items-center justify-center gap-2.5 py-5 px-8 rounded-[2rem]">
+          <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+          Start My 5-Day Build · $129
+        </a>
+        <p class="text-sm font-mono uppercase tracking-widest text-muted mt-4">$129 once. Use the system again for every product you build after this one.</p>
       </div>
     </div>
   </section>
 
   <!-- ═══════════════════════════════════════════════════════════════
-       THE MATH — what hiring this out costs vs the Launchpad
+       PROGRESS + TOOLS — backup/restore animation (2nd and last of the
+       page's two animations) plus the free-tools-first explanation.
+       Replaces the old screenshot-led Tools row and the separate "Do The
+       Math" freelancer-cost section (2026-07-11): the math section's one
+       real idea — you keep the system for every future launch — already
+       lives in the price-close line in "Everything Included" below, so
+       repeating it here in dollar-figure form was redundant.
        ═══════════════════════════════════════════════════════════════ -->
-  <section id="the-math" class="relative py-16 md:py-20 px-6 border-t border-line/60">
-    <div class="max-w-[860px] mx-auto reveal">
-      <header class="text-center mb-8 md:mb-10">
-        <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">Do The Math</span>
-        <h2 class="font-display text-3xl md:text-5xl leading-tight text-text mt-3">
-          What hiring this out <span class="italic text-gold">actually costs.</span>
-        </h2>
-        <p class="font-mono text-[10px] md:text-[11px] uppercase tracking-[0.2em] text-muted-2 mt-3">At standard freelancer day rates for each deliverable</p>
-      </header>
-      <div class="rounded-[2rem] border border-line bg-surface/60 p-7 md:p-10">
-        <ul class="space-y-3.5">
-          {#each [
-            ['Brand identity from a designer', '$1,500+'],
-            ['Landing page copy from a copywriter', '$1,200+'],
-            ['Page design and build from a developer', '$2,500+'],
-            ['Funnel and email setup from a consultant', '$1,000+']
-          ] as row}
-            <li class="flex items-baseline justify-between gap-4 border-b border-line/60 pb-3">
-              <span class="text-text text-base md:text-[17px]">{row[0]}</span>
-              <span class="font-mono font-bold text-base text-muted whitespace-nowrap tracking-tight">{row[1]}</span>
-            </li>
-          {/each}
+  <section id="progress" class="relative py-20 md:py-24 px-6 border-t border-line/60">
+    <div class="max-w-[1040px] mx-auto reveal grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10 items-center">
+      <div class="motion-viz motion-panel rounded-[1.5rem] border border-line bg-surface/40">
+        <span class="motion-label">Backup and restore</span>
+        <div class="mv-devices">
+          <div class="mv-device">Launchpad<i></i><i></i></div>
+          <div class="mv-device mv-device-mid">Drive<i></i><i></i></div>
+          <div class="mv-device">Restore<i></i><i></i></div>
+        </div>
+        <div class="mv-transfer-track"><div class="mv-file-token"></div></div>
+      </div>
+      <div>
+        <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">Progress, Backed Up</span>
+        <h3 class="font-display text-2xl md:text-3xl text-text leading-tight mt-2 mb-3">Start on one device. Continue on another.</h3>
+        <p class="text-base md:text-lg text-text/85 leading-relaxed">Your progress autosaves in the browser. <strong class="text-text">Backup Progress</strong> creates a portable file you can keep in Drive or move to another computer. <strong class="text-text">Restore Progress</strong> brings the work back exactly where you left it. It's mobile-friendly too, so a day can start on your phone and finish on your laptop.</p>
+      </div>
+    </div>
+    <div class="max-w-[1040px] mx-auto reveal grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10 items-center mt-14 md:mt-16 pt-14 md:pt-16 border-t border-line/40">
+      <div class="lg:order-2">
+        <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">Free Tools Get You There</span>
+        <h3 class="font-display text-2xl md:text-3xl text-text leading-tight mt-2 mb-3">The free tier finishes all five days. Paid tiers are polish.</h3>
+        <p class="text-base md:text-lg text-text/85 leading-relaxed">Everything the Launchpad asks for runs on tools with a real free tier: the free plan of ChatGPT, Claude, or Gemini for the prompts, Leonardo or Ideogram for early visuals, Google Antigravity to build your page, GitHub and Cloudflare Pages to host it live, and Gumroad to sell it. That's a complete, working path to Day 5 for $0 in tools.</p>
+        <p class="text-base md:text-lg text-text/85 leading-relaxed mt-4">A paid AI tier and a Higgsfield subscription for premium visuals are optional. Neither decides whether you finish Day 5. What they buy is polish: crisper visuals and longer AI sessions.</p>
+      </div>
+      <div class="lg:order-1 rounded-[1.5rem] border border-line bg-surface/40 p-6 md:p-8">
+        <ul class="flex flex-col gap-3 font-mono text-xs uppercase tracking-[0.14em] text-text/85">
+          <li class="flex items-center gap-2"><span class="text-gold" aria-hidden="true">✓</span> ChatGPT · Claude · Gemini</li>
+          <li class="flex items-center gap-2"><span class="text-gold" aria-hidden="true">✓</span> Leonardo · Ideogram</li>
+          <li class="flex items-center gap-2"><span class="text-gold" aria-hidden="true">✓</span> Google Antigravity</li>
+          <li class="flex items-center gap-2"><span class="text-gold" aria-hidden="true">✓</span> GitHub · Cloudflare Pages</li>
+          <li class="flex items-center gap-2"><span class="text-gold" aria-hidden="true">✓</span> Gumroad</li>
         </ul>
-        <div class="flex items-baseline justify-between mt-5">
-          <span class="font-mono text-sm uppercase tracking-widest text-muted">Hired out</span>
-          <span class="font-mono font-bold text-2xl md:text-3xl text-gold/60 line-through tracking-tight">$6,200+</span>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       WHO THIS IS FOR / NOT FOR — final qualification gate, placed after
+       proof (mechanism + testimonials) and right before the guarantee/CTA
+       push. Condensed to 3 points per side 2026-07-11 (was 5/6) so this
+       reads as a fast, concrete final filter instead of another wall of
+       copy — the buyer has already seen the offer and proof by this point.
+       ═══════════════════════════════════════════════════════════════ -->
+  <section id="for-who" class="relative py-20 md:py-24 px-6 border-t border-line/60">
+    <div class="max-w-[1080px] mx-auto reveal">
+      <header class="text-center max-w-[760px] mx-auto mb-12 md:mb-16">
+        <div class="flex items-center justify-center gap-3 mb-6">
+          <div class="h-px w-16 bg-gold-line"></div>
+          <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">Section · Who This Is For</span>
+          <div class="h-px w-16 bg-gold-line"></div>
         </div>
-        <div class="flex items-baseline justify-between mt-3 pt-3 border-t border-gold-line/40">
-          <span class="font-mono text-sm uppercase tracking-widest text-text">The Launchpad, built with you</span>
-          <span class="font-mono font-bold text-4xl md:text-5xl text-gold tracking-tight">$129</span>
+        <h2 class="font-display text-3xl md:text-5xl leading-tight text-text">
+          Honest qualification, <span class="italic text-gold">both ways</span>.
+        </h2>
+      </header>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-0 md:gap-0 rounded-[1.5rem] border border-line bg-surface/60 overflow-hidden">
+        <!-- For you if... -->
+        <div class="p-7 md:p-10 md:border-r md:border-gold-line border-b md:border-b-0 border-gold-line">
+          <div class="flex items-center gap-3 mb-5">
+            <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">For you if</span>
+          </div>
+          <h3 class="font-display text-2xl md:text-3xl text-text leading-tight mb-6">
+            This is for you if<span class="text-gold">...</span>
+          </h3>
+          <ul class="flex flex-col gap-4 text-base md:text-lg text-text/90 leading-relaxed">
+            <li class="flex gap-3"><span class="text-gold mt-1">·</span><span>You have a folder of unfinished ideas in your notes app, and you are ready to stop planning and get your first offer out of your head and onto a real page on the internet.</span></li>
+            <li class="flex gap-3"><span class="text-gold mt-1">·</span><span>You are overwhelmed by the volume of decisions a launch demands: naming, colors, type, copy, layout. You want a system that makes those calls for you.</span></li>
+            <li class="flex gap-3"><span class="text-gold mt-1">·</span><span>You want a real, payment-ready storefront, a structured funnel, and a complete email sequence ready to connect to your own platform, all on a live custom URL by Day 5.</span></li>
+          </ul>
         </div>
-        <p class="text-base text-text/85 leading-relaxed mt-5 text-center">
-          Same deliverables, and you keep the system. Every product you launch after this one rides the same rails for free.
-        </p>
-        <a href={GUMROAD.launchpad} class="btn-primary flex items-center justify-center gap-2.5 mt-6 py-5 rounded-[2rem]">
-          <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
-          Get The Launchpad · $129 →
-        </a>
+        <!-- NOT for you if... -->
+        <div class="p-7 md:p-10">
+          <div class="flex items-center gap-3 mb-5">
+            <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-muted">Not for you if</span>
+          </div>
+          <h3 class="font-display text-2xl md:text-3xl text-text leading-tight mb-6">
+            This is <span class="italic text-muted">not</span> for you if<span class="text-muted">...</span>
+          </h3>
+          <ul class="flex flex-col gap-4 text-base md:text-lg text-text/80 leading-relaxed">
+            <li class="flex gap-3"><span class="text-muted mt-1">·</span><span>You are looking for an agency to build it for you. We give you the complete machinery, but you have to turn the key. If you want someone else's hands on the keyboard, it makes more sense to pay a $12,000 agency invoice.</span></li>
+            <li class="flex gap-3"><span class="text-muted mt-1">·</span><span>You expect sales to happen automatically without promotion. The Launchpad builds the storefront and checkout funnel; driving traffic is your job, and we would rather be honest about that upfront.</span></li>
+            <li class="flex gap-3"><span class="text-muted mt-1">·</span><span>You are selling something physical you need to manufacture, stock, or ship. The checkout and delivery system is instant-download, not inventory or fulfillment.</span></li>
+          </ul>
+        </div>
+      </div>
+      <div class="text-center mt-8">
+        <a href={GUMROAD.launchpad} data-event="initiate_checkout" data-analytics-id="for-who-cta" on:click={trackCheckoutClick} class="text-sm font-mono uppercase tracking-widest text-gold hover:text-gold-hi transition border-b border-gold-line hover:border-gold pb-1">Get The Launchpad · $129 →</a>
       </div>
     </div>
   </section>
@@ -1509,10 +913,10 @@
        SOCIAL PROOF — real verified-buyer reviews, quoted verbatim
        (2026-07-02: reverted an earlier light spelling pass per Jamil,
        left exactly as submitted, no corrections). Placed right after
-       the value math, right before the guarantee: proof, then risk
-       reversal. Subhead intentionally does not mention names, Gumroad,
-       or spelling; it amplifies the offer instead of explaining the
-       sourcing.
+       the for-who qualification gate, right before the guarantee: proof,
+       then risk reversal. Subhead intentionally does not mention names,
+       Gumroad, or spelling; it amplifies the offer instead of explaining
+       the sourcing.
        ═══════════════════════════════════════════════════════════════ -->
   <section id="testimonials" class="relative py-20 md:py-24 px-6 border-t border-line/60">
     <div class="max-w-[1180px] mx-auto reveal">
@@ -1533,17 +937,17 @@
       <div class="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6">
         <div class="rounded-[1.5rem] border border-line bg-surface/60 p-6 md:p-7 flex flex-col gap-4">
           <span class="text-gold text-lg tracking-[0.15em] leading-none" aria-label="Rated 5 out of 5 stars">★★★★★</span>
-          <p class="text-text/90 text-base leading-relaxed flex-1">"I'm really glad I decided to go through this process. I had a lot of ideas but wasn't sure how to put everything together in a way that made sense. What I appreciated most was that it gave me clarity and helped me organize my thoughts into something practical that I could actually move forward with. The whole experience felt straightforward and productive. Instead of spending months trying to figure things out on my own, I came away with a clearer direction, a stronger brand foundation, and a funnel that I could start using right away. For me, it was a worthwhile investment because it helped turn a lot of uncertainty into a concrete plan. I left feeling more confident about my business and the next steps I needed to take."</p>
+          <p class="text-text/90 text-base leading-relaxed flex-1">"Instead of spending months trying to figure things out on my own, I came away with a clearer direction, a stronger brand foundation, and a funnel that I could start using right away. For me, it was a worthwhile investment because it helped turn a lot of uncertainty into a concrete plan."</p>
           <span class="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-2 inline-flex items-center gap-1.5"><span class="text-gold" aria-hidden="true">✓</span> Verified Buyer</span>
         </div>
         <div class="rounded-[1.5rem] border border-line bg-surface/60 p-6 md:p-7 flex flex-col gap-4">
           <span class="text-gold text-lg tracking-[0.15em] leading-none" aria-label="Rated 5 out of 5 stars">★★★★★</span>
-          <p class="text-text/90 text-base leading-relaxed flex-1">"I was so surprised by the quality of the final product. Sometimes you buy things online and cross your fingers hoping it matches what's advertised on the website, and in this case, it was even better. The system is super polished, easy to understand, and aesthetically it's a 10/10. It's been a great investment, and I would definitely recommend it to anyone hesitating to take the plunge. If you want an already proofed system, this is it!"</p>
+          <p class="text-text/90 text-base leading-relaxed flex-1">"The system is super polished, easy to understand, and aesthetically it's a 10/10. It's been a great investment, and I would definitely recommend it to anyone hesitating to take the plunge."</p>
           <span class="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-2 inline-flex items-center gap-1.5"><span class="text-gold" aria-hidden="true">✓</span> Verified Buyer</span>
         </div>
         <div class="rounded-[1.5rem] border border-line bg-surface/60 p-6 md:p-7 flex flex-col gap-4">
           <span class="text-gold text-lg tracking-[0.15em] leading-none" aria-label="Rated 5 out of 5 stars">★★★★★</span>
-          <p class="text-text/90 text-base leading-relaxed flex-1">"As a full time college student, I felt like I never had enough time to figure out how to start an online business. Every time I had a free moment, I would end up watching another YouTube video or buying into another idea, and I still felt like I was going in circles. Vanguard OS honestly helped simplify everything for me. Instead of feeling like I needed to do a hundred different things, I finally had a clear direction. It made starting feel a lot less overwhelming, which was exactly what I needed with everything else going on in my life. If u are busy, constantly second guessing yourself, or just tired of feeling stuck, I think it's worth checking out. It helped me go from overthinking my next move to following a system that lead me to actually starting that business that I had put off for years. Feels really good seeing my business on an actual website with a checkout system!"</p>
+          <p class="text-text/90 text-base leading-relaxed flex-1">"It helped me go from overthinking my next move to following a system that lead me to actually starting that business that I had put off for years. Feels really good seeing my business on an actual website with a checkout system!"</p>
           <span class="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-2 inline-flex items-center gap-1.5"><span class="text-gold" aria-hidden="true">✓</span> Verified Buyer · Full-time college student</span>
         </div>
       </div>
@@ -1568,528 +972,17 @@
           And if you get stuck on a step, tell us where. We'd rather you finish your launch than have your money back.
         </p>
       </div>
-    </div>
-  </section>
 
-  <!-- ═══════════════════════════════════════════════════════════════
-       LEGACY: 60-Minute AI Assistant sections — hidden via {#if false}
-       Kept in source for re-enable / future relaunch. Do not delete.
-       Sections wrapped: Prompted-not-autonomous · Beat 1 Core ·
-       Editorial opener + 6 painkillers · Command Center ·
-       Beat 2 Upgrade · Beat 3 Bundle reveal · Value stack +
-       comparison + guarantee · Comparison grid · Catalog (Pick Your Path)
-       ═══════════════════════════════════════════════════════════════ -->
-  {#if false}
-  <!-- PROMPTED, NOT AUTONOMOUS -->
-  <section class="relative py-20 md:py-28 px-6">
-    <div class="max-w-[1000px] mx-auto reveal">
-      <div class="rounded-[2.5rem] border border-gold-line bg-gold-soft/40 p-8 md:p-14 text-center space-y-6"
-        style="background-image: radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.10), transparent 70%);">
-        <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">The one rule that keeps you in control</span>
-        <h2 class="font-display text-3xl md:text-5xl leading-tight text-text">
-          It runs when <span class="italic text-gold">you say so</span>. Not a second before.
-        </h2>
-        <p class="text-text text-lg md:text-xl leading-relaxed max-w-[760px] mx-auto">
-          This is not an autonomous agent loose in your accounts. It is <strong class="text-gold">prompted</strong> — you send the trigger, it does the job, then it waits. Nothing fires on its own. It never spends a cent without your tap, and it answers only to your phone. It is your assistant when you need it — silent the rest of the time.
-        </p>
-        <div class="flex flex-wrap items-center justify-center gap-3 pt-2">
-          <span class="font-mono text-xs uppercase tracking-wide text-gold bg-base/40 border border-gold-line rounded-full px-4 py-1.5">You trigger it</span>
-          <span class="font-mono text-xs uppercase tracking-wide text-gold bg-base/40 border border-gold-line rounded-full px-4 py-1.5">It acts</span>
-          <span class="font-mono text-xs uppercase tracking-wide text-gold bg-base/40 border border-gold-line rounded-full px-4 py-1.5">It waits</span>
+      <!-- Completion glimpse: 3rd and final real visual on the page -->
+      <div class="reveal mt-8 flex flex-col items-center gap-4">
+        <div class="reveal-crop relative w-full max-w-[420px] rounded-[1.25rem] border border-gold-line/40 bg-surface/40 p-2 overflow-hidden">
+          <img src="/screenshots/completion.webp" alt="A completed Vanguard Launchpad, at 100%, with the Backup Progress action" class="w-full rounded-[0.85rem] border border-line/60 object-cover" style="aspect-ratio: 16 / 9; object-position: center 20%;" width="1200" height="675" loading="lazy" decoding="async" />
         </div>
+        <p class="font-display italic text-lg md:text-xl text-text/90 text-center max-w-[520px]">The finish line is not a certificate. It is the checkout you can send someone.</p>
       </div>
     </div>
   </section>
 
-  <!-- BEAT 1 — THE CORE -->
-  <section class="relative pt-20 md:pt-28 px-6 max-w-[900px] mx-auto reveal text-center">
-    <span class="font-mono text-xs uppercase tracking-[0.45em] text-muted">VanguardOS introduces</span>
-    <h2 class="font-display text-4xl md:text-6xl lg:text-7xl leading-[0.95] text-text mt-4">
-      The <span class="italic text-gold">60-Minute AI&nbsp;Assistant</span>.
-    </h2>
-    <p class="text-text text-lg md:text-xl mt-5 max-w-[640px] mx-auto leading-relaxed">
-      Where it starts. Five jobs off your plate, a live Command Center, and your money rendered beautifully — for <strong class="text-gold">$49, once</strong>.
-    </p>
-  </section>
-
-  <!-- EDITORIAL OPENER -->
-  <section id="painkillers" class="relative py-14 md:py-20 px-6 max-w-[1180px] mx-auto reveal">
-    <div class="flex items-center gap-4 mb-12 md:mb-16">
-      <div class="h-px flex-1 bg-gold-line"></div>
-      <span class="font-mono text-[10px] md:text-xs uppercase tracking-[0.3em] text-gold whitespace-nowrap">The Five Painkillers + the Command Center</span>
-      <div class="h-px flex-1 bg-gold-line"></div>
-    </div>
-    <div class="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-end">
-      <div class="md:col-span-7">
-        <h2 class="font-display text-4xl md:text-6xl lg:text-7xl leading-[0.95] text-text">
-          Six jobs off your plate <span class="italic text-gold">the moment you ask</span>.
-        </h2>
-      </div>
-      <div class="md:col-span-5 md:pl-6 md:border-l border-gold-line">
-        <p class="text-text text-lg md:text-xl leading-relaxed">
-          Each one is a copy-paste skill with a single trigger. You text it, it returns finished work. Install once, use forever. Read the texts below — this is exactly what it looks like on your phone.
-        </p>
-        <p class="font-mono text-sm uppercase tracking-widest text-muted mt-6 pt-6 border-t border-line">
-          06 skills · ~60 min total install · $0/mo to run
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <!-- THE SIX EDITORIAL SPREADS -->
-  {#each painkillers as p, i}
-    <section data-section-index={i} class="relative px-6 py-20 md:py-28 lg:py-32 border-t border-line/60 overflow-hidden" class:bg-base-2={i % 2 === 1}>
-      <div class="max-w-[1180px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center">
-        <div class="lg:col-span-6 reveal {i % 2 === 0 ? 'lg:order-1' : 'lg:order-2'} space-y-7">
-          <div class="flex items-center gap-3">
-            <span class="font-mono text-[10px] uppercase tracking-[0.4em] text-gold">N° {p.num}</span>
-            <span class="h-px w-12 bg-gold-line"></span>
-            <span class="font-mono text-[10px] uppercase tracking-[0.4em] text-muted-2">{p.kicker}</span>
-          </div>
-          <h3 class="font-display text-4xl md:text-6xl lg:text-7xl leading-[0.95] text-text">
-            {p.title}{#if p.flagship}<span class="text-gold">.</span>{/if}
-          </h3>
-          <p class="font-display italic text-2xl md:text-3xl text-text/90 leading-snug">{p.lede}</p>
-          <p class="text-text text-lg md:text-xl leading-relaxed max-w-[540px]">{p.body}</p>
-          <div class="inline-flex items-center gap-3 pt-2">
-            <span class="font-mono text-[10px] uppercase tracking-widest text-muted-2">Your trigger</span>
-            <span class="font-mono text-xs uppercase tracking-wide text-gold bg-gold-soft border border-gold-line rounded-full px-4 py-1.5">{p.trigger}</span>
-          </div>
-          {#if p.flagship}
-            <div class="pt-2">
-              <a href="#command" class="inline-flex items-center gap-2 text-gold font-mono text-xs uppercase tracking-widest border-b border-gold-line hover:border-gold pb-0.5 transition">See the screen it builds ↓</a>
-            </div>
-          {/if}
-        </div>
-
-        <div class="lg:col-span-6 reveal {i % 2 === 0 ? 'lg:order-2' : 'lg:order-1'} flex justify-center">
-          <div class="phone-shell">
-            <div class="phone-notch"></div>
-            <div class="phone-screen chat-window">
-              <div class="status-bar">
-                <span class="font-mono">{p.time}</span>
-                <div class="status-icons"><span>•</span><span>•</span><span>•</span></div>
-              </div>
-              <div class="chat-header">
-                <button class="back" aria-label="Back">‹</button>
-                <div class="avatar"><img src="/brand/brand-mark-owl.svg" alt="VanguardOS" /></div>
-                <div class="who">
-                  <div class="who-name"><span class="text-text">Vanguard</span><span class="italic text-gold">OS</span></div>
-                  <div class="who-status">online</div>
-                </div>
-              </div>
-              <div class="chat-body">
-                {#each p.messages as msg}
-                  <div class="bubble {msg.from}" style="opacity: 0">{msg.text}</div>
-                {/each}
-              </div>
-              <div class="chat-input">
-                <span class="input-placeholder">Message</span>
-                <span class="input-mic">🎙</span>
-              </div>
-            </div>
-            <div class="phone-glow"></div>
-          </div>
-        </div>
-      </div>
-    </section>
-  {/each}
-
-  <!-- COMMAND CENTER SHOWCASE -->
-  <section id="command" class="relative px-6 py-24 md:py-32 border-t border-line/60 overflow-hidden"
-    style="background-image: radial-gradient(ellipse at 50% -10%, rgba(212,175,55,0.08), transparent 60%);">
-    <div class="max-w-[1180px] mx-auto">
-      <header class="text-center mb-12 md:mb-16 reveal">
-        <div class="flex items-center justify-center gap-3 mb-6">
-          <div class="h-px w-16 bg-gold-line"></div>
-          <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">The Payoff</span>
-          <div class="h-px w-16 bg-gold-line"></div>
-        </div>
-        <h2 class="font-display text-4xl md:text-6xl lg:text-7xl leading-[0.95] text-text max-w-[900px] mx-auto">
-          One text. Your <span class="italic text-gold">entire day</span>, on one screen.
-        </h2>
-        <p class="text-text text-lg md:text-xl mt-6 max-w-[740px] mx-auto leading-relaxed">
-          Text <span class="text-gold font-mono">"morning briefing"</span> and the Command Center builds itself — live, from your real data. This is the exact screen that opens in your browser. Your assistant even tells you where it saved it.
-        </p>
-      </header>
-
-      <!-- The bot pointer + the dashboard -->
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-        <!-- Pointer chat -->
-        <div class="lg:col-span-4 reveal">
-          <div class="rounded-[2rem] border border-line bg-surface/70 p-5 space-y-3">
-            <div class="flex items-center gap-2 pb-2 border-b border-line">
-              <div class="avatar-sm"><img src="/brand/brand-mark-owl.svg" alt="VanguardOS" /></div>
-              <span class="font-display text-sm"><span class="text-text">Vanguard</span><span class="italic text-gold">OS</span></span>
-              <span class="who-status ml-auto">online</span>
-            </div>
-            <div class="cc-bubble user">morning briefing</div>
-            <div class="cc-bubble bot">🧭 Command Center open — 3 urgent, next flight Thu, $2,940 spent this month.</div>
-            <div class="cc-bubble bot">It's live in your browser now. 👉</div>
-            <div class="cc-bubble bot">Saved as <strong>Command-Center.html</strong> in your <strong>Documents → AI-Assistant</strong> folder. Double-click to reopen it anytime.</div>
-          </div>
-        </div>
-
-        <!-- The dashboard the customer sees -->
-        <div class="lg:col-span-8 reveal">
-          <div class="dash">
-            <div class="dash-top">
-              <div class="flex items-center gap-2">
-                <img src="/brand/brand-mark-owl.svg" alt="" class="w-5 h-5" />
-                <span class="font-display text-sm">Command Center</span>
-              </div>
-              <span class="font-mono text-[10px] uppercase tracking-widest text-muted">Jun 2026</span>
-            </div>
-
-            <!-- four status cards -->
-            <div class="dash-cards">
-              <div class="dash-card">
-                <div class="dc-head"><span>🔴 Urgent Inbox</span><span class="dc-num">3</span></div>
-                <p class="dc-sub">Sarah · contract 5PM — Board · Q3 deck — IRS · Fri. All drafted.</p>
-              </div>
-              <div class="dash-card">
-                <div class="dc-head"><span>💰 Money</span><span class="dc-num">$2,940</span></div>
-                <p class="dc-sub">This month · $17,280 YTD · top: Travel, Meals, Software</p>
-              </div>
-              <div class="dash-card">
-                <div class="dc-head"><span>✈ Travel</span><span class="dc-num">DL 1422</span></div>
-                <p class="dc-sub">Thu · JFK → SFO · check-in handled · seat 4C</p>
-              </div>
-              <div class="dash-card">
-                <div class="dc-head"><span>✍ Content</span><span class="dc-num">2</span></div>
-                <p class="dc-sub">LinkedIn post + newsletter · waiting for your review</p>
-              </div>
-            </div>
-
-            <!-- Living money dashboard: donut + bars -->
-            <div class="dash-money">
-              <div class="dm-title">
-                <span class="font-display text-base text-text">Living Money Dashboard</span>
-                <span class="font-mono text-[10px] uppercase tracking-widest text-muted">Built from your real receipts</span>
-              </div>
-              <div class="dm-grid">
-                <!-- Donut -->
-                <div class="dm-donut">
-                  <svg viewBox="0 0 200 200" width="170" height="170" role="img" aria-label="Spending by category donut chart">
-                    <g transform="rotate(-90 100 100)" fill="none" stroke-width="26">
-                      {#each categories as c}
-                        <circle cx="100" cy="100" r="80" stroke={c.color}
-                          stroke-dasharray="{c.len} {502.65 - c.len}" stroke-dashoffset={c.off} />
-                      {/each}
-                    </g>
-                    <text x="100" y="94" text-anchor="middle" fill="#ECEAE4" font-family="JetBrains Mono, monospace" font-size="26">$17,280</text>
-                    <text x="100" y="116" text-anchor="middle" fill="#A6A6A1" font-family="JetBrains Mono, monospace" font-size="9" letter-spacing="1.5">YTD SPEND</text>
-                  </svg>
-                  <ul class="dm-legend">
-                    {#each categories as c}
-                      <li><span class="dot" style="background:{c.color}"></span>{c.name}<em>${c.amt.toLocaleString()}</em></li>
-                    {/each}
-                  </ul>
-                </div>
-                <!-- Bars + vendors -->
-                <div class="dm-right">
-                  <div class="dm-bars" aria-label="Spending by month">
-                    {#each months as mo}
-                      <div class="bar-col">
-                        <div class="bar" style="height: {Math.round((mo.v / maxMonth) * 100)}%"></div>
-                        <span class="bar-label">{mo.m}</span>
-                      </div>
-                    {/each}
-                  </div>
-                  <div class="dm-vendors">
-                    <span class="dv-title">Top vendors</span>
-                    <div class="dv-row"><span>Delta Air Lines</span><em>$2,180</em></div>
-                    <div class="dv-row"><span>Marriott</span><em>$1,640</em></div>
-                    <div class="dv-row"><span>Adobe Cloud</span><em>$1,290</em></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Regenerate-on-trigger demo -->
-      <div class="cc-demo reveal" data-cc-demo>
-        <div class="cc-demo-flow">
-          <div class="cc-demo-bubble user" data-cc="b1">update my dashboard</div>
-          <div class="cc-demo-bubble bot" data-cc="b2">On it — pulling this month's receipts and rebuilding the screen above. ↑</div>
-        </div>
-        <div class="cc-demo-save" data-cc="save">
-          <span class="cc-file-chip" data-cc="chip">
-            <span class="cc-file-ic">📄</span> Command-Center.html
-          </span>
-          <span class="cc-demo-caption">Saved to your <strong>Documents → AI-Assistant</strong> folder — double-click to reopen anytime.</span>
-        </div>
-      </div>
-
-      <div class="text-center mt-12 reveal">
-        <a href={GUMROAD.bundle} class="btn-primary inline-flex items-center justify-center gap-2.5 px-10 py-5 rounded-[2rem]">
-          <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
-          Get the Bundle — $79 →
-        </a>
-        <p class="text-sm font-mono uppercase tracking-widest text-muted mt-4">Read-only · it never acts, sends, or spends — it only shows you what's already done</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- BEAT 2 — THE UPGRADE -->
-  <section id="upgrade-showcase" class="relative px-6 py-24 md:py-32 border-t border-line/60 overflow-hidden"
-    style="background-image: radial-gradient(ellipse at 50% -10%, rgba(212,175,55,0.07), transparent 60%);">
-    <div class="max-w-[1180px] mx-auto">
-      <header class="text-center mb-12 md:mb-16 reveal max-w-[780px] mx-auto">
-        <span class="font-mono text-xs uppercase tracking-[0.45em] text-muted">And the next step</span>
-        <h2 class="font-display text-4xl md:text-6xl lg:text-7xl leading-[0.95] text-text mt-4">
-          The <span class="italic text-gold">Chief of Staff</span> Upgrade.
-        </h2>
-        <p class="text-text text-lg md:text-xl mt-5 leading-relaxed">
-          The same assistant — fully staffed. Your five skills become <strong class="text-gold">thirty</strong>, organized into six departments. Includes <strong class="text-gold">The Toolbox</strong> — the skill that builds new skills just by talking. You stop texting one helper and start running a back office from your pocket.
-        </p>
-        <div class="inline-flex flex-wrap items-center justify-center gap-3 mt-6 font-mono text-sm uppercase tracking-widest">
-          <span class="text-muted">5 skills</span>
-          <span class="text-gold">→</span>
-          <span class="text-gold bg-gold-soft border border-gold-line rounded-full px-4 py-1.5">30 skills · 6 departments · Toolbox</span>
-        </div>
-      </header>
-
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5 reveal">
-        {#each [
-          ['📥', 'Inbox & Comms', 'Meeting recaps, follow-up nudges, polite-no replies, contact context before a call.'],
-          ['💼', 'Money & Ops', 'Invoice drafting, recurring-bill watch, quote generators, refund-claim chasers.'],
-          ['🧭', 'Travel & Logistics', 'Full itinerary builder, packing lists, OOO drafts, restaurant recon.'],
-          ['🏡', 'Family Ops', 'Appointment juggler, school-form watcher, gift-idea bench, meal-plan pings.'],
-          ['📣', 'Brand & Content', 'Repurpose mode — one video into 5 platforms — idea log, content calendar.'],
-          ['🧠', 'Personal Intelligence', 'Daily summary, weekly review, and a big-decision worksheet.']
-        ] as dept}
-          <div class="rounded-[1.5rem] border border-line bg-surface/60 p-6 hover:border-gold-line transition">
-            <div class="flex items-center gap-3 mb-3">
-              <span class="text-2xl leading-none">{dept[0]}</span>
-              <h3 class="font-display text-xl md:text-2xl text-text">{dept[1]}</h3>
-            </div>
-            <p class="text-base text-text/85 leading-relaxed">{dept[2]}</p>
-          </div>
-        {/each}
-      </div>
-
-      <div class="flex flex-col items-center gap-4 mt-12 reveal">
-        <div class="flex items-baseline gap-3">
-          <span class="font-mono text-base line-through text-gold-line">$264 value</span>
-          <span class="font-display text-5xl text-gold">$79</span>
-          <span class="font-mono text-sm uppercase tracking-widest text-muted">standalone</span>
-        </div>
-        <a href={GUMROAD.upgrade} on:click={(e) => openUpsell('upgrade', e)} class="btn-secondary inline-flex items-center justify-center gap-2 px-10 py-5 rounded-[2rem]">
-          See the Upgrade — $79 →
-        </a>
-        <p class="text-sm font-mono uppercase tracking-widest text-muted text-center">Includes The Toolbox · Always-On Kit · Family Multiplier License</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- BEAT 3 — THE BUNDLE REVEAL -->
-  <section id="bundle-reveal" class="relative px-6 pt-24 md:pt-32 max-w-[1180px] mx-auto reveal">
-    <div class="text-center max-w-[820px] mx-auto">
-      <span class="font-mono text-xs uppercase tracking-[0.45em] text-muted">For the same price as the upgrade alone</span>
-      <h2 class="font-display text-4xl md:text-6xl lg:text-7xl leading-[0.95] text-text mt-4">
-        The <span class="italic text-gold">Orchestrator Bundle</span>.
-      </h2>
-      <p class="text-text text-lg md:text-xl mt-5 leading-relaxed">
-        Here's the part that ends the debate. The Bundle is <strong class="text-gold">$79</strong> — the exact same price as the Upgrade alone. The Bundle just adds the full <strong class="text-gold">60-Minute AI Assistant Playbook</strong> on top: the 5 painkiller skills, the Command Center, the Living Money Dashboard, and the Privacy Lock. Same $79 — the Playbook is the free add.
-      </p>
-      <p class="font-display italic text-2xl md:text-3xl text-gold mt-6">Same $79. One gets you 30 skills. The other gets you the same 30 skills <em>and</em> the Playbook that taught the first five.</p>
-    </div>
-
-    <!-- Bundle hero banner -->
-    <div class="mt-12 md:mt-16 relative rounded-[2.5rem] overflow-hidden border-2 border-gold shadow-2xl shadow-gold/20"
-      style="box-shadow: 0 0 0 1px rgba(212,175,55,0.34), 0 30px 80px -20px rgba(212,175,55,0.30), 0 8px 32px -8px rgba(0,0,0,0.6);">
-      <span class="absolute top-4 left-4 md:top-6 md:left-6 z-10 bundle-best-badge">★ Best Value</span>
-      <img src="/products/bundle-banner.webp" alt="The Orchestrator Bundle — everything in one stack" class="w-full block" width="1800" height="1005" loading="lazy" decoding="async" />
-    </div>
-  </section>
-
-  <!-- VALUE STACK + COMPARISON + GUARANTEE -->
-  <section class="px-6 pt-12 pb-12 md:pt-16 md:pb-16">
-    <div class="max-w-[1180px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 reveal">
-      <!-- Inclusions checklist -->
-      <div class="rounded-[2rem] border-2 border-gold bg-gold-soft/20 p-8 md:p-10 relative"
-        style="background-image: radial-gradient(ellipse at 0% 0%, rgba(212,175,55,0.10), transparent 60%);">
-        <span class="font-mono text-xs uppercase tracking-[0.3em] text-gold">★ Everything Included</span>
-        <h3 class="font-display text-3xl md:text-4xl text-text mt-3 mb-6 leading-tight">What's inside the Bundle</h3>
-        <ul class="space-y-3.5">
-          {#each [
-            ['The 60-Minute AI Assistant Playbook', '$97'],
-            ['5 painkiller skills + the Command Center', '$214'],
-            ['25-skill Chief of Staff Upgrade', '$97'],
-            ['★ The Toolbox — build new skills by talking', '$147'],
-            ['Privacy Lock + Cheat Sheet + Troubleshooting', '$46'],
-            ['Family Multiplier License + Always-On Kit', '$140']
-          ] as row}
-            <li class="flex items-baseline justify-between gap-4 border-b border-gold-line/40 pb-3">
-              <span class="flex items-baseline gap-2.5 text-text text-base md:text-[17px]">
-                <span class="text-gold flex-shrink-0">✓</span>
-                <span>{row[0]}</span>
-              </span>
-              <span class="font-mono text-base text-gold-line line-through whitespace-nowrap">{row[1]}</span>
-            </li>
-          {/each}
-        </ul>
-        <!-- Value math callout -->
-        <div class="mt-7 rounded-2xl border border-gold-line bg-base/40 p-5">
-          <div class="flex items-baseline justify-between">
-            <span class="font-mono text-sm uppercase tracking-widest text-muted">Stacked value</span>
-            <span class="font-display text-3xl text-gold-line line-through">$821</span>
-          </div>
-          <div class="flex items-baseline justify-between mt-2 pt-2 border-t border-gold-line/30">
-            <span class="font-mono text-sm uppercase tracking-widest text-text">Today, one payment</span>
-            <span class="font-display text-6xl text-gold">$79</span>
-          </div>
-        </div>
-        <a href={GUMROAD.bundle} class="btn-primary flex items-center justify-center gap-2.5 mt-6 py-5 rounded-[2rem]">
-          <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
-          Get the Bundle — $79 →
-        </a>
-        <p class="text-sm font-mono uppercase tracking-widest text-muted mt-3 text-center">One payment. No subscription. Ever.</p>
-      </div>
-
-      <!-- "What you miss" callout + guarantee -->
-      <div class="flex flex-col gap-6">
-        <div class="rounded-[2rem] border border-line bg-surface/60 p-8 md:p-10">
-          <span class="font-mono text-xs uppercase tracking-[0.3em] text-muted">If you pick differently</span>
-          <h3 class="font-display text-2xl md:text-3xl text-text mt-3 mb-5 leading-tight">What you miss by skipping the Bundle</h3>
-          <ul class="space-y-3 text-base md:text-[17px]">
-            <li class="flex items-start gap-3 text-text">
-              <span class="text-muted-2 mt-0.5">✗</span>
-              <span><strong class="text-text">Core only ($49):</strong> no Toolbox, no 25 extra skills, no Family License, no Always-On Kit.</span>
-            </li>
-            <li class="flex items-start gap-3 text-text">
-              <span class="text-muted-2 mt-0.5">✗</span>
-              <span><strong class="text-text">Upgrade only ($79):</strong> no Playbook, no Command Center, no Living Money Dashboard — you need the Playbook to run it.</span>
-            </li>
-            <li class="flex items-start gap-3 text-text">
-              <span class="text-gold mt-0.5">✓</span>
-              <span><strong class="text-gold">Bundle ($79):</strong> same $79, everything in. The arithmetic is not subtle.</span>
-            </li>
-          </ul>
-        </div>
-        <div class="rounded-[2rem] border border-gold-line bg-gold-soft/30 p-8 md:p-10 flex flex-col justify-center">
-          <span class="font-mono text-xs uppercase tracking-[0.3em] text-gold mb-4">The Promise</span>
-          <h3 class="font-display text-2xl md:text-3xl text-text mb-4 leading-tight">Set it up, then decide.<br/>30 days.</h3>
-          <p class="text-text text-base md:text-[17px] leading-relaxed">
-            Buy it, follow the 60-minute setup, and live with your assistant for 30 days. If it doesn't save you more time than it cost — email us and we'll refund every cent, no questions, no hoops.
-          </p>
-          <p class="text-text text-base md:text-[17px] leading-relaxed mt-4">
-            And if you get stuck installing it, tell us the step. We'd rather you have a working assistant than your money back.
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- COMPARISON GRID -->
-  <section class="px-6 py-16 md:py-24">
-    <div class="max-w-[1100px] mx-auto reveal">
-      <header class="text-center mb-10">
-        <div class="flex items-center justify-center gap-3 mb-6">
-          <div class="h-px w-16 bg-gold-line"></div>
-          <span class="font-mono text-xs uppercase tracking-[0.3em] text-gold">Side By Side</span>
-          <div class="h-px w-16 bg-gold-line"></div>
-        </div>
-        <h2 class="font-display text-3xl md:text-5xl text-text leading-tight">Exactly what each product includes.</h2>
-      </header>
-      <div class="overflow-x-auto rounded-[1.5rem] border border-line">
-        <table class="cmp-table">
-          <thead>
-            <tr>
-              <th class="cmp-feat">What's included</th>
-              <th>Core — $49</th>
-              <th>Upgrade — $79</th>
-              <th class="cmp-best">Bundle — $79 <span class="cmp-best-pill">★ BEST</span></th>
-            </tr>
-          </thead>
-          <tbody>
-            {#each [
-              ['8-chapter Playbook',          true,  false, true],
-              ['5 painkiller skills + Command Center', true, false, true],
-              ['25-skill Chief of Staff Upgrade (30 total)', false, true, true],
-              ['★ The Toolbox — builds new skills by talking', false, true, true],
-              ['Always-On Kit + Family Multiplier License', false, true, true],
-              ['Privacy Lock + Cheat Sheet + Troubleshooting', true, false, true]
-            ] as row}
-              <tr>
-                <td class="cmp-feat">{row[0]}</td>
-                <td>{#if row[1]}<span class="cmp-yes">✓</span>{:else}<span class="cmp-no">✗</span>{/if}</td>
-                <td>{#if row[2]}<span class="cmp-yes">✓</span>{:else}<span class="cmp-no">✗</span>{/if}</td>
-                <td class="cmp-best">{#if row[3]}<span class="cmp-yes">✓</span>{:else}<span class="cmp-no">✗</span>{/if}</td>
-              </tr>
-            {/each}
-          </tbody>
-        </table>
-      </div>
-      <p class="text-center text-sm font-mono uppercase tracking-widest text-muted mt-6">
-        Same $79 as the Upgrade alone — the Bundle adds the Playbook, Command Center & Living Money Dashboard.
-      </p>
-    </div>
-  </section>
-
-  <!-- CATALOG -->
-  <section id="catalog" class="py-20 md:py-28 px-6 max-w-[1180px] mx-auto border-t border-line/60">
-    <header class="text-center mb-6 reveal">
-      <div class="flex items-center justify-center gap-3 mb-8">
-        <div class="h-px w-16 bg-gold-line"></div>
-        <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">Choose Your Vanguard</span>
-        <div class="h-px w-16 bg-gold-line"></div>
-      </div>
-      <h2 class="font-display text-4xl md:text-6xl text-text">Same price. Very different stacks.</h2>
-      <p class="text-text text-lg md:text-xl mt-6 max-w-[720px] mx-auto leading-relaxed">You've seen what it does. Now pick the one that's actually the deal — the Bundle is the same $79 as the standalone Upgrade, and includes everything.</p>
-    </header>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
-      {#each products as p}
-        <div class="reveal relative bg-surface border-2 rounded-[2rem] p-6 md:p-8 space-y-4 transition {p.featured ? 'border-gold lg:-translate-y-4 shadow-2xl shadow-gold/20' : 'border-line'}">
-          {#if p.featured}<div class="absolute -top-4 left-6 bg-gold text-base-2 px-4 py-1.5 rounded-full text-xs font-mono uppercase tracking-widest font-black shadow-lg shadow-gold/30">★ Best Value</div>{/if}
-          <img src={p.src} alt={p.name} class="w-full aspect-square object-cover rounded-[1.5rem]" width="900" height="900" loading="lazy" decoding="async" />
-          <h3 class="font-display text-2xl md:text-3xl text-text">{p.name}</h3>
-          <p class="text-base text-text/85 leading-snug">{p.caption}</p>
-          <div class="pt-1">
-            <span class="font-mono text-xs uppercase tracking-[0.25em] text-gold">Includes</span>
-            <ul class="mt-3 space-y-2.5">
-              {#each p.includes as item}
-                <li class="flex items-start gap-2.5 text-[15px] leading-snug text-text">
-                  <span class="text-gold mt-0.5 flex-shrink-0">✓</span>
-                  <span>{item}</span>
-                </li>
-              {/each}
-            </ul>
-          </div>
-          <div class="flex items-baseline gap-3 pt-3">
-            <span class="font-mono text-base line-through text-gold-line">{p.retail}</span>
-            <span class="font-display text-5xl text-gold">{p.price}</span>
-          </div>
-          {#if p.key === 'core'}
-            <a href={ctaHref(p.key)} on:click={(e) => openUpsell('core', e)} class="btn-secondary flex items-center justify-center gap-2 py-4 rounded-full">
-              <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
-              {p.cta} →
-            </a>
-          {:else if p.featured}
-            <a href={ctaHref(p.key)} class="btn-primary flex items-center justify-center gap-2 py-4 rounded-full">
-              <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
-              {p.cta} — $79 →
-            </a>
-          {:else}
-            <a href={ctaHref(p.key)} on:click={(e) => openUpsell('upgrade', e)} class="btn-secondary flex items-center justify-center gap-2 py-4 rounded-full">
-              <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
-              {p.cta} — $79 →
-            </a>
-          {/if}
-        </div>
-      {/each}
-    </div>
-    <p class="text-center text-base text-text/85 mt-12 max-w-[720px] mx-auto leading-relaxed reveal">
-      Powered by your <strong style="color:#D4AF37">Claude</strong> plan. A free Claude account works to start; a basic monthly plan unlocks the full setup. We charge nothing on top — ever.
-    </p>
-  </section>
-  {/if}
-  <!-- ═══════════════════════════════════════════════════════════════
-       END LEGACY BLOCK
-       ═══════════════════════════════════════════════════════════════ -->
 
   <!-- ═══ MULTILINGUAL — IN YOUR LANGUAGE ═══ -->
   <section id="languages" class="relative py-20 md:py-24 px-6 border-t border-line/60 overflow-hidden">
@@ -2200,14 +1093,14 @@
       <img src="/brand/brand-mark-owl.svg" alt="VanguardOS owl mark" class="w-12 h-12 mx-auto" />
       <h2 class="font-display text-4xl md:text-6xl lg:text-7xl leading-[0.95] text-text">Five days from now, <span class="italic text-gold">it's live.</span></h2>
       <p class="text-text text-lg md:text-xl max-w-[680px] mx-auto leading-relaxed">
-        Brand, assets, landing page, offer, funnel: the five things every solo launch needs, all built with you, all yours forever. The core system plus six bonuses, {'$' + stackValue} of value. <strong class="text-gold">$129, once.</strong>
+        Brand, product, landing page, checkout, funnel: the five things every solo launch needs, built with you and yours forever. <strong class="text-gold">$129, once.</strong>
       </p>
 
 
       <div class="flex flex-col items-center gap-4">
-        <a href={GUMROAD.launchpad} class="btn-primary inline-flex items-center justify-center gap-2.5 px-10 py-5 rounded-[2rem]">
+        <a href={GUMROAD.launchpad} data-event="initiate_checkout" data-analytics-id="final-cta" on:click={trackCheckoutClick} class="btn-primary inline-flex items-center justify-center gap-2.5 px-10 py-5 rounded-[2rem]">
           <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
-          Start the Launchpad · $129 →
+          Start My 5-Day Build · $129 →
         </a>
         <a href="#offer-stack" class="text-sm font-mono uppercase tracking-widest text-muted hover:text-text transition border-b border-gold-line/40 hover:border-gold pb-1">See what's inside ↓</a>
         <p class="text-sm font-mono uppercase tracking-wider text-muted pt-2">Instant access, start Day 1 today · 30-day guarantee · One payment · Yours forever</p>
@@ -2247,7 +1140,7 @@
       <span class="sticky-cta-price">$129</span>
       <span class="sticky-cta-sub">One payment · Yours forever</span>
     </div>
-    <a href={GUMROAD.launchpad} class="btn-primary sticky-cta-btn flex items-center justify-center gap-2" tabindex={showStickyCta ? 0 : -1}>
+    <a href={GUMROAD.launchpad} data-event="initiate_checkout" data-analytics-id="sticky-cta" on:click={trackCheckoutClick} class="btn-primary sticky-cta-btn flex items-center justify-center gap-2" tabindex={showStickyCta ? 0 : -1}>
       <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
       Get The Launchpad →
     </a>
@@ -2291,59 +1184,10 @@
         <p class="text-sm text-muted leading-relaxed mt-5">Display: <span class="text-text/90">{specimenData.display}</span> · Body: <span class="text-text/90">{specimenData.body}</span> · Accent/Mono: <span class="text-text/90">{specimenData.accent}</span> (kickers and labels only). One of 20 type systems inside the pack. Sources: Fontshare + Google Fonts + The League of Moveable Type.</p>
       {/if}
 
-      <a href={GUMROAD.launchpad} class="btn-primary flex items-center justify-center gap-2.5 mt-7 py-4 rounded-[2rem]">
+      <a href={GUMROAD.launchpad} data-event="initiate_checkout" data-analytics-id="specimen-modal-cta" on:click={trackCheckoutClick} class="btn-primary flex items-center justify-center gap-2.5 mt-7 py-4 rounded-[2rem]">
         <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
         Get The Launchpad · $129 →
       </a>
-    </div>
-  </div>
-{/if}
-
-<!-- BUNDLE UPSELL MODAL — intercepts non-Bundle CTAs (Core + Upgrade) before Gumroad -->
-{#if modalOpen}
-  <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
-  <div class="upsell-overlay" on:click={upsellClose}>
-    <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
-    <div class="upsell-card" on:click|stopPropagation role="dialog" aria-modal="true" aria-labelledby="upsell-title" tabindex="-1">
-      <button class="upsell-x" on:click={upsellClose} aria-label="Close">✕</button>
-      <img src="/brand/brand-mark-owl.svg" alt="" class="w-10 h-10 mx-auto mb-4" />
-
-      {#if upsellSource === 'core'}
-        <h3 id="upsell-title" class="upsell-headline">Want <em>both</em> products for just $30 more?</h3>
-        <p class="upsell-sub">
-          You're about to grab the Playbook for <strong>$49</strong>. The Bundle gives you the Playbook <em>and</em> the Chief of Staff Upgrade for <strong>$79</strong> — that's <strong class="upsell-gold">both products for $30 over your current cart</strong>, and $49 less than buying them separately.
-        </p>
-      {:else}
-        <h3 id="upsell-title" class="upsell-headline">Add the 60-Minute AI Assistant Playbook for <em>$0</em> — same price.</h3>
-        <p class="upsell-sub">
-          You're about to grab the Chief of Staff Upgrade for <strong>$79</strong>. The Bundle is the <strong>same $79</strong> — and includes the 60-Minute AI Assistant Playbook on top. <strong class="upsell-gold">Same price, more product.</strong>
-        </p>
-      {/if}
-
-      <div class="upsell-stack">
-        <span class="upsell-stack-title">What's in the Bundle</span>
-        <ul class="upsell-stack-list">
-          <li><span class="upsell-check">✓</span><span>The 60-Minute AI Assistant Playbook — 5 painkiller skills, Command Center, Money Dashboard, Privacy Lock</span></li>
-          <li><span class="upsell-check">✓</span><span>The Chief of Staff Upgrade — 25-Skill Mega-Vault, Always-On Kit, Family License</span></li>
-          <li><span class="upsell-check">✓</span><span>The Toolbox — conversational meta-skill that builds new skills on demand</span></li>
-        </ul>
-      </div>
-
-      <label class="upsell-optin" class:checked={upsellOptIn}>
-        <input type="checkbox" bind:checked={upsellOptIn} />
-        <span class="upsell-optin-box" aria-hidden="true">{upsellOptIn ? '✓' : ''}</span>
-        <span class="upsell-optin-text">Yes, upgrade me to the Bundle</span>
-      </label>
-
-      <div class="upsell-actions">
-        <button bind:this={upsellPrimaryBtn} on:click={upsellContinue} class="btn-primary upsell-primary flex items-center justify-center gap-2">
-          <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
-          Continue to Checkout →
-        </button>
-        <button on:click={upsellDecline} class="upsell-secondary">
-          No thanks, just the {upsellSource === 'core' ? 'Playbook' : 'Upgrade'}
-        </button>
-      </div>
     </div>
   </div>
 {/if}
@@ -3031,6 +1875,20 @@
      screenshot, never a replacement for one. Class names are prefixed
      `mv-`/`motion-` to avoid colliding with the unrelated `.day-card` /
      `.phone-shell` classes already used elsewhere on this page. */
+  /* Edge-mask crop treatment for the page's real product screenshots
+     (Selective Product Reveal + Completion Glimpse). Restrained cropping
+     and a soft fade at the bottom edge instead of a blur overlay, so the
+     screenshot reads as a deliberate partial reveal rather than a locked
+     or obscured asset. */
+  .reveal-crop { isolation: isolate; }
+  .reveal-crop::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(180deg, transparent 62%, rgba(17, 18, 18, 0.55) 100%);
+    border-radius: inherit;
+  }
   .motion-viz {
     --mv-bg: #0A0B0B;
     --mv-panel: #1C1D1F;
