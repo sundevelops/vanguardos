@@ -113,43 +113,44 @@
   }
 
   // ── LAUNCHPAD OFFER STACK ──────────────────────────────────────────
-  // launchpadStack[0] is THE CORE; everything after is a companion resource.
-  // Dollar `value` fields kept on each item for internal reference only —
-  // no template displays per-item or stacked dollar values (2026-07-11).
+  // 1 core system ($197) + 6 bonuses ($614). Total stacked $811, sells for $129.
+  // launchpadStack[0] is THE CORE; everything after is a stacked-on bonus.
   const launchpadStack = [
-    { name: 'The 5-Day Launchpad',                     img: '/products/stack-01.webp', blurb: 'The interactive, guided build system. Open it in your browser and it walks you from idea to launch-ready, one screen at a time, by Day 5.' },
-    { name: 'The Vanguard Vault',                      img: '/products/stack-02.webp', blurb: '150 paste-and-go AI prompts. Paste one, answer up to three plain questions, get finished work. Works with ChatGPT, Claude, and Gemini.' },
-    { name: '5 Cloneable Landing Page Templates',      img: '/products/stack-03.webp', blurb: 'One master prompt builds any of the five. Hero, offer, FAQ, CTAs, already wired.' },
-    { name: 'The Brand Palette Pack',                  img: '/products/stack-04.webp', blurb: '20 ready-to-use palettes with the psychology behind each.' },
-    { name: 'The Typography Pack',                     img: '/products/stack-05.webp', blurb: '20 free-to-use premium type systems for solo brands.' },
-    { name: 'The Notion Operations OS',                img: '/products/stack-06.webp', blurb: 'One dashboard, four databases, duplicate it in under a minute. The operations room you run the business from after launch.' },
-    { name: 'The Funnel Pattern Library',              img: '/products/stack-07.webp', blurb: 'Bundle modal copy, the 9-email sequence, upsell templates for Gumroad. The conversion machinery.' }
+    { name: 'The 5-Day Launchpad',                     value: '$197', img: '/products/stack-01.webp', blurb: 'The interactive, guided build system. Open it in your browser and it walks you from idea to launch-ready, one screen at a time, by Day 5.' },
+    { name: 'The Vanguard Vault',                      value: '$147', img: '/products/stack-02.webp', blurb: '150 paste-and-go AI prompts. Paste one, answer up to three plain questions, get finished work. Works with ChatGPT, Claude, and Gemini.' },
+    { name: '5 Cloneable Landing Page Templates',      value: '$149', img: '/products/stack-03.webp', blurb: 'One master prompt builds any of the five. Hero, offer, FAQ, CTAs, already wired.' },
+    { name: 'The Brand Palette Pack',                  value: '$79',  img: '/products/stack-04.webp', blurb: '20 ready-to-use palettes with the psychology behind each.' },
+    { name: 'The Typography Pack',                     value: '$79',  img: '/products/stack-05.webp', blurb: '20 free-to-use premium type systems for solo brands.' },
+    { name: 'The Notion Operations OS',                value: '$61',  img: '/products/stack-06.webp', blurb: 'One dashboard, four databases, duplicate it in under a minute. The operations room you run the business from after launch.' },
+    { name: 'The Funnel Pattern Library',              value: '$99',  img: '/products/stack-07.webp', blurb: 'Bundle modal copy, the 9-email sequence, upsell templates for Gumroad. The conversion machinery.' }
   ];
+  // Core vs bonus split + self-summing values (keeps the math honest: 197 + 614 = 811).
   const coreItem  = launchpadStack[0];
   const bonusItems = launchpadStack.slice(1);
+  const dollars = (v) => parseInt(String(v).replace(/[^0-9]/g, ''), 10) || 0;
+  const bonusValue = bonusItems.reduce((sum, i) => sum + dollars(i.value), 0);   // 614
+  const stackValue = launchpadStack.reduce((sum, i) => sum + dollars(i.value), 0); // 811
 
   // ── 5-DAY JOURNEY ────────────────────────────────────────────────
-  // Condensed 2026-07-11: dropped per-day screenshot cards + long
-  // descriptions (Visual Reveal Rule — no five-card gallery here) down to
-  // one line per day. img/desc fields removed since nothing renders them
-  // anymore; kicker still feeds the compact list + rail dots.
+  // Restored as premium day cards 2026-07-13. The page needs to make the
+  // buyer feel the sequence, not merely read a compressed checklist.
   const launchpadDays = [
-    { num: '01', kicker: 'IDEATE',       line: 'Lock the idea, buyer, offer, and price.' },
-    { num: '02', kicker: 'BRAND',        line: 'Build the brand foundation.' },
-    { num: '03', kicker: 'ASSETS',       line: 'Create and package the digital product.' },
-    { num: '04', kicker: 'LANDING PAGE', line: 'Build and deploy the landing page.' },
-    { num: '05', kicker: 'FUNNEL',       line: 'Connect Gumroad, the upsell, delivery, and follow-up emails.' }
+    { num: '01', kicker: 'IDEATE',        line: 'Lock your idea, validate, price.',         desc: 'Run the Problem-Validation Matrix to pick the one idea worth shipping, sketch a one-page portrait of the buyer who pays at 11pm, and set a price you can say out loud. You leave Day 1 with a locked offer in a single sentence.' },
+    { num: '02', kicker: 'BRAND',         line: 'Name, voice, colors, fonts, logo.',        desc: 'Name it, find its voice in three words, and lock the palette and type from 20 ready-made pairings instead of a blank canvas. One page, one day, a brand book your future self will actually obey.' },
+    { num: '03', kicker: 'ASSETS',        line: 'Covers, banners, social. Then build and package.',        desc: 'Generate a hero image, a product mockup, and a full social set, all brand-locked, in one studio session. Then write, structure, and package the product itself, with the exact cover and thumbnail your checkout needs.' },
+    { num: '04', kicker: 'LANDING PAGE',  line: 'Hero, offer, CTAs, mobile.',                desc: 'Build a real page in plain English with a free AI builder, no code, then deploy it on a live URL. Hero, high-impact offer, proof, and CTAs, mobile-first, by tonight.' },
+    { num: '05', kicker: 'FUNNEL',        line: 'Checkout, upsell, emails. Ready.',         desc: 'Wire the whole path from click to welcome: set up your Gumroad checkout, layer in the bundle upsell, and write your complete follow-up email sequence right inside the Day 5 screens. Make a test purchase, refund yourself, and you are shipped.' }
   ];
 
   // ── HERO DAY-5 OUTCOME CHIPS ─────────────────────────────────────
   // Concrete, tactile proof of the "5 deliverables in 5 days" promise.
   // Rendered as a row of checked chips directly under the hero subhead.
   const day5Outcomes = [
-    'Validated digital product',
-    'Brand and sales assets',
-    'Live sales page',
-    'Gumroad checkout',
-    'Follow-up emails'
+    'Brand + logo',
+    'Landing page live',
+    'High-impact offer',
+    'Payment-ready funnel',
+    'Email sequence'
   ];
 
   // ── ASSET-PACK SPECIMENS ─────────────────────────────────────────
@@ -385,11 +386,24 @@
     }, { rootMargin: '0px 0px -8% 0px' });
     document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
+    // Mobile day-card spotlight: the `.is-active-card` styles (below) light a
+    // day card as it crosses the middle band of the viewport, so the five-day
+    // sequence reads as a guided walk-through on touch devices where hover
+    // doesn't exist. Wired 2026-07-13 — the CSS existed but nothing toggled it.
+    let cardIo = null;
+    if (!reducedMotion && window.matchMedia('(max-width: 1023px)').matches) {
+      cardIo = new IntersectionObserver(entries => {
+        entries.forEach(e => e.target.classList.toggle('is-active-card', e.isIntersecting));
+      }, { rootMargin: '-38% 0px -38% 0px' });
+      document.querySelectorAll('.day-card').forEach(el => cardIo.observe(el));
+    }
+
     return () => {
       window.removeEventListener('scroll', onScroll);
       window.removeEventListener('resize', onResize);
       window.removeEventListener('keydown', onKey);
       io.disconnect();
+      if (cardIo) cardIo.disconnect();
     };
   });
 </script>
@@ -479,7 +493,7 @@
            instead of 6-7, per the mobile-hero brief. -->
       <h1 class="hero-h1 font-display font-medium text-text leading-[0.95] max-w-[1100px] mx-auto select-none" style="letter-spacing: -0.025em;">
         <span class="block text-3xl sm:text-5xl md:text-7xl lg:text-[5.25rem] xl:text-[6rem]">
-          Build and launch your first digital product
+          Turn the idea you keep postponing into a live checkout
         </span>
         <span class="block italic text-gold text-3xl sm:text-4xl md:text-6xl lg:text-[4.25rem] xl:text-[4.75rem] mt-2 md:mt-5">
           in five focused days.
@@ -491,13 +505,13 @@
            logo instead of being pushed down by this line. -->
       <div class="hero-item" style="opacity: 0">
         <span class="font-mono text-[11px] md:text-xs uppercase tracking-[0.3em] text-gold">
-          You don't need more information. You need the next exact step.
+          Not another course. The room, rails, and order to finish.
         </span>
       </div>
 
       <!-- Subhead: calmer, body serif -->
       <p class="hero-item font-sans text-muted text-base md:text-2xl leading-snug max-w-[820px] mx-auto" style="opacity: 0">
-        The Vanguard Launchpad guides you from a rough idea to a branded product, live sales page, Gumroad checkout, and follow-up funnel, one screen at a time.
+        The Vanguard Launchpad is an interactive five-day build system. Open it, answer three guided prompts a day, follow the locked steps, and walk out with a branded digital product, sales page, Gumroad checkout, and follow-up funnel.
       </p>
 
       <!-- Outcome chips: tactile proof of the five deliverables you keep.
@@ -531,7 +545,7 @@
            cold-traffic click needs to hear before scrolling further. -->
       <div class="hero-item pt-1" style="opacity: 0">
         <p class="font-mono text-[10px] md:text-[11px] uppercase tracking-[0.25em] md:tracking-[0.3em] text-muted-2 max-w-[860px] mx-auto leading-relaxed">
-          Interactive &nbsp;·&nbsp; Mobile-friendly &nbsp;·&nbsp; Progress autosaves &nbsp;·&nbsp; 30-day guarantee
+          Interactive &nbsp;·&nbsp; 72 guided steps &nbsp;·&nbsp; Progress autosaves &nbsp;·&nbsp; 30-day guarantee
         </p>
       </div>
 
@@ -562,21 +576,6 @@
     </div>
   </section>
 
-  <!-- COMPACT EARLY PROOF — three exact verified-buyer excerpts, right after
-       the hero, before any pain copy. Same reviews as the full Testimonials
-       section near the end; these are shorter cuts for a fast credibility
-       hit before the buyer has invested any reading time (2026-07-11). -->
-  <section class="border-y border-line/60 bg-base-2/40 reveal">
-    <div class="max-w-[1100px] mx-auto px-6 py-10 md:py-12">
-      <p class="text-center font-mono text-[10px] uppercase tracking-[0.3em] text-gold mb-6">★★★★★ Verified Buyers</p>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 text-center">
-        <p class="text-sm md:text-[15px] text-text/85 leading-relaxed">"I came away with a clearer direction, a stronger brand foundation, and a funnel that I could start using right away."</p>
-        <p class="text-sm md:text-[15px] text-text/85 leading-relaxed">"The system is super polished, easy to understand, and aesthetically it's a 10/10."</p>
-        <p class="text-sm md:text-[15px] text-text/85 leading-relaxed">"Feels really good seeing my business on an actual website with a checkout system!"</p>
-      </div>
-    </div>
-  </section>
-
   <!-- ═══════════════════════════════════════════════════════════════
        THE PROBLEM — pain before the reveal
        ═══════════════════════════════════════════════════════════════ -->
@@ -589,28 +588,28 @@
           <div class="h-px w-16 bg-gold-line"></div>
         </div>
         <h2 class="font-display text-4xl md:text-6xl leading-[0.98] text-text">
-          You don't have an idea problem. <span class="italic text-gold">You have a packaging problem.</span>
+          The idea is not the hard part. <span class="italic text-gold">The unfinished middle is.</span>
         </h2>
         <p class="text-text/85 text-lg md:text-xl mt-6 leading-relaxed">
-          Most people do not need another idea, course, or motivational push. They need the next exact step in the right order.
+          You already know enough to start. What keeps stealing weeks is the invisible chain between idea and payment: positioning, brand, assets, page, checkout, delivery, and follow-up.
         </p>
       </header>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5">
         <div class="rounded-[1.5rem] border border-line bg-surface/60 p-6 md:p-7">
-          <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">01 · The idea is still sitting in Notes</span>
-          <p class="text-base md:text-lg text-text/90 leading-relaxed mt-3">You know what you want to build. You still cannot see the exact sequence between the idea and a working checkout.</p>
+          <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">01 · The Notes app trap</span>
+          <p class="text-base md:text-lg text-text/90 leading-relaxed mt-3">You open the idea again, polish two bullets, and close it. Nothing is wrong with the idea. There is just no next screen telling you what to do.</p>
         </div>
         <div class="rounded-[1.5rem] border border-line bg-surface/60 p-6 md:p-7">
-          <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">02 · Every answer creates five more decisions</span>
-          <p class="text-base md:text-lg text-text/90 leading-relaxed mt-3">Name, offer, colors, product files, page copy, hosting, checkout, emails. Nothing is individually impossible. Together, they keep the launch unfinished.</p>
+          <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">02 · The forty-decision fog</span>
+          <p class="text-base md:text-lg text-text/90 leading-relaxed mt-3">Name, promise, price, palette, logo, product file, page copy, domain, checkout, emails. None of it is impossible. All of it at once is where momentum dies.</p>
         </div>
         <div class="rounded-[1.5rem] border border-line bg-surface/60 p-6 md:p-7">
-          <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">03 · There is still nowhere for the sale to land</span>
-          <p class="text-base md:text-lg text-text/90 leading-relaxed mt-3">Even when the product is nearly finished, the page, payment link, delivery, and follow-up system are still disconnected.</p>
+          <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">03 · The missing money path</span>
+          <p class="text-base md:text-lg text-text/90 leading-relaxed mt-3">Even a good product cannot sell from a folder. It needs a page, a reason to buy, a checkout, delivery, and a clean follow-up after the payment clears.</p>
         </div>
       </div>
       <p class="text-center text-lg md:text-xl text-text leading-relaxed max-w-[760px] mx-auto mt-10">
-        The problem was never your ability. It was trying to solve every part of the launch at the same time. The Launchpad puts those decisions into one fixed order.
+        The Launchpad does not ask you to become a designer, copywriter, developer, and funnel strategist overnight. It gives you the order those people would follow if they were building it for you.
       </p>
     </div>
   </section>
@@ -631,30 +630,14 @@
           Five days. Five outcomes. <span class="italic text-gold">One launch-ready system.</span>
         </h2>
         <p class="text-text text-lg md:text-xl mt-6 leading-relaxed">
-          The Launchpad is not a course. It's a sequence. Each day produces a finished piece of your business. By Day 5 you have a real, live, take-the-money-today system.
+          The Launchpad is not a course. It's a sequence. You never face the whole launch at once, only today's day, and each day ends with a finished piece of your business. By Day 5 you have a real, live, take-the-money-today system.
         </p>
       </header>
 
-      <!-- Five-day path — restrained animated mechanism preview. Abstracted
-           motion sketch of the sequence itself (not real product UI), a
-           companion to the scrollytelling rail + day cards below. -->
-      <div class="reveal max-w-[760px] mx-auto mb-12 md:mb-16">
-        <div class="motion-viz motion-panel rounded-[1.5rem] border border-line bg-surface/40">
-          <span class="motion-label">Five-day path</span>
-          <div class="mv-day-row">
-            <div class="mv-day-chip"><span>Day 1</span><strong>Idea</strong></div>
-            <div class="mv-day-chip"><span>Day 2</span><strong>Brand</strong></div>
-            <div class="mv-day-chip"><span>Day 3</span><strong>Product</strong></div>
-            <div class="mv-day-chip"><span>Day 4</span><strong>Page</strong></div>
-            <div class="mv-day-chip"><span>Day 5</span><strong>Checkout</strong></div>
-          </div>
-          <div class="mv-path-line"></div>
-          <div class="mv-day-scan"><i></i></div>
-        </div>
-        <p class="font-mono text-[10px] md:text-[11px] uppercase tracking-[0.25em] text-muted-2 mt-4 text-center">
-          One screen at a time. One finished outcome each day.
-        </p>
-      </div>
+      <!-- The animated five-day-path panel used to repeat here (same markup
+           as the hero visual). Removed 2026-07-13: within one section the
+           sequence was told three times (panel + rail + cards). The rail and
+           the day cards carry it now; the hero keeps the single animation. -->
 
       <!-- Scrollytelling rail — fills as the section scrolls past; day markers
            light up in sequence. -->
@@ -669,18 +652,85 @@
         </div>
       </div>
 
-      <!-- Compact day list — one line per day, no screenshots or CSS mockup
-           cards (Visual Reveal Rule: the mechanism is told, not toured). -->
-      <ol class="max-w-[720px] mx-auto flex flex-col gap-3 mt-10 md:mt-12">
+      <ol class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 md:gap-5 mt-10 md:mt-12">
         {#each launchpadDays as day, idx}
-          <li class="reveal flex items-baseline gap-4 rounded-[1rem] border border-line bg-surface/60 px-5 py-4 md:px-6 md:py-4.5" style="transition-delay: {idx * 70}ms">
-            <span class="font-mono text-[11px] uppercase tracking-[0.25em] text-gold shrink-0">Day {day.num}</span>
-            <span class="text-base md:text-lg text-text/90 leading-snug">{day.line}</span>
+          <li class="day-card reveal rounded-[1.5rem] border border-line bg-surface/60 p-5 md:p-6 flex flex-col gap-4 transition"
+            data-day-index={idx}
+            style="transition-delay: {idx * 90}ms">
+            <div class="relative aspect-square rounded-[1rem] overflow-hidden bg-base/40 border border-line/60">
+              <div class="day-fallback absolute inset-0 p-3 select-none overflow-hidden"
+                style="background-image: radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.12), transparent 70%);" aria-hidden="true">
+                <div class="absolute top-2 left-2.5 flex items-baseline gap-1 z-10">
+                  <span class="font-mono font-bold text-base text-gold/90 leading-none tracking-tight">{day.num}</span>
+                  <span class="font-mono text-[7px] uppercase tracking-[0.25em] text-muted-2">{day.kicker}</span>
+                </div>
+                {#if day.num === '01'}
+                  <div class="absolute inset-0 flex flex-col justify-center gap-1.5 px-5 pt-5">
+                    {#each [0,1,2] as r}
+                      <div class="flex items-center gap-1.5">
+                        <span class="w-3 h-3 rounded-full bg-gold/25 border border-gold/50 flex items-center justify-center text-gold text-[7px] leading-none">✓</span>
+                        <span class="h-1.5 flex-1 rounded-full bg-gold/20"></span>
+                      </div>
+                    {/each}
+                    <span class="mt-1.5 self-start text-[8px] font-mono text-gold/80 border border-gold/40 rounded px-1.5 py-0.5">Offer locked</span>
+                  </div>
+                {:else if day.num === '02'}
+                  <div class="absolute inset-0 flex flex-col items-center justify-center gap-2 px-4 pt-4">
+                    <div class="w-8 h-8 rounded-lg border border-gold/50 bg-gold/10 flex items-center justify-center font-display text-gold text-sm leading-none">V</div>
+                    <div class="flex gap-1">
+                      {#each ['#0A0B0B','#ECEAE4','#D4AF37','#7FB89A','#76766F'] as c}
+                        <span class="w-3 h-3 rounded-sm" style="background:{c}"></span>
+                      {/each}
+                    </div>
+                    <div class="flex flex-col items-center gap-1 mt-0.5">
+                      <span class="h-1.5 w-16 rounded-full bg-text/30"></span>
+                      <span class="h-1 w-11 rounded-full bg-text/15"></span>
+                    </div>
+                  </div>
+                {:else if day.num === '03'}
+                  <div class="absolute inset-0 grid grid-cols-2 grid-rows-2 gap-1.5 p-4 pt-8">
+                    <span class="rounded-md border border-gold/20 bg-gradient-to-br from-gold/25 to-transparent"></span>
+                    <span class="rounded-md border border-line bg-gradient-to-br from-text/15 to-transparent"></span>
+                    <span class="rounded-md border border-line bg-gradient-to-tr from-gold/15 to-transparent"></span>
+                    <span class="rounded-md border border-gold/20 bg-gradient-to-tr from-text/20 to-transparent"></span>
+                  </div>
+                {:else if day.num === '04'}
+                  <div class="absolute inset-0 flex flex-col gap-1.5 p-4 pt-8">
+                    <div class="flex items-center justify-between">
+                      <span class="w-4 h-1.5 rounded-full bg-gold/60"></span>
+                      <span class="w-6 h-1.5 rounded-full bg-text/15"></span>
+                    </div>
+                    <span class="h-2 w-3/4 rounded bg-text/30 mt-1"></span>
+                    <span class="h-1.5 w-1/2 rounded bg-text/15"></span>
+                    <span class="mt-1 h-3 w-12 rounded-full bg-gold/70"></span>
+                    <div class="mt-auto grid grid-cols-3 gap-1">
+                      <span class="h-4 rounded bg-text/10"></span>
+                      <span class="h-4 rounded bg-text/10"></span>
+                      <span class="h-4 rounded bg-text/10"></span>
+                    </div>
+                  </div>
+                {:else}
+                  <div class="absolute inset-0 flex flex-col items-center justify-center gap-1 px-4 pt-4">
+                    <span class="h-2.5 w-20 rounded-sm bg-gold/60"></span>
+                    <span class="h-2.5 w-14 rounded-sm bg-gold/40"></span>
+                    <span class="h-2.5 w-9 rounded-sm bg-gold/25"></span>
+                    <span class="mt-1.5 text-[8px] font-mono text-gold/80 border border-gold/40 rounded px-1.5 py-0.5">Checkout live</span>
+                  </div>
+                {/if}
+              </div>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="font-mono text-[10px] uppercase tracking-[0.4em] text-gold day-kicker">Day {day.num}</span>
+              <span class="h-px flex-1 bg-gold-line/60"></span>
+            </div>
+            <h3 class="font-display text-2xl text-text leading-tight">{day.kicker}</h3>
+            <p class="text-base text-text/90 leading-snug font-medium">{day.line}</p>
+            <p class="text-sm text-muted leading-relaxed">{day.desc}</p>
           </li>
         {/each}
       </ol>
 
-      <div class="text-center mt-10 reveal">
+      <div class="text-center mt-12 reveal">
         <a href={GUMROAD.launchpad} data-event="initiate_checkout" data-analytics-id="five-day-cta" on:click={trackCheckoutClick} class="btn-primary inline-flex items-center justify-center gap-2.5 px-10 py-5 rounded-[2rem]">
           <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
           Start My 5-Day Build · $129 →
@@ -746,39 +796,75 @@
   </section>
 
   <!-- ═══════════════════════════════════════════════════════════════
-       OFFER — condensed. No dollar-value math, no oversized bonus cards.
-       Includes one compact brand-asset sample (palette + type pairing).
+       OFFER — high-impact stack, core system first, bonuses made tangible.
        ═══════════════════════════════════════════════════════════════ -->
-  <section id="offer-stack" class="relative py-20 md:py-24 px-6 border-t border-line/60">
-    <div class="max-w-[900px] mx-auto reveal">
-      <header class="text-center max-w-[760px] mx-auto mb-10 md:mb-12">
+  <section id="offer-stack" class="relative py-20 md:py-28 px-6 border-t border-line/60">
+    <div class="max-w-[1100px] mx-auto reveal">
+      <header class="text-center max-w-[820px] mx-auto mb-12 md:mb-16">
         <div class="flex items-center justify-center gap-3 mb-6">
           <div class="h-px w-16 bg-gold-line"></div>
-          <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">What's Included</span>
+          <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">What's In The Launchpad</span>
           <div class="h-px w-16 bg-gold-line"></div>
         </div>
-        <h2 class="font-display text-3xl md:text-5xl lg:text-6xl leading-[1.02] text-text">
-          Everything required to finish the first launch, <span class="italic text-gold">included.</span>
+        <h2 class="font-display text-4xl md:text-6xl lg:text-7xl leading-[0.95] text-text">
+          The system, <span class="italic text-gold">plus six bonuses.</span>
         </h2>
         <p class="text-text text-lg md:text-xl mt-6 leading-relaxed">
-          {coreItem.blurb} Six companion resources come with it, ready the moment you need them: brand assets, copy references, and the tool paths already built into the five days.
+          The 5-Day Launchpad is the core: the whole path from a hunch in your notes app to a checkout page live on the internet, with the forty small decisions that stall most people already sequenced for you. Then six finished systems stack on top, free. Each is something you would otherwise lose a weekend building. Together they are the difference between launching someday and sending someone the link this week.
         </p>
       </header>
 
-      <ul class="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
+      <div class="reveal mb-10 md:mb-12 max-w-[820px] mx-auto rounded-[1.25rem] border-l-2 border-gold bg-surface/60 px-6 py-5 md:px-8 md:py-6">
+        <p class="font-display italic text-lg md:text-xl text-text/90 leading-relaxed">
+          The entire Launchpad is <span class="text-gold not-italic font-semibold">72 guided steps</span>, split across Welcome and the 5 days, inside one interactive app you open in your browser. Not a 250-page manual to study. You're meant to finish a day in a single sitting, one screen at a time.
+        </p>
+      </div>
+
+      <div class="reveal rounded-[1.75rem] border-2 border-gold bg-gold-soft/20 p-6 md:p-8"
+        style="background-image: radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.12), transparent 70%);">
+        <div class="flex items-center justify-between gap-4 mb-4">
+          <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">The core system</span>
+          <span class="font-mono text-base text-gold/70 line-through whitespace-nowrap">Value {coreItem.value}</span>
+        </div>
+        <div class="flex items-start gap-4 md:gap-6">
+          <img src={coreItem.img} alt="{coreItem.name} cover art" class="w-20 h-20 md:w-28 md:h-28 rounded-[1rem] border border-gold-line/60 object-cover shrink-0" loading="lazy" decoding="async" />
+          <div class="flex flex-col gap-2 min-w-0">
+            <h3 class="font-display text-2xl md:text-4xl text-text leading-tight">{coreItem.name}</h3>
+            <p class="text-base md:text-lg text-text/85 leading-relaxed">{coreItem.blurb} This is the whole system. The six below are stacked on top of it.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal flex items-center justify-center gap-4 my-8 md:my-10">
+        <div class="h-px flex-1 bg-gold-line/40"></div>
+        <span class="font-mono text-[10px] md:text-xs uppercase tracking-[0.3em] text-gold text-center whitespace-nowrap">Then six bonuses, free · {'$' + bonusValue} of value</span>
+        <div class="h-px flex-1 bg-gold-line/40"></div>
+      </div>
+
+      <ul class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
         {#each bonusItems as item}
-          <li class="reveal flex items-start gap-3 rounded-[1rem] border border-line bg-surface/60 px-5 py-4">
-            <span class="font-mono text-[9px] uppercase tracking-[0.2em] text-gold shrink-0 mt-0.5">·</span>
-            <div class="flex flex-col gap-1 min-w-0">
-              <h3 class="font-display text-lg text-text leading-tight">{item.name}</h3>
-              <p class="text-sm text-text/75 leading-snug">{item.blurb}</p>
+          <li class="reveal rounded-[1.5rem] border border-line bg-surface/60 p-6 md:p-7 hover:border-gold-line transition flex flex-col gap-3">
+            <div class="flex items-center justify-between gap-4">
+              <span class="font-mono text-[9px] uppercase tracking-[0.25em] text-gold border border-gold/40 bg-gold-soft/20 rounded-full px-2.5 py-1">Bonus</span>
+              <span class="font-mono text-base text-gold/60 line-through whitespace-nowrap">Value {item.value}</span>
+            </div>
+            <div class="flex items-start gap-4">
+              <img src={item.img} alt="{item.name} cover art" class="w-16 h-16 md:w-20 md:h-20 rounded-[0.9rem] border border-line/60 object-cover shrink-0" loading="lazy" decoding="async" />
+              <div class="flex flex-col gap-2 min-w-0">
+                <h3 class="font-display text-2xl md:text-[28px] text-text leading-tight">{item.name}</h3>
+                <p class="text-base text-text/85 leading-relaxed">{item.blurb}</p>
+              </div>
             </div>
           </li>
         {/each}
       </ul>
 
-      <!-- Compact brand-asset sample: one palette, one type pairing -->
-      <div class="reveal mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
+      <div class="reveal flex items-center justify-center gap-4 mt-10 mb-4">
+        <div class="h-px w-12 bg-gold-line/40"></div>
+        <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-muted-2">Open a sample before you buy</span>
+        <div class="h-px w-12 bg-gold-line/40"></div>
+      </div>
+      <div class="reveal grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
         <button type="button" on:click={(e) => openSpecimen('palette', specimenPalettes[0], e)}
           class="specimen-row flex items-center gap-3 rounded-[1rem] border border-line bg-surface/60 px-5 py-4 text-left"
           aria-label="Expand a sample palette from the Brand Palette Pack">
@@ -797,12 +883,32 @@
         </button>
       </div>
 
-      <div class="reveal mt-10 md:mt-12 rounded-[1.75rem] border border-gold-line bg-surface/40 p-7 md:p-9 text-center">
-        <a href={GUMROAD.launchpad} data-event="initiate_checkout" data-analytics-id="offer-stack-cta" on:click={trackCheckoutClick} class="btn-primary inline-flex items-center justify-center gap-2.5 py-5 px-8 rounded-[2rem]">
+      <div class="reveal mt-10 md:mt-12 rounded-[2rem] border-2 border-gold bg-gold-soft/20 p-8 md:p-10"
+        style="background-image: radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.10), transparent 70%);">
+        <div class="flex items-baseline justify-between text-text/80">
+          <span class="font-mono text-sm uppercase tracking-widest">The 5-day system</span>
+          <span class="font-mono text-base md:text-lg tracking-tight">{coreItem.value}</span>
+        </div>
+        <div class="flex items-baseline justify-between mt-2.5 text-text/80">
+          <span class="font-mono text-sm uppercase tracking-widest">Six bonuses, stacked on top</span>
+          <span class="font-mono text-base md:text-lg tracking-tight">{'+$' + bonusValue}</span>
+        </div>
+        <div class="flex items-baseline justify-between mt-3 pt-3 border-t border-gold-line/40">
+          <span class="font-mono text-sm uppercase tracking-widest text-muted">Stacked value</span>
+          <span class="font-mono font-bold text-2xl md:text-3xl text-gold/60 line-through tracking-tight">{'$' + stackValue}</span>
+        </div>
+        <div class="flex items-baseline justify-between mt-3 pt-3 border-t border-gold-line/40">
+          <span class="font-mono text-sm uppercase tracking-widest text-text">Today, one payment</span>
+          <span class="font-mono font-bold text-4xl md:text-5xl text-gold tracking-tight">$129</span>
+        </div>
+        <p class="text-base text-text/85 leading-relaxed mt-5 text-center">
+          Counted on their own, the six bonuses come to {'$' + bonusValue}, nearly five times the price, and they are free. You pay $129 for the system and keep all {'$' + stackValue}.
+        </p>
+        <a href={GUMROAD.launchpad} data-event="initiate_checkout" data-analytics-id="offer-stack-cta" on:click={trackCheckoutClick} class="btn-primary flex items-center justify-center gap-2.5 mt-7 py-5 rounded-[2rem]">
           <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
-          Start My 5-Day Build · $129
+          Get The Launchpad · $129 →
         </a>
-        <p class="text-sm font-mono uppercase tracking-widest text-muted mt-4">$129 once. Use the system again for every product you build after this one.</p>
+        <p class="text-sm font-mono uppercase tracking-widest text-muted mt-3 text-center">One payment · 30-day guarantee · Yours for every launch after this one</p>
       </div>
     </div>
   </section>
@@ -865,7 +971,7 @@
       <header class="text-center max-w-[760px] mx-auto mb-12 md:mb-16">
         <div class="flex items-center justify-center gap-3 mb-6">
           <div class="h-px w-16 bg-gold-line"></div>
-          <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">Section · Who This Is For</span>
+          <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">Who This Is For</span>
           <div class="h-px w-16 bg-gold-line"></div>
         </div>
         <h2 class="font-display text-3xl md:text-5xl leading-tight text-text">
@@ -918,7 +1024,8 @@
        Gumroad, or spelling; it amplifies the offer instead of explaining
        the sourcing.
        ═══════════════════════════════════════════════════════════════ -->
-  <section id="testimonials" class="relative py-20 md:py-24 px-6 border-t border-line/60">
+  <section id="testimonials" class="relative py-20 md:py-24 px-6 border-t border-line/60"
+    style="background-image: radial-gradient(ellipse at 50% -10%, rgba(212,175,55,0.07), transparent 55%);">
     <div class="max-w-[1180px] mx-auto reveal">
       <header class="text-center max-w-[780px] mx-auto mb-12 md:mb-16">
         <div class="flex items-center justify-center gap-3 mb-6">
@@ -935,17 +1042,17 @@
       </header>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6">
-        <div class="rounded-[1.5rem] border border-line bg-surface/60 p-6 md:p-7 flex flex-col gap-4">
+        <div class="rounded-[1.5rem] border border-line bg-surface/60 p-6 md:p-7 flex flex-col gap-4 hover:border-gold-line transition">
           <span class="text-gold text-lg tracking-[0.15em] leading-none" aria-label="Rated 5 out of 5 stars">★★★★★</span>
           <p class="text-text/90 text-base leading-relaxed flex-1">"Instead of spending months trying to figure things out on my own, I came away with a clearer direction, a stronger brand foundation, and a funnel that I could start using right away. For me, it was a worthwhile investment because it helped turn a lot of uncertainty into a concrete plan."</p>
           <span class="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-2 inline-flex items-center gap-1.5"><span class="text-gold" aria-hidden="true">✓</span> Verified Buyer</span>
         </div>
-        <div class="rounded-[1.5rem] border border-line bg-surface/60 p-6 md:p-7 flex flex-col gap-4">
+        <div class="rounded-[1.5rem] border border-line bg-surface/60 p-6 md:p-7 flex flex-col gap-4 hover:border-gold-line transition">
           <span class="text-gold text-lg tracking-[0.15em] leading-none" aria-label="Rated 5 out of 5 stars">★★★★★</span>
           <p class="text-text/90 text-base leading-relaxed flex-1">"The system is super polished, easy to understand, and aesthetically it's a 10/10. It's been a great investment, and I would definitely recommend it to anyone hesitating to take the plunge."</p>
           <span class="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-2 inline-flex items-center gap-1.5"><span class="text-gold" aria-hidden="true">✓</span> Verified Buyer</span>
         </div>
-        <div class="rounded-[1.5rem] border border-line bg-surface/60 p-6 md:p-7 flex flex-col gap-4">
+        <div class="rounded-[1.5rem] border border-line bg-surface/60 p-6 md:p-7 flex flex-col gap-4 hover:border-gold-line transition">
           <span class="text-gold text-lg tracking-[0.15em] leading-none" aria-label="Rated 5 out of 5 stars">★★★★★</span>
           <p class="text-text/90 text-base leading-relaxed flex-1">"It helped me go from overthinking my next move to following a system that lead me to actually starting that business that I had put off for years. Feels really good seeing my business on an actual website with a checkout system!"</p>
           <span class="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-2 inline-flex items-center gap-1.5"><span class="text-gold" aria-hidden="true">✓</span> Verified Buyer · Full-time college student</span>
@@ -1102,7 +1209,7 @@
           <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
           Start My 5-Day Build · $129 →
         </a>
-        <a href="#offer-stack" class="text-sm font-mono uppercase tracking-widest text-muted hover:text-text transition border-b border-gold-line/40 hover:border-gold pb-1">See what's inside ↓</a>
+        <a href="#offer-stack" class="text-sm font-mono uppercase tracking-widest text-muted hover:text-text transition border-b border-gold-line/40 hover:border-gold pb-1">See what's inside ↑</a>
         <p class="text-sm font-mono uppercase tracking-wider text-muted pt-2">Instant access, start Day 1 today · 30-day guarantee · One payment · Yours forever</p>
       </div>
     </div>
@@ -1123,7 +1230,6 @@
       <div class="text-[10px] font-mono uppercase tracking-widest" style="color: #B5B5AE;">© 2026 VanguardOS</div>
       <div class="flex flex-wrap justify-center gap-x-8 gap-y-4 text-xs font-mono uppercase tracking-wider" style="color: #B5B5AE;">
         <a href="#offer-stack" class="hover:text-text transition">What's Inside</a>
-        <a href="#brand-work" class="hover:text-text transition">Brand Work</a>
         <a href="#five-day" class="hover:text-text transition">5-Day Journey</a>
         <a href="#testimonials" class="hover:text-text transition">Reviews</a>
         <a href="#faq" class="hover:text-text transition">FAQ</a>
