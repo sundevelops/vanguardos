@@ -5,7 +5,12 @@
   let scrolled = false;
   let scrollProgress = 0;
   let showStickyCta = false;   // persistent mobile CTA — appears once hero scrolls away
+  let stickyNearEnd = false;   // true once the FAQ / final CTA enters view — hide the sticky then
   let menuOpen = false;
+  // The sticky mobile CTA is only shown when we're past the hero, not near the
+  // closing conversion sections, and no overlay is open — so it never covers
+  // the final CTA, the FAQ controls, or a modal (QA gate #15).
+  $: stickyVisible = showStickyCta && !stickyNearEnd && !menuOpen && !contactOpen && !specimenModalOpen;
   // Scroll-linked progress for the 5-day journey scrollytelling rail (0→1).
   let fiveDayProgress = 0;
 
@@ -45,7 +50,7 @@
   function openSpecimen(kind, data, e) {
     if (e) e.preventDefault();
     loadSpecimenFonts();
-    specimenLastFocus = typeof document !== 'undefined' ? document.activeElement : null;
+    specimenLastFocus = e?.currentTarget || (typeof document !== 'undefined' ? document.activeElement : null);
     specimenKind = kind;
     specimenData = data;
     specimenModalOpen = true;
@@ -64,7 +69,7 @@
   let contactCopied = false;
   function openContact(e) {
     if (e) e.preventDefault();
-    contactLastFocus = typeof document !== 'undefined' ? document.activeElement : null;
+    contactLastFocus = e?.currentTarget || (typeof document !== 'undefined' ? document.activeElement : null);
     menuOpen = false;
     contactOpen = true;
   }
@@ -117,12 +122,12 @@
   // launchpadStack[0] is THE CORE; everything after is a stacked-on bonus.
   const launchpadStack = [
     { name: 'The 5-Day Launchpad',                     value: '$197', img: '/products/stack-01.webp', blurb: 'The interactive, guided build system. Open it in your browser and it walks you from idea to launch-ready, one screen at a time, by Day 5.' },
-    { name: 'The Vanguard Vault',                      value: '$147', img: '/products/stack-02.webp', blurb: '150 paste-and-go AI prompts. Paste one, answer up to three plain questions, get finished work. Works with ChatGPT, Claude, and Gemini.' },
+    { name: 'The Vanguard Vault',                      value: '$147', img: '/products/stack-02.webp', blurb: '150 paste-and-go AI prompts. Paste one, answer up to three plain questions, get finished work. Runs in any major AI writing assistant.' },
     { name: '5 Cloneable Landing Page Templates',      value: '$149', img: '/products/stack-03.webp', blurb: 'One master prompt builds any of the five. Hero, offer, FAQ, CTAs, already wired.' },
     { name: 'The Brand Palette Pack',                  value: '$79',  img: '/products/stack-04.webp', blurb: '20 ready-to-use palettes with the psychology behind each.' },
     { name: 'The Typography Pack',                     value: '$79',  img: '/products/stack-05.webp', blurb: '20 free-to-use premium type systems for solo brands.' },
     { name: 'The Notion Operations OS',                value: '$61',  img: '/products/stack-06.webp', blurb: 'One dashboard, four databases, duplicate it in under a minute. The operations room you run the business from after launch.' },
-    { name: 'The Funnel Pattern Library',              value: '$99',  img: '/products/stack-07.webp', blurb: 'Bundle modal copy, the 9-email sequence, upsell templates for Gumroad. The conversion machinery.' }
+    { name: 'The Funnel Pattern Library',              value: '$99',  img: '/products/stack-07.webp', blurb: 'Checkout upsell copy, a nine-email follow-up sequence, and CTA patterns for the complete buyer path. The conversion machinery.' }
   ];
   // Core vs bonus split + self-summing values (keeps the math honest: 197 + 614 = 811).
   const coreItem  = launchpadStack[0];
@@ -138,19 +143,8 @@
     { num: '01', kicker: 'IDEATE',        line: 'Lock your idea, validate, price.',         desc: 'Run the Problem-Validation Matrix to pick the one idea worth shipping, sketch a one-page portrait of the buyer who pays at 11pm, and set a price you can say out loud. You leave Day 1 with a locked offer in a single sentence.' },
     { num: '02', kicker: 'BRAND',         line: 'Name, voice, colors, fonts, logo.',        desc: 'Name it, find its voice in three words, and lock the palette and type from 20 ready-made pairings instead of a blank canvas. One page, one day, a brand book your future self will actually obey.' },
     { num: '03', kicker: 'ASSETS',        line: 'Covers, banners, social. Then build and package.',        desc: 'Generate a hero image, a product mockup, and a full social set, all brand-locked, in one studio session. Then write, structure, and package the product itself, with the exact cover and thumbnail your checkout needs.' },
-    { num: '04', kicker: 'LANDING PAGE',  line: 'Hero, offer, CTAs, mobile.',                desc: 'Build a real page in plain English with a free AI builder, no code, then deploy it on a live URL. Hero, high-impact offer, proof, and CTAs, mobile-first, by tonight.' },
-    { num: '05', kicker: 'FUNNEL',        line: 'Checkout, upsell, emails. Ready.',         desc: 'Wire the whole path from click to welcome: set up your Gumroad checkout, layer in the bundle upsell, and write your complete follow-up email sequence right inside the Day 5 screens. Make a test purchase, refund yourself, and you are shipped.' }
-  ];
-
-  // ── HERO DAY-5 OUTCOME CHIPS ─────────────────────────────────────
-  // Concrete, tactile proof of the "5 deliverables in 5 days" promise.
-  // Rendered as a row of checked chips directly under the hero subhead.
-  const day5Outcomes = [
-    'Brand + logo',
-    'Landing page live',
-    'High-impact offer',
-    'Payment-ready funnel',
-    'Email sequence'
+    { num: '04', kicker: 'LANDING PAGE',  line: 'Hero, offer, CTAs, mobile.',                desc: 'Write the rough sales copy, then build a real page in plain English inside the guided website workspace, no code, and deploy it to a live URL. Hero, high-impact offer, proof, and CTAs, mobile-first, by tonight.' },
+    { num: '05', kicker: 'FUNNEL',        line: 'Checkout, upsell, emails. Ready.',         desc: 'Wire the whole path from click to welcome: publish the product and its checkout, add the checkout upsell, and write the complete nine-email follow-up sequence right inside the Day 5 screens, ready for your own sender. Make a test purchase, refund yourself, and you are shipped.' }
   ];
 
   // ── ASSET-PACK SPECIMENS ─────────────────────────────────────────
@@ -233,9 +227,9 @@
     ['Do I need to be technical?', 'No. Every template, prompt, and pattern is copy-paste. The prompts ask you a few plain questions and do the rest. If you can follow a recipe, you can follow this.'],
     ["What if I don't have an idea yet?", "Yes, that's what Day 1 is for. Start with nothing more than a hunch, or a blank page: Day 1 is a sequenced way to surface, validate, and price an idea, and you finish it with a locked offer."],
     ['How much time does each day take?', 'One focused sitting, not a day off work. The Launchpad is 72 guided steps across Welcome plus five days, action-first, so most people finish a day in one to two hours after work. Plan on roughly 8 to 12 hours of hands-on building across the five days, and the AI does the heavy lifting inside each screen.'],
-    ['How do I get it after I pay?', 'Instantly. The moment your $129 payment clears on Gumroad, the email lands with a single file: the Launchpad itself, an interactive build system you open in your browser, plus the six bonus PDFs and the prompt vault, ready to keep forever. No onboarding call, no waiting room, nothing to install. You can open Day 1 the same night.'],
-    ['What AI tools do I need?', "Free tools are enough to finish. The free tiers of ChatGPT, Claude, or Gemini run the prompts, Day 4 builds your landing page in Google Antigravity (free to start), and GitHub, Cloudflare Pages, and Gumroad handle hosting and checkout at no cost. A paid AI tier (about $20 a month) is optional polish, not a requirement: it buys longer sessions and a stronger model, which shows up as noticeably better output. There is no VanguardOS subscription on top, ever."],
-    ['How much extra will I spend on tools?', 'You can build and host for $0. Two upgrades are worth it: a paid AI tier for stronger output, and a custom domain (about $10 a year) so your site has a real, credible address you own. Neither is strictly required to finish, but both are worth the small spend.'],
+    ['How do I get it after I pay?', 'Instantly. The moment your $129 payment clears, the email lands with a single file: the Launchpad itself, an interactive build system you open in your browser, plus the six bonus guides and the prompt vault, ready to keep forever. No onboarding call, no waiting room, nothing to install. You can open Day 1 the same night.'],
+    ['What tools do I need?', "The free path can complete the whole system. Each day names the exact free and premium option for that stage: an AI writing assistant for the prompts, a guided website builder and deployment stack for Day 4, and a checkout platform for Day 5, all with real free tiers. A paid AI tier (about $20 a month) is optional polish, not a requirement: it buys longer sessions and a stronger model, which shows up as better output. There is no VanguardOS subscription on top, ever."],
+    ['How much extra will I spend on tools?', 'You can build and host on free tiers. Two upgrades are worth it: a paid AI tier for stronger output, and a custom domain (about $10 a year) so your site has a real, credible address you own. A checkout platform also charges a small transaction fee per sale. Neither upgrade is required to finish, but both are worth the small spend.'],
     ['Will this work for my niche?', "Yes. The system is niche-agnostic by design. The templates and patterns are the scaffolding; the Day 2 brand work and Day 4 landing copy are where your niche shapes the output."],
     ["What if I'm already mid-launch?", "Drop into whichever day matches where you are. Stuck on the offer? Day 1. Brand feels off? Day 2. No landing page? Day 4. The Launchpad is a system you re-enter whenever a leg is weak."],
     ['Refund policy?', 'A full 30 days, no questions asked. Buy it, go through it, and if the Launchpad is not for you for any reason, email us within 30 days for a full refund. No forms, no hoops, no explanation needed.']
@@ -261,7 +255,7 @@
     "@context": "https://schema.org",
     "@type": "Product",
     "name": "The Vanguard Launchpad",
-    "description": "The Vanguard Launchpad is an interactive five-day system that guides you from idea to branded digital product, live sales page, Gumroad checkout, and follow-up funnel.",
+    "description": "The Vanguard Launchpad is an interactive five-day system that guides you from idea to a branded digital product, a live sales page, a working checkout, and a ready-to-connect follow-up email sequence.",
     "image": "https://vanguardos.co/og/og-card.jpg",
     "url": "https://vanguardos.co/",
     "brand": { "@type": "Brand", "name": "VanguardOS" },
@@ -345,6 +339,18 @@
       // mostly scrolled past, so there's always a tap-target without it
       // overlapping the hero's own button.
       showStickyCta = window.scrollY > window.innerHeight * 0.85;
+      // Hide the sticky CTA once the FAQ or the final conversion section
+      // enters the viewport, so it never overlaps those controls.
+      const vh0 = window.innerHeight;
+      let nearEnd = false;
+      for (const id of ['faq', 'final-cta']) {
+        const el = document.getElementById(id);
+        if (el) {
+          const top = el.getBoundingClientRect().top;
+          if (top < vh0 * 0.92) { nearEnd = true; break; }
+        }
+      }
+      stickyNearEnd = nearEnd;
       const max = document.documentElement.scrollHeight - window.innerHeight;
       scrollProgress = max > 0 ? Math.min(window.scrollY / max, 1) : 0;
       // 5-day journey rail: fill as the section travels through the viewport.
@@ -426,17 +432,17 @@
         <span class="text-text">Vanguard</span><span class="italic text-gold">OS</span>
       </span>
     </a>
-    <nav class="hidden md:flex items-center gap-8">
+    <nav class="hidden lg:flex items-center gap-8">
       <a href="#offer-stack" class="text-xs font-mono uppercase tracking-wider text-muted hover:text-text transition">What's Inside</a>
       <a href="#five-day" class="text-xs font-mono uppercase tracking-wider text-muted hover:text-text transition">5-Day Journey</a>
       <a href="#faq" class="text-xs font-mono uppercase tracking-wider text-muted hover:text-text transition">FAQ</a>
       <a href="mailto:support@vanguardos.co" on:click|preventDefault={openContact} class="text-xs font-mono uppercase tracking-wider text-muted hover:text-text transition">Contact</a>
-      <a href={GUMROAD.launchpad} data-event="initiate_checkout" data-analytics-id="nav-cta" on:click={trackCheckoutClick} class="flex items-center gap-2 px-5 py-2 border border-gold-line hover:border-gold hover:bg-gold-soft text-gold text-xs font-semibold font-mono uppercase tracking-wider rounded-full transition hover:scale-[1.03]">
+      <a href={GUMROAD.launchpad} data-event="initiate_checkout" data-analytics-id="nav-cta" on:click={trackCheckoutClick} class="flex items-center gap-2 px-5 h-11 border border-gold-line hover:border-gold hover:bg-gold-soft text-gold text-xs font-semibold font-mono uppercase tracking-wider rounded-full transition hover:scale-[1.03]">
         <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
-        Start the Launchpad →
+        Start My 5-Day Build · $129
       </a>
     </nav>
-    <button class="md:hidden text-muted hover:text-text p-1" on:click={() => menuOpen = !menuOpen} aria-label="Toggle menu">
+    <button class="lg:hidden text-muted hover:text-text p-1" on:click={() => menuOpen = !menuOpen} aria-label="Toggle menu">
       {#if menuOpen}
         <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       {:else}
@@ -444,19 +450,23 @@
       {/if}
     </button>
   </div>
-  <div class="fixed top-0 right-0 h-screen w-[280px] bg-surface border-l border-line p-8 space-y-6 shadow-2xl transition-transform duration-300 z-[95] md:hidden" style="transform: translateX({menuOpen ? '0' : '100%'})">
-    <button on:click={() => menuOpen = false} class="ml-auto block text-muted hover:text-text" aria-label="Close">✕</button>
-    <a href="#offer-stack" on:click={() => menuOpen = false} class="block text-sm font-mono uppercase tracking-wider text-muted hover:text-text">What's Inside</a>
-    <a href="#five-day" on:click={() => menuOpen = false} class="block text-sm font-mono uppercase tracking-wider text-muted hover:text-text">5-Day Journey</a>
-    <a href="#faq" on:click={() => menuOpen = false} class="block text-sm font-mono uppercase tracking-wider text-muted hover:text-text">FAQ</a>
-    <a href="mailto:support@vanguardos.co" on:click|preventDefault={openContact} class="block text-sm font-mono uppercase tracking-wider text-muted hover:text-text">Contact</a>
-    <a href={GUMROAD.launchpad} data-event="initiate_checkout" data-analytics-id="mobile-nav-cta" on:click={(e) => { menuOpen = false; trackCheckoutClick(e); }} class="flex items-center justify-center gap-2 py-3 bg-gold text-base-2 font-bold font-mono uppercase text-xs tracking-wide rounded-full">
-      <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
-      Start the Launchpad →
-    </a>
-  </div>
+  <!-- Off-canvas mobile drawer is conditionally rendered (not translated
+       off-screen) so a closed menu never extends the horizontal scroll area.
+       A translateX(100%) parked panel is a classic source of the exact mobile
+       overflow the QA gate checks for once body clipping is disabled. -->
   {#if menuOpen}
-    <button on:click={() => menuOpen = false} type="button" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[92] md:hidden" aria-label="Close menu"></button>
+    <button on:click={() => menuOpen = false} type="button" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[92] lg:hidden" aria-label="Close menu"></button>
+    <div class="menu-drawer fixed top-0 right-0 h-screen w-[280px] max-w-[86vw] bg-surface border-l border-line p-8 space-y-6 shadow-2xl z-[95] lg:hidden">
+      <button on:click={() => menuOpen = false} class="ml-auto block text-muted hover:text-text" aria-label="Close">✕</button>
+      <a href="#offer-stack" on:click={() => menuOpen = false} class="block text-sm font-mono uppercase tracking-wider text-muted hover:text-text">What's Inside</a>
+      <a href="#five-day" on:click={() => menuOpen = false} class="block text-sm font-mono uppercase tracking-wider text-muted hover:text-text">5-Day Plan</a>
+      <a href="#faq" on:click={() => menuOpen = false} class="block text-sm font-mono uppercase tracking-wider text-muted hover:text-text">FAQ</a>
+      <a href="mailto:support@vanguardos.co" on:click|preventDefault={openContact} class="block text-sm font-mono uppercase tracking-wider text-muted hover:text-text">Contact</a>
+      <a href={GUMROAD.launchpad} data-event="initiate_checkout" data-analytics-id="mobile-nav-cta" on:click={(e) => { menuOpen = false; trackCheckoutClick(e); }} class="flex items-center justify-center gap-2 h-11 bg-gold text-base-2 font-bold font-mono uppercase text-xs tracking-wide rounded-full">
+        <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+        Start My 5-Day Build · $129
+      </a>
+    </div>
   {/if}
 </header>
 
@@ -465,97 +475,79 @@
   <!-- HERO -->
   <section class="relative pt-24 pb-12 md:pt-44 md:pb-32 px-6 flex flex-col items-center text-center overflow-hidden"
     style="background-image: radial-gradient(ellipse at 80% -10%, rgba(212,175,55,0.10), transparent 60%);">
-    <div class="max-w-[1100px] mx-auto space-y-5 md:space-y-9">
+    <div class="hero-inner w-full min-w-0 max-w-[1100px] mx-auto space-y-5 md:space-y-8">
       <!-- Logo lockup hidden on mobile: the fixed navbar already carries the
            brand there, and every pixel of vertical space matters for
-           getting the CTA into the first 390×844 viewport (2026-07-11). -->
+           getting the CTA into the first 390×844 viewport. -->
       <div class="hero-item hidden md:inline-flex items-center gap-3" style="opacity: 0">
         <img src="/brand/brand-mark-owl.svg" alt="VanguardOS owl mark" class="w-10 h-10" />
         <span class="font-display text-lg md:text-xl leading-none">
           <span class="text-text">Vanguard</span><span class="italic text-gold">OS</span>
         </span>
       </div>
-      <!-- Headline
-           2026-07-03 Core Web Vitals fix: this <h1> is the page's LCP
-           candidate (by far the largest painted text block above the fold).
-           It used to share the `.hero-item` class, which the onMount()
-           motion.animate() call starts at opacity:0 and fades in after JS
-           hydrates, at the end of a 0.13s-per-item stagger. Chrome's LCP
-           algorithm does not count an element until it is visibly painted,
-           so gating the single biggest element behind a post-hydration JS
-           fade was directly inflating measured LCP, and made real buyers
-           wait to see the headline. Now excluded from that class/opacity
-           gate so it paints immediately at first paint (opacity defaults to
-           1); `.hero-h1` below gives it a CSS-only transform-in entrance
-           that never touches opacity, so the motion feel is kept without
-           the invisibility window. Mobile base sizes trimmed 2026-07-11 so
-           the full two-line headline reads as ~4 lines on a 390px viewport
-           instead of 6-7, per the mobile-hero brief. -->
-      <h1 class="hero-h1 font-display font-medium text-text leading-[0.95] max-w-[1100px] mx-auto select-none" style="letter-spacing: -0.025em;">
-        <span class="block text-3xl sm:text-5xl md:text-7xl lg:text-[5.25rem] xl:text-[6rem]">
-          Turn the idea you keep postponing into a live checkout
+
+      <!-- Eyebrow above the headline: names the category in one calm line. -->
+      <div class="hero-item w-full min-w-0" style="opacity: 0">
+        <span class="font-mono text-[11px] md:text-xs uppercase tracking-[0.28em] md:tracking-[0.3em] text-gold">
+          The Interactive 5-Day Build System
         </span>
-        <span class="block italic text-gold text-3xl sm:text-4xl md:text-6xl lg:text-[4.25rem] xl:text-[4.75rem] mt-2 md:mt-5">
-          in five focused days.
+      </div>
+
+      <!-- Headline
+           This <h1> is the page's LCP candidate (largest painted text block
+           above the fold), so it is excluded from the JS opacity fade and
+           paints immediately at first paint; `.hero-h1` gives it a CSS-only
+           transform-in entrance that never touches opacity. Only "with a live
+           checkout." is set in champagne-gold italic; the rest stays platinum.
+           Fixed rem sizes only (no viewport-width font sizing) so the two-line
+           headline reads cleanly on a 390px viewport. -->
+      <h1 class="hero-h1 font-display font-medium text-text leading-[1.02] md:leading-[0.98] w-full min-w-0 max-w-[1100px] mx-auto select-none">
+        <span class="block text-[1.95rem] leading-[1.08] sm:text-5xl md:text-6xl lg:text-[4.75rem] xl:text-[5.25rem] md:leading-[0.98]">
+          Five days from now, your idea can be a branded digital product
+        </span>
+        <span class="block italic text-gold text-[1.95rem] leading-[1.08] sm:text-5xl md:text-6xl lg:text-[4.75rem] xl:text-[5.25rem] md:leading-[0.98] mt-1.5 md:mt-3">
+          with a live checkout.
         </span>
       </h1>
 
-      <!-- Pain eyebrow: leads with the pattern the buyer recognizes. Sits
-           below the headline (2026-07-11) so the h1 paints right under the
-           logo instead of being pushed down by this line. -->
-      <div class="hero-item" style="opacity: 0">
-        <span class="font-mono text-[11px] md:text-xs uppercase tracking-[0.3em] text-gold">
-          Not another course. The room, rails, and order to finish.
-        </span>
-      </div>
-
-      <!-- Subhead: calmer, body serif -->
-      <p class="hero-item font-sans text-muted text-base md:text-2xl leading-snug max-w-[820px] mx-auto" style="opacity: 0">
-        The Vanguard Launchpad is an interactive five-day build system. Open it, answer three guided prompts a day, follow the locked steps, and walk out with a branded digital product, sales page, Gumroad checkout, and follow-up funnel.
+      <!-- Supporting copy: names the exact sequence in one sentence. -->
+      <p class="hero-item body-copy font-sans text-body text-[17px] md:text-2xl leading-[1.6] md:leading-snug w-full min-w-0 max-w-[820px] mx-auto" style="opacity: 0">
+        The Vanguard Launchpad guides a complete beginner through one exact sequence: validate the idea, build and package the product, create the brand and sales page, publish a working checkout, and prepare the follow-up email sequence.
       </p>
 
-      <!-- Outcome chips: tactile proof of the five deliverables you keep.
-           Renders day5Outcomes so the hero promise is concrete, not abstract. -->
-      <div class="hero-item flex flex-col items-center gap-3 pt-1" style="opacity: 0">
-        <ul class="flex flex-wrap items-center justify-center gap-2 md:gap-2.5 max-w-[780px] mx-auto">
-          {#each day5Outcomes as outcome}
-            <li class="inline-flex items-center gap-1.5 rounded-full border border-gold-line/60 bg-gold-soft/15 px-2.5 py-1 md:px-3 md:py-1.5 font-mono text-[9px] md:text-[11px] uppercase tracking-[0.14em] md:tracking-[0.16em] text-text/90">
-              <span class="text-gold leading-none" aria-hidden="true">✓</span>{outcome}
-            </li>
-          {/each}
-        </ul>
-      </div>
+      <!-- Mechanism line: the three-part rhythm of how the work happens. -->
+      <p class="hero-item font-sans text-text text-base md:text-xl leading-relaxed w-full min-w-0 max-w-[720px] mx-auto" style="opacity: 0">
+        Three guided prompts a day. One required step at a time. Progress autosaves.
+      </p>
 
-      <!-- Primary CTA: gold, prominent, all caps. Secondary "See How It Works"
-           is the lower-commitment path: anchor-scrolls to the mechanism
-           section instead of straight to checkout. -->
-      <div class="hero-item flex flex-col items-center gap-4 pt-2 md:pt-3" style="opacity: 0">
-        <div class="flex flex-col sm:flex-row items-center gap-3 sm:gap-4">
-          <a href={GUMROAD.launchpad} data-event="initiate_checkout" data-analytics-id="hero-primary" on:click={trackCheckoutClick} class="btn-primary inline-flex items-center justify-center gap-3 px-12 py-5 rounded-[2rem] font-mono text-sm md:text-base uppercase tracking-[0.18em]">
+      <!-- Primary CTA: gold, prominent. Secondary "See the 5-Day Plan" is the
+           lower-commitment path: anchor-scrolls to the five-day section. On
+           mobile the primary CTA is full-width within a sensible max so it
+           lands inside the first 390×844 viewport without clipping. -->
+      <div class="hero-item w-full min-w-0 flex flex-col items-center gap-4 pt-1 md:pt-2" style="opacity: 0">
+        <div class="w-full min-w-0 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
+          <a href={GUMROAD.launchpad} data-event="initiate_checkout" data-analytics-id="hero-primary" on:click={trackCheckoutClick} class="btn-primary cta-hero w-full sm:w-auto max-w-[360px] inline-flex items-center justify-center gap-2.5 px-6 sm:px-10 py-4 md:py-5 rounded-[2rem] font-mono text-sm md:text-base uppercase tracking-[0.12em] md:tracking-[0.18em]">
             <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
-            Start My 5-Day Build &nbsp;·&nbsp; $129
+            Start My 5-Day Build&nbsp;·&nbsp;$129
           </a>
-          <a href="#five-day" class="btn-secondary inline-flex items-center justify-center gap-2 px-9 py-5 rounded-[2rem] font-mono text-sm md:text-base uppercase tracking-[0.18em]">
-            See How It Works
+          <a href="#five-day" class="btn-secondary cta-hero w-full sm:w-auto max-w-[360px] inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-4 md:py-5 rounded-[2rem] font-mono text-sm md:text-base uppercase tracking-[0.12em] md:tracking-[0.18em]">
+            See the 5-Day Plan
           </a>
         </div>
       </div>
 
-      <!-- Trust line: no dollar-value claims, just the four things a skeptical
-           cold-traffic click needs to hear before scrolling further. -->
-      <div class="hero-item pt-1" style="opacity: 0">
-        <p class="font-mono text-[10px] md:text-[11px] uppercase tracking-[0.25em] md:tracking-[0.3em] text-muted-2 max-w-[860px] mx-auto leading-relaxed">
-          Interactive &nbsp;·&nbsp; 72 guided steps &nbsp;·&nbsp; Progress autosaves &nbsp;·&nbsp; 30-day guarantee
+      <!-- Trust line: the three things a skeptical cold click needs before scrolling. -->
+      <div class="hero-item w-full min-w-0 pt-1" style="opacity: 0">
+        <p class="font-mono text-[10px] md:text-[11px] uppercase tracking-[0.2em] md:tracking-[0.3em] text-muted w-full min-w-0 max-w-[860px] mx-auto leading-relaxed">
+          Instant access &nbsp;·&nbsp; Mobile and desktop &nbsp;·&nbsp; 30-day guarantee
         </p>
       </div>
 
       <!-- Hero visual: the restrained five-day-path animation (not a full
-           screenshot — see Visual Reveal Rule), reused from the same motion
-           markup as the mechanism section below. Answers one objection:
-           "is this a real interactive system, not a PDF?" Ends on a static
-           confirmation line rather than a second screenshot. -->
-      <div class="hero-item pt-4 md:pt-8" style="opacity: 0">
-        <div class="max-w-[640px] mx-auto">
+           screenshot). Answers one objection: "is this a real interactive
+           system, not a PDF?" Ends on a static confirmation line. -->
+      <div class="hero-item w-full min-w-0 pt-3 md:pt-6" style="opacity: 0">
+        <div class="w-full min-w-0 max-w-[640px] mx-auto">
           <div class="motion-viz motion-panel rounded-[1.5rem] border border-line bg-surface/40">
             <span class="motion-label">Idea to live checkout</span>
             <div class="mv-day-row">
@@ -568,7 +560,7 @@
             <div class="mv-path-line"></div>
             <div class="mv-day-scan"><i></i></div>
           </div>
-          <p class="font-mono text-[10px] md:text-[11px] uppercase tracking-[0.25em] text-muted-2 mt-4">
+          <p class="font-mono text-[10px] md:text-[11px] uppercase tracking-[0.22em] text-muted mt-4">
             <span class="text-gold" aria-hidden="true">✓</span> Live checkout, confirmed.
           </p>
         </div>
@@ -629,8 +621,8 @@
         <h2 class="font-display text-4xl md:text-6xl lg:text-7xl leading-[0.95] text-text">
           Five days. Five outcomes. <span class="italic text-gold">One launch-ready system.</span>
         </h2>
-        <p class="text-text text-lg md:text-xl mt-6 leading-relaxed">
-          The Launchpad is not a course. It's a sequence. You never face the whole launch at once, only today's day, and each day ends with a finished piece of your business. By Day 5 you have a real, live, take-the-money-today system.
+        <p class="body-copy text-body text-lg md:text-xl mt-6 leading-relaxed">
+          Each day ends with a finished piece of the business. You only see the work required for today, and every completed step prepares the next one. By Day 5 you have a real, live, take-payment-today system.
         </p>
       </header>
 
@@ -731,7 +723,7 @@
       </ol>
 
       <div class="text-center mt-12 reveal">
-        <a href={GUMROAD.launchpad} data-event="initiate_checkout" data-analytics-id="five-day-cta" on:click={trackCheckoutClick} class="btn-primary inline-flex items-center justify-center gap-2.5 px-10 py-5 rounded-[2rem]">
+        <a href={GUMROAD.launchpad} data-event="initiate_checkout" data-analytics-id="five-day-cta" on:click={trackCheckoutClick} class="btn-primary inline-flex items-center justify-center gap-2.5 px-6 sm:px-10 py-5 rounded-[2rem]">
           <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
           Start My 5-Day Build · $129 →
         </a>
@@ -781,7 +773,7 @@
         'A locked brand: name, palette, typography, logo direction',
         'The core product itself, built and organized',
         'A live, branded sales page at a real URL',
-        'A working Gumroad checkout, ready to take payment',
+        'A working checkout, ready to take payment',
         'A written follow-up email sequence',
         'Copy that explains the offer in plain language',
         'A backup file, so none of the work can be lost',
@@ -837,7 +829,7 @@
 
       <div class="reveal flex items-center justify-center gap-4 my-8 md:my-10">
         <div class="h-px flex-1 bg-gold-line/40"></div>
-        <span class="font-mono text-[10px] md:text-xs uppercase tracking-[0.3em] text-gold text-center whitespace-nowrap">Then six bonuses, free · {'$' + bonusValue} of value</span>
+        <span class="font-mono text-gold text-center bonus-header-text">Then six bonuses, free · {'$' + bonusValue} of value</span>
         <div class="h-px flex-1 bg-gold-line/40"></div>
       </div>
 
@@ -906,7 +898,7 @@
         </p>
         <a href={GUMROAD.launchpad} data-event="initiate_checkout" data-analytics-id="offer-stack-cta" on:click={trackCheckoutClick} class="btn-primary flex items-center justify-center gap-2.5 mt-7 py-5 rounded-[2rem]">
           <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
-          Get The Launchpad · $129 →
+          Start My 5-Day Build · $129 →
         </a>
         <p class="text-sm font-mono uppercase tracking-widest text-muted mt-3 text-center">One payment · 30-day guarantee · Yours for every launch after this one</p>
       </div>
@@ -939,22 +931,51 @@
         <p class="text-base md:text-lg text-text/85 leading-relaxed">Your progress autosaves in the browser. <strong class="text-text">Backup Progress</strong> creates a portable file you can keep in Drive or move to another computer. <strong class="text-text">Restore Progress</strong> brings the work back exactly where you left it. It's mobile-friendly too, so a day can start on your phone and finish on your laptop.</p>
       </div>
     </div>
-    <div class="max-w-[1040px] mx-auto reveal grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10 items-center mt-14 md:mt-16 pt-14 md:pt-16 border-t border-line/40">
-      <div class="lg:order-2">
-        <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">Free Tools Get You There</span>
-        <h3 class="font-display text-2xl md:text-3xl text-text leading-tight mt-2 mb-3">The free tier finishes all five days. Paid tiers are polish.</h3>
-        <p class="text-base md:text-lg text-text/85 leading-relaxed">Everything the Launchpad asks for runs on tools with a real free tier: the free plan of ChatGPT, Claude, or Gemini for the prompts, Leonardo or Ideogram for early visuals, Google Antigravity to build your page, GitHub and Cloudflare Pages to host it live, and Gumroad to sell it. That's a complete, working path to Day 5 for $0 in tools.</p>
-        <p class="text-base md:text-lg text-text/85 leading-relaxed mt-4">A paid AI tier and a Higgsfield subscription for premium visuals are optional. Neither decides whether you finish Day 5. What they buy is polish: crisper visuals and longer AI sessions.</p>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       THE STACK IS ALREADY CHOSEN — mystery-by-outcome. The exact software
+       stack is part of the paid value, so it is never named on this public
+       page. Every tool is described by category and outcome only: the relief
+       of not losing a week comparing options, without revealing the picks.
+       ═══════════════════════════════════════════════════════════════ -->
+  <section id="stack-chosen" class="relative py-20 md:py-28 px-6 border-t border-line/60 overflow-hidden"
+    style="background-image: radial-gradient(ellipse at 50% -10%, rgba(212,175,55,0.07), transparent 55%);">
+    <div class="max-w-[1040px] mx-auto reveal">
+      <header class="text-center max-w-[820px] mx-auto mb-12 md:mb-14">
+        <div class="flex items-center justify-center gap-3 mb-6">
+          <div class="h-px w-16 bg-gold-line"></div>
+          <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">The Stack Is Already Chosen</span>
+          <div class="h-px w-16 bg-gold-line"></div>
+        </div>
+        <h2 class="font-display text-4xl md:text-6xl leading-[0.98] text-text">
+          No more losing a week <span class="italic text-gold">comparing tools.</span>
+        </h2>
+        <p class="body-copy text-body text-lg md:text-xl mt-6 leading-relaxed">
+          Every day reveals the exact free and premium option for that stage, what it does, and when to use it. You open the Launchpad, follow the screen, and keep building.
+        </p>
+      </header>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
+        <div class="rounded-[1.5rem] border border-line bg-surface/60 p-6 md:p-8 flex flex-col gap-3">
+          <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">The free path</span>
+          <h3 class="font-display text-2xl md:text-3xl text-text leading-tight">Enough to finish, start to checkout.</h3>
+          <p class="body-copy text-body text-base md:text-lg leading-relaxed">
+            The free path can complete the entire system. For each stage the Launchpad names a free option with a real free tier: an AI writing assistant for the prompts, an image generator for visuals, a guided website builder and deployment stack for the page, and a checkout platform to take payment.
+          </p>
+        </div>
+        <div class="rounded-[1.5rem] border border-gold-line bg-gold-soft/15 p-6 md:p-8 flex flex-col gap-3">
+          <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">The premium path</span>
+          <h3 class="font-display text-2xl md:text-3xl text-text leading-tight">Improves speed, range, and polish.</h3>
+          <p class="body-copy text-body text-base md:text-lg leading-relaxed">
+            When you want more, each stage also names the premium option and exactly what it buys: longer AI sessions and a stronger model, a premium AI workspace and visual studio for sharper output, and a custom domain for a credible address you own. None of it decides whether you finish.
+          </p>
+        </div>
       </div>
-      <div class="lg:order-1 rounded-[1.5rem] border border-line bg-surface/40 p-6 md:p-8">
-        <ul class="flex flex-col gap-3 font-mono text-xs uppercase tracking-[0.14em] text-text/85">
-          <li class="flex items-center gap-2"><span class="text-gold" aria-hidden="true">✓</span> ChatGPT · Claude · Gemini</li>
-          <li class="flex items-center gap-2"><span class="text-gold" aria-hidden="true">✓</span> Leonardo · Ideogram</li>
-          <li class="flex items-center gap-2"><span class="text-gold" aria-hidden="true">✓</span> Google Antigravity</li>
-          <li class="flex items-center gap-2"><span class="text-gold" aria-hidden="true">✓</span> GitHub · Cloudflare Pages</li>
-          <li class="flex items-center gap-2"><span class="text-gold" aria-hidden="true">✓</span> Gumroad</li>
-        </ul>
-      </div>
+
+      <p class="body-copy text-body text-base md:text-lg leading-relaxed max-w-[820px] mx-auto mt-8 text-center">
+        The full five-day build can be completed with the free options named inside the Launchpad. Premium options can improve speed, range, and visual polish. A custom domain, transaction fees, and optional software upgrades are separate.
+      </p>
     </div>
   </section>
 
@@ -1010,7 +1031,7 @@
         </div>
       </div>
       <div class="text-center mt-8">
-        <a href={GUMROAD.launchpad} data-event="initiate_checkout" data-analytics-id="for-who-cta" on:click={trackCheckoutClick} class="text-sm font-mono uppercase tracking-widest text-gold hover:text-gold-hi transition border-b border-gold-line hover:border-gold pb-1">Get The Launchpad · $129 →</a>
+        <a href={GUMROAD.launchpad} data-event="initiate_checkout" data-analytics-id="for-who-cta" on:click={trackCheckoutClick} class="inline-flex items-center justify-center px-8 h-11 border border-gold-line hover:border-gold hover:bg-gold-soft text-gold text-xs font-semibold font-mono uppercase tracking-wider rounded-full transition hover:scale-[1.03]">Start My 5-Day Build · $129 →</a>
       </div>
     </div>
   </section>
@@ -1103,8 +1124,8 @@
         <h2 class="font-display text-4xl md:text-6xl leading-[0.98] text-text">
           English isn't your first language? <span class="italic text-gold">You're covered.</span>
         </h2>
-        <p class="text-text text-lg md:text-xl mt-6 max-w-[760px] mx-auto leading-relaxed">
-          The entire Launchpad is fully translated, not machine-skimmed. Every screen of the interactive build system, all six bonuses, the Notion Operations OS, and the Website System build file ship in your language. Same download, same $129, no add-on. Choose your language and build in it.
+        <p class="body-copy text-body text-lg md:text-xl mt-6 max-w-[760px] mx-auto leading-relaxed">
+          Choose the language you think and build in. Every edition includes the complete interactive Launchpad, the Website System, and all six bonus guides. Same download, same $129, no add-on.
         </p>
       </header>
 
@@ -1172,7 +1193,7 @@
       </div>
 
       <p class="text-center text-sm font-mono uppercase tracking-widest text-muted mt-10 reveal">
-        Fully translated · Same price · One download
+        Six languages · Same price · One download
       </p>
     </div>
   </section>
@@ -1194,7 +1215,7 @@
   </section>
 
   <!-- FINAL CTA — Launchpad -->
-  <section class="px-6 py-24 md:py-32 border-t border-line/60 text-center overflow-hidden"
+  <section id="final-cta" class="px-6 py-24 md:py-32 border-t border-line/60 text-center overflow-hidden"
     style="background-image: radial-gradient(ellipse at 50% 120%, rgba(212,175,55,0.12), transparent 60%);">
     <div class="max-w-[820px] mx-auto reveal space-y-8">
       <img src="/brand/brand-mark-owl.svg" alt="VanguardOS owl mark" class="w-12 h-12 mx-auto" />
@@ -1205,11 +1226,11 @@
 
 
       <div class="flex flex-col items-center gap-4">
-        <a href={GUMROAD.launchpad} data-event="initiate_checkout" data-analytics-id="final-cta" on:click={trackCheckoutClick} class="btn-primary inline-flex items-center justify-center gap-2.5 px-10 py-5 rounded-[2rem]">
+        <a href={GUMROAD.launchpad} data-event="initiate_checkout" data-analytics-id="final-cta" on:click={trackCheckoutClick} class="btn-primary inline-flex items-center justify-center gap-2.5 px-6 sm:px-10 py-5 rounded-[2rem]">
           <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
           Start My 5-Day Build · $129 →
         </a>
-        <a href="#offer-stack" class="text-sm font-mono uppercase tracking-widest text-muted hover:text-text transition border-b border-gold-line/40 hover:border-gold pb-1">See what's inside ↑</a>
+        <a href="#five-day" class="text-sm font-mono uppercase tracking-widest text-muted hover:text-text transition border-b border-gold-line/40 hover:border-gold pb-1">See the 5-Day Plan</a>
         <p class="text-sm font-mono uppercase tracking-wider text-muted pt-2">Instant access, start Day 1 today · 30-day guarantee · One payment · Yours forever</p>
       </div>
     </div>
@@ -1234,21 +1255,18 @@
         <a href="#testimonials" class="hover:text-text transition">Reviews</a>
         <a href="#faq" class="hover:text-text transition">FAQ</a>
         <a href="mailto:support@vanguardos.co" on:click|preventDefault={openContact} class="hover:text-text transition">Contact</a>
+        <a href="#top" class="hover:text-text transition">Back to Top ↑</a>
       </div>
     </div>
   </div>
 </footer>
 
 <!-- PERSISTENT MOBILE CTA — appears once the hero scrolls away; mobile only -->
-<div class="sticky-cta md:hidden {showStickyCta ? 'sticky-cta-show' : ''}" aria-hidden={!showStickyCta}>
+<div class="sticky-cta lg:hidden {stickyVisible ? 'sticky-cta-show' : ''}" aria-hidden={!stickyVisible}>
   <div class="sticky-cta-inner">
-    <div class="sticky-cta-copy">
-      <span class="sticky-cta-price">$129</span>
-      <span class="sticky-cta-sub">One payment · Yours forever</span>
-    </div>
-    <a href={GUMROAD.launchpad} data-event="initiate_checkout" data-analytics-id="sticky-cta" on:click={trackCheckoutClick} class="btn-primary sticky-cta-btn flex items-center justify-center gap-2" tabindex={showStickyCta ? 0 : -1}>
+    <a href={GUMROAD.launchpad} data-event="initiate_checkout" data-analytics-id="sticky-cta" on:click={trackCheckoutClick} class="btn-primary sticky-cta-btn flex items-center justify-center gap-2" tabindex={stickyVisible ? 0 : -1}>
       <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
-      Get The Launchpad →
+      Start My 5-Day Build · $129
     </a>
   </div>
 </div>
@@ -1292,7 +1310,7 @@
 
       <a href={GUMROAD.launchpad} data-event="initiate_checkout" data-analytics-id="specimen-modal-cta" on:click={trackCheckoutClick} class="btn-primary flex items-center justify-center gap-2.5 mt-7 py-4 rounded-[2rem]">
         <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
-        Get The Launchpad · $129 →
+        Start My 5-Day Build · $129 →
       </a>
     </div>
   </div>
@@ -1421,7 +1439,7 @@
   .bubble.bot { align-self: flex-start; background: rgba(236,234,228,0.07); color: #ECEAE4; border-bottom-left-radius: 4px; border: 1px solid rgba(236,234,228,0.06); }
   .bubble.user { align-self: flex-end; background: linear-gradient(135deg, #D4AF37 0%, #E7C66A 100%); color: #111212; border-bottom-right-radius: 4px; font-weight: 500; }
   .chat-input { margin: 8px 12px 14px; display: flex; align-items: center; justify-content: space-between; padding: 10px 16px; background: rgba(236,234,228,0.05); border: 1px solid rgba(236,234,228,0.08); border-radius: 22px; font-size: 12px; }
-  .input-placeholder { color: #8C8C86; font-family: 'Alegreya', serif; }
+  .input-placeholder { color: #8C8C86; font-family: 'Source Serif 4', serif; }
   .input-mic { color: #D4AF37; font-size: 14px; }
 
   /* === COMMAND CENTER POINTER CHAT === */
@@ -1512,7 +1530,7 @@
     font-size: 26px; line-height: 1.15;
     color: #ECEAE4;                                /* platinum */
     text-align: center;
-    letter-spacing: -0.01em;
+    letter-spacing: 0;
   }
   .upsell-headline em { font-style: italic; color: #D4AF37; }
   @media (min-width: 768px) { .upsell-headline { font-size: 32px; } }
@@ -1965,6 +1983,18 @@
   .sticky-cta-price { font-family: 'JetBrains Mono Numbers', 'Playfair Display', serif; font-size: 22px; color: #D4AF37; }
   .sticky-cta-sub { font-family: 'JetBrains Mono', monospace; font-size: 9px; text-transform: uppercase; letter-spacing: 0.12em; color: #A6A6A1; margin-top: 2px; }
   .sticky-cta-btn { flex: 1; text-align: center; padding: 14px 18px; border-radius: 2rem; white-space: nowrap; }
+  @media (max-width: 380px) {
+    .sticky-cta-btn {
+      font-size: 12px !important;
+      letter-spacing: 0.04em !important;
+      padding: 12px 10px !important;
+    }
+  }
+
+  /* === MOBILE MENU DRAWER === */
+  .menu-drawer { animation: drawerIn 0.28s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+  @keyframes drawerIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+  @media (prefers-reduced-motion: reduce) { .menu-drawer { animation: none; } }
 
   /* === MOTION ASSETS — restrained CSS-only mockups, ported from the
      "Vanguard Launchpad Motion Previews" reference pack (landing-page-motion-assets/
@@ -2034,11 +2064,16 @@
     z-index: 3;
   }
 
-  /* Five-day path */
-  .mv-day-row { position: relative; z-index: 2; display: flex; justify-content: space-between; gap: 6px; }
+  /* Five-day path — five equal, shrinkable columns so every chip (including
+     "Product" and "Checkout") stays inside its card with visible padding at
+     every width. Grid with minmax(0, 1fr) is what prevents the flex-basis
+     overflow the old `flex: 1` layout produced on narrow phones. */
+  .mv-day-row { position: relative; z-index: 2; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
   .mv-day-chip {
-    flex: 1; min-width: 0; max-width: 108px;
-    padding: 9px 10px;
+    min-width: 0;
+    box-sizing: border-box;
+    padding: 9px 6px;
+    text-align: center;
     border: 1px solid var(--mv-hair);
     background: rgba(236, 234, 228, 0.045);
     animation: mvFloat 4.2s ease-in-out infinite;
@@ -2047,8 +2082,8 @@
   .mv-day-chip:nth-child(3) { animation-delay: .3s; }
   .mv-day-chip:nth-child(4) { animation-delay: .45s; }
   .mv-day-chip:nth-child(5) { animation-delay: .6s; }
-  .mv-day-chip span { display: block; color: var(--mv-gold); font: 600 8px 'JetBrains Mono', ui-monospace, monospace; letter-spacing: 0.14em; text-transform: uppercase; }
-  .mv-day-chip strong { display: block; margin-top: 6px; font: 600 17px/1 'Playfair Display', Georgia, serif; color: var(--mv-ink); }
+  .mv-day-chip span { display: block; color: var(--mv-gold); font: 600 8px 'JetBrains Mono', ui-monospace, monospace; letter-spacing: 0.12em; text-transform: uppercase; }
+  .mv-day-chip strong { display: block; margin-top: 6px; font: 600 16px/1 'Playfair Display', Georgia, serif; color: var(--mv-ink); white-space: nowrap; letter-spacing: 0; }
   .mv-path-line { position: relative; z-index: 2; margin-top: 26px; height: 1px; background: linear-gradient(90deg, transparent, var(--mv-gold), transparent); }
   .mv-day-scan { position: relative; z-index: 2; height: 14px; margin-top: -7px; }
   .mv-day-scan i {
@@ -2147,12 +2182,48 @@
   @keyframes mvSignalPulse { 0% { transform: scale(1); opacity: .38; } 100% { transform: scale(1.5); opacity: 0; } }
 
   @media (max-width: 640px) {
-    .motion-panel { min-height: 170px; padding: 36px 14px 18px; }
-    .mv-day-chip strong { font-size: 15px; }
+    .motion-panel { min-height: 170px; padding: 36px 12px 18px; }
+    .mv-day-chip { padding: 8px 5px; }
+    .mv-day-chip strong { font-size: 13px; }
     .mv-day-chip span { font-size: 7px; }
     .mv-prompt-card strong { font-size: 15px; }
     .mv-device { font-size: 7px; padding: 8px 8px; }
     .mv-phone-shell { width: 100px; height: 172px; }
+  }
+  /* Narrow phones: shrink the five-day chips further so "Product" and
+     "Checkout" always sit inside their cards with padding, never touching
+     the border or overflowing. Fixed px sizes only — no viewport-width units. */
+  @media (max-width: 430px) {
+    .motion-panel { padding: 32px 10px 16px; }
+    .mv-day-row { gap: 4px; }
+    .mv-day-chip { padding: 6px 4px; }
+    .mv-day-chip strong { font-size: 11px; }
+    .mv-day-chip span { font-size: 7px; letter-spacing: 0.08em; }
+  }
+  @media (max-width: 360px) {
+    .motion-panel { padding: 30px 8px 14px; }
+    .mv-day-chip { padding: 6px 3px; }
+    .mv-day-chip strong { font-size: 9px; }
+    .mv-day-chip span { font-size: 6px; }
+  }
+
+  .bonus-header-text {
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  @media (min-width: 768px) {
+    .bonus-header-text {
+      font-size: 12px;
+    }
+  }
+  @media (max-width: 360px) {
+    .bonus-header-text {
+      font-size: 9px;
+      letter-spacing: 0.16em;
+      white-space: normal;
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {

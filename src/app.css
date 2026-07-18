@@ -26,13 +26,25 @@
 body {
   background: #111212;
   color: #ECEAE4;
-  font-family: 'JetBrains Mono Numbers', 'Alegreya', Georgia, serif;
-  letter-spacing: 0.005em;
+  font-family: 'JetBrains Mono Numbers', 'Source Serif 4', Georgia, serif;
+  letter-spacing: 0;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
 
 strong { color: #ECEAE4; font-weight: 600; }
+
+/* Headlines and body copy sit at 0 letter-spacing per the Midnight Vanguard
+   spec — no negative tracking on display type. */
+h1, h2, h3, h4, h5, h6, p { letter-spacing: 0; }
+
+/* Readable mobile body copy: essential paragraphs stay at least 17px with a
+   comfortable 1.6 line-height and are never left in faint opacity. Solid
+   secondary tone (#C8C6BF) is the floor for body text, not a low-opacity
+   platinum. */
+@media (max-width: 640px) {
+  p.body-copy, .body-copy p { font-size: 17px; line-height: 1.6; }
+}
 
 /* Mobile-friendly default: respect prefers-reduced-motion */
 @media (prefers-reduced-motion: reduce) {

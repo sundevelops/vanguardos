@@ -16,3 +16,14 @@ vite.config.js.timestamp-*
 
 # wrangler
 .wrangler/
+
+# Playwright QA
+/qa/.artifacts/
+/qa/screenshots/
+/test-results/
+/playwright-report/
+/.playwright/
+
+# Backups
+*.bak
+
