@@ -24,9 +24,12 @@ const SCREENSHOT_DIR = path.join(__dirname, 'screenshots');
 // The approved checkout destination. Every purchase CTA must point here.
 const CHECKOUT_URL_FRAGMENT = 'vanguardos.gumroad.com/l/lgaxz';
 
-// The single approved primary CTA label, normalized (arrows and non-breaking
-// spaces stripped, whitespace collapsed).
-const CANONICAL_CTA = 'Start My 5-Day Build · $129';
+// Approved primary CTA labels, normalized (arrows and non-breaking spaces
+// stripped, whitespace collapsed). The label is responsive: the full label on
+// tablet/desktop, a shortened label on phones (the price stays visible in the
+// offer card and the hero, so the mobile button does not repeat it).
+const CANONICAL_CTA_DESKTOP = 'Start My 5-Day Build';
+const CANONICAL_CTA_MOBILE = 'Start My Build';
 
 // Third-party tool / platform / model / host / service names that must never
 // appear in public copy, metadata, structured data, alt text, or animation
@@ -276,20 +279,72 @@ test('no embargoed tool names in public copy, metadata, or structured data', asy
 // ─────────────────────────────────────────────────────────────────────────
 // (14) Primary CTA label consistent across every purchase link
 // ─────────────────────────────────────────────────────────────────────────
-test('primary CTA label is consistent across every purchase link', async ({ page }) => {
-  await page.goto('/', { waitUntil: 'networkidle' });
-  const labels = await page.evaluate(() => {
-    return Array.from(document.querySelectorAll('a[href*="gumroad.com"]')).map((a) => a.textContent);
-  });
-  expect(labels.length).toBeGreaterThan(4);
-  for (const raw of labels) {
-    expect(normalizeLabel(raw)).toBe(CANONICAL_CTA);
+test('primary CTA label is consistent (responsive) across every visible purchase link', async ({ page }) => {
+  // innerText returns only the VISIBLE label span, so the hidden half of the
+  // responsive label is excluded automatically. We check both a phone width
+  // (short label) and a desktop width (full label).
+  for (const { w, h, expected } of [
+    { w: 390, h: 844, expected: CANONICAL_CTA_MOBILE },
+    { w: 1280, h: 800, expected: CANONICAL_CTA_DESKTOP },
+  ]) {
+    await page.setViewportSize({ width: w, height: h });
+    await page.goto('/', { waitUntil: 'networkidle' });
+    await page.waitForTimeout(300);
+    const labels = await page.evaluate(() => {
+      return Array.from(document.querySelectorAll('a[href*="gumroad.com"]'))
+        .filter((a) => {
+          const s = getComputedStyle(a);
+          const r = a.getBoundingClientRect();
+          return s.display !== 'none' && s.visibility !== 'hidden' && r.width > 0 && r.height > 0;
+        })
+        .map((a) => a.innerText);
+    });
+    expect(labels.length, `no visible purchase CTAs at ${w}px`).toBeGreaterThan(3);
+    for (const raw of labels) {
+      expect(normalizeLabel(raw).toLowerCase(), `unexpected CTA label at ${w}px`).toBe(expected.toLowerCase());
+    }
   }
   // The lone secondary label must be the single approved one.
   const secondary = await page.evaluate(() =>
     Array.from(document.querySelectorAll('a[href="#five-day"]')).map((a) => a.textContent.trim())
   );
   expect(secondary.some((t) => normalizeLabel(t) === 'See the 5-Day Plan')).toBeTruthy();
+});
+
+// ─────────────────────────────────────────────────────────────────────────
+// Price is clearly visible near every CTA (button labels are action-only, so
+// the price must be shown on its own line / in the offer stack / sticky chip).
+// ─────────────────────────────────────────────────────────────────────────
+test('the $129 price is visible near every CTA at mobile and desktop', async ({ page }) => {
+  for (const { w, h } of [{ w: 390, h: 844 }, { w: 1280, h: 800 }]) {
+    await page.setViewportSize({ width: w, height: h });
+    await page.goto('/', { waitUntil: 'networkidle' });
+    await page.addStyleTag({ content: '.reveal{opacity:1!important;transform:none!important;}' });
+    await page.evaluate(() => document.fonts && document.fonts.ready);
+    await page.waitForTimeout(300);
+    const prices = await page.evaluate(() => {
+      return Array.from(document.querySelectorAll('.cta-price')).map((el) => {
+        const s = getComputedStyle(el);
+        const r = el.getBoundingClientRect();
+        return {
+          text: (el.textContent || '').replace(/\s+/g, ' ').trim(),
+          visible: s.display !== 'none' && s.visibility !== 'hidden' && parseFloat(s.opacity) > 0.9 && r.width > 0 && r.height > 0,
+          hasPrice: /\$129/.test(el.textContent || ''),
+        };
+      });
+    });
+    expect(prices.length, `too few .cta-price lines at ${w}px`).toBeGreaterThanOrEqual(4);
+    for (const p of prices) {
+      expect(p.visible, `price line not visible at ${w}px: "${p.text}"`).toBeTruthy();
+      expect(p.hasPrice, `price line missing $129 at ${w}px: "${p.text}"`).toBeTruthy();
+    }
+    // The offer stack carries the headline $129 too.
+    const offerHasPrice = await page.evaluate(() => {
+      const el = document.querySelector('#offer-stack');
+      return el ? /\$129/.test(el.textContent || '') : false;
+    });
+    expect(offerHasPrice, `offer stack missing $129 at ${w}px`).toBeTruthy();
+  }
 });
 
 // ─────────────────────────────────────────────────────────────────────────

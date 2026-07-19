@@ -439,7 +439,7 @@
       <a href="mailto:support@vanguardos.co" on:click|preventDefault={openContact} class="text-xs font-mono uppercase tracking-wider text-muted hover:text-text transition">Contact</a>
       <a href={GUMROAD.launchpad} data-event="initiate_checkout" data-analytics-id="nav-cta" on:click={trackCheckoutClick} class="flex items-center gap-2 px-5 h-11 border border-gold-line hover:border-gold hover:bg-gold-soft text-gold text-xs font-semibold font-mono uppercase tracking-wider rounded-full transition hover:scale-[1.03]">
         <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
-        Start My 5-Day Build · $129
+        Start My 5-Day Build
       </a>
     </nav>
     <button class="lg:hidden text-muted hover:text-text p-1" on:click={() => menuOpen = !menuOpen} aria-label="Toggle menu">
@@ -462,9 +462,9 @@
       <a href="#five-day" on:click={() => menuOpen = false} class="block text-sm font-mono uppercase tracking-wider text-muted hover:text-text">5-Day Plan</a>
       <a href="#faq" on:click={() => menuOpen = false} class="block text-sm font-mono uppercase tracking-wider text-muted hover:text-text">FAQ</a>
       <a href="mailto:support@vanguardos.co" on:click|preventDefault={openContact} class="block text-sm font-mono uppercase tracking-wider text-muted hover:text-text">Contact</a>
-      <a href={GUMROAD.launchpad} data-event="initiate_checkout" data-analytics-id="mobile-nav-cta" on:click={(e) => { menuOpen = false; trackCheckoutClick(e); }} class="flex items-center justify-center gap-2 h-11 bg-gold text-base-2 font-bold font-mono uppercase text-xs tracking-wide rounded-full">
+      <a href={GUMROAD.launchpad} data-event="initiate_checkout" data-analytics-id="mobile-nav-cta" on:click={(e) => { menuOpen = false; trackCheckoutClick(e); }} class="flex flex-nowrap items-center justify-center gap-2 h-12 bg-gold text-base-2 font-bold font-mono uppercase text-xs tracking-[0.04em] rounded-full">
         <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
-        Start My 5-Day Build · $129
+        <span class="cta-label"><span class="cta-label-full">Start My 5-Day Build</span><span class="cta-label-short">Start My Build</span></span>
       </a>
     </div>
   {/if}
@@ -526,19 +526,22 @@
            lands inside the first 390×844 viewport without clipping. -->
       <div class="hero-item w-full min-w-0 flex flex-col items-center gap-4 pt-1 md:pt-2" style="opacity: 0">
         <div class="w-full min-w-0 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
-          <a href={GUMROAD.launchpad} data-event="initiate_checkout" data-analytics-id="hero-primary" on:click={trackCheckoutClick} class="btn-primary cta-hero w-full sm:w-auto max-w-[360px] inline-flex items-center justify-center gap-2.5 px-6 sm:px-10 py-4 md:py-5 rounded-[2rem] font-mono text-sm md:text-base uppercase tracking-[0.12em] md:tracking-[0.18em]">
+          <a href={GUMROAD.launchpad} data-event="initiate_checkout" data-analytics-id="hero-primary" on:click={trackCheckoutClick} class="btn-primary cta-btn cta-hero w-full sm:w-auto max-w-[360px] sm:max-w-none rounded-[2rem] font-mono text-sm md:text-base uppercase">
             <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
-            Start My 5-Day Build&nbsp;·&nbsp;$129
+            <span class="cta-label"><span class="cta-label-full">Start My 5-Day Build</span><span class="cta-label-short">Start My Build</span></span>
+            <span class="cta-arrow" aria-hidden="true">→</span>
           </a>
-          <a href="#five-day" class="btn-secondary cta-hero w-full sm:w-auto max-w-[360px] inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-4 md:py-5 rounded-[2rem] font-mono text-sm md:text-base uppercase tracking-[0.12em] md:tracking-[0.18em]">
-            See the 5-Day Plan
+          <a href="#five-day" class="btn-secondary cta-btn cta-hero w-full sm:w-auto max-w-[360px] sm:max-w-none rounded-[2rem] font-mono text-sm md:text-base uppercase">
+            <span class="cta-label">See the 5-Day Plan</span>
           </a>
         </div>
       </div>
 
-      <!-- Trust line: the three things a skeptical cold click needs before scrolling. -->
+      <!-- Price + trust line: price shown clearly right under the CTA, then
+           the reassurances a skeptical cold click needs before scrolling. -->
       <div class="hero-item w-full min-w-0 pt-1" style="opacity: 0">
-        <p class="font-mono text-[10px] md:text-[11px] uppercase tracking-[0.2em] md:tracking-[0.3em] text-muted w-full min-w-0 max-w-[860px] mx-auto leading-relaxed">
+        <p class="cta-price w-full min-w-0 max-w-[860px] mx-auto"><span class="price">$129</span> · one payment · yours forever</p>
+        <p class="font-mono text-[10px] md:text-[11px] uppercase tracking-[0.12em] md:tracking-[0.28em] text-muted-2 w-full min-w-0 max-w-[860px] mx-auto leading-relaxed mt-2">
           Instant access &nbsp;·&nbsp; Mobile and desktop &nbsp;·&nbsp; 30-day guarantee
         </p>
       </div>
@@ -723,10 +726,12 @@
       </ol>
 
       <div class="text-center mt-12 reveal">
-        <a href={GUMROAD.launchpad} data-event="initiate_checkout" data-analytics-id="five-day-cta" on:click={trackCheckoutClick} class="btn-primary inline-flex items-center justify-center gap-2.5 px-6 sm:px-10 py-5 rounded-[2rem]">
+        <a href={GUMROAD.launchpad} data-event="initiate_checkout" data-analytics-id="five-day-cta" on:click={trackCheckoutClick} class="btn-primary cta-btn w-full max-w-[480px] mx-auto rounded-[2rem] font-mono text-sm md:text-base uppercase">
           <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
-          Start My 5-Day Build · $129 →
+          <span class="cta-label"><span class="cta-label-full">Start My 5-Day Build</span><span class="cta-label-short">Start My Build</span></span>
+          <span class="cta-arrow" aria-hidden="true">→</span>
         </a>
+        <p class="cta-price max-w-[480px] mx-auto"><span class="price">$129</span> · one payment · 30-day guarantee</p>
       </div>
     </div>
   </section>
@@ -896,11 +901,12 @@
         <p class="text-base text-text/85 leading-relaxed mt-5 text-center">
           Counted on their own, the six bonuses come to {'$' + bonusValue}, nearly five times the price, and they are free. You pay $129 for the system and keep all {'$' + stackValue}.
         </p>
-        <a href={GUMROAD.launchpad} data-event="initiate_checkout" data-analytics-id="offer-stack-cta" on:click={trackCheckoutClick} class="btn-primary flex items-center justify-center gap-2.5 mt-7 py-5 rounded-[2rem]">
+        <a href={GUMROAD.launchpad} data-event="initiate_checkout" data-analytics-id="offer-stack-cta" on:click={trackCheckoutClick} class="btn-primary cta-btn w-full mt-7 rounded-[2rem] font-mono text-sm md:text-base uppercase">
           <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
-          Start My 5-Day Build · $129 →
+          <span class="cta-label"><span class="cta-label-full">Start My 5-Day Build</span><span class="cta-label-short">Start My Build</span></span>
+          <span class="cta-arrow" aria-hidden="true">→</span>
         </a>
-        <p class="text-sm font-mono uppercase tracking-widest text-muted mt-3 text-center">One payment · 30-day guarantee · Yours for every launch after this one</p>
+        <p class="text-xs md:text-sm font-mono uppercase tracking-wide md:tracking-widest text-muted mt-3 text-center leading-relaxed">One payment · 30-day guarantee · Yours for every launch after this one</p>
       </div>
     </div>
   </section>
@@ -1031,7 +1037,11 @@
         </div>
       </div>
       <div class="text-center mt-8">
-        <a href={GUMROAD.launchpad} data-event="initiate_checkout" data-analytics-id="for-who-cta" on:click={trackCheckoutClick} class="inline-flex items-center justify-center px-8 h-11 border border-gold-line hover:border-gold hover:bg-gold-soft text-gold text-xs font-semibold font-mono uppercase tracking-wider rounded-full transition hover:scale-[1.03]">Start My 5-Day Build · $129 →</a>
+        <a href={GUMROAD.launchpad} data-event="initiate_checkout" data-analytics-id="for-who-cta" on:click={trackCheckoutClick} class="inline-flex flex-nowrap items-center justify-center gap-2 px-6 sm:px-8 h-12 max-w-full border border-gold-line hover:border-gold hover:bg-gold-soft text-gold text-xs font-semibold font-mono uppercase tracking-[0.04em] sm:tracking-wider rounded-full transition hover:scale-[1.03]">
+          <span class="cta-label"><span class="cta-label-full">Start My 5-Day Build</span><span class="cta-label-short">Start My Build</span></span>
+          <span class="cta-arrow shrink-0" aria-hidden="true">→</span>
+        </a>
+        <p class="cta-price max-w-[420px] mx-auto"><span class="price">$129</span> · one payment · 30-day guarantee</p>
       </div>
     </div>
   </section>
@@ -1226,12 +1236,14 @@
 
 
       <div class="flex flex-col items-center gap-4">
-        <a href={GUMROAD.launchpad} data-event="initiate_checkout" data-analytics-id="final-cta" on:click={trackCheckoutClick} class="btn-primary inline-flex items-center justify-center gap-2.5 px-6 sm:px-10 py-5 rounded-[2rem]">
+        <a href={GUMROAD.launchpad} data-event="initiate_checkout" data-analytics-id="final-cta" on:click={trackCheckoutClick} class="btn-primary cta-btn w-full max-w-[480px] mx-auto rounded-[2rem] font-mono text-sm md:text-base uppercase">
           <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
-          Start My 5-Day Build · $129 →
+          <span class="cta-label"><span class="cta-label-full">Start My 5-Day Build</span><span class="cta-label-short">Start My Build</span></span>
+          <span class="cta-arrow" aria-hidden="true">→</span>
         </a>
+        <p class="cta-price max-w-[480px] mx-auto"><span class="price">$129</span> · one payment · yours forever</p>
         <a href="#five-day" class="text-sm font-mono uppercase tracking-widest text-muted hover:text-text transition border-b border-gold-line/40 hover:border-gold pb-1">See the 5-Day Plan</a>
-        <p class="text-sm font-mono uppercase tracking-wider text-muted pt-2">Instant access, start Day 1 today · 30-day guarantee · One payment · Yours forever</p>
+        <p class="text-xs md:text-sm font-mono uppercase tracking-wide md:tracking-wider text-muted-2 pt-2 text-center leading-relaxed">Instant access · start Day 1 today · 30-day guarantee</p>
       </div>
     </div>
   </section>
@@ -1264,9 +1276,14 @@
 <!-- PERSISTENT MOBILE CTA — appears once the hero scrolls away; mobile only -->
 <div class="sticky-cta lg:hidden {stickyVisible ? 'sticky-cta-show' : ''}" aria-hidden={!stickyVisible}>
   <div class="sticky-cta-inner">
-    <a href={GUMROAD.launchpad} data-event="initiate_checkout" data-analytics-id="sticky-cta" on:click={trackCheckoutClick} class="btn-primary sticky-cta-btn flex items-center justify-center gap-2" tabindex={stickyVisible ? 0 : -1}>
+    <div class="sticky-cta-copy">
+      <span class="sticky-cta-price">$129</span>
+      <span class="sticky-cta-sub">One payment</span>
+    </div>
+    <a href={GUMROAD.launchpad} data-event="initiate_checkout" data-analytics-id="sticky-cta" on:click={trackCheckoutClick} class="btn-primary cta-btn sticky-cta-btn" tabindex={stickyVisible ? 0 : -1}>
       <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
-      Start My 5-Day Build · $129
+      <span class="cta-label"><span class="cta-label-full">Start My 5-Day Build</span><span class="cta-label-short">Start My Build</span></span>
+      <span class="cta-arrow" aria-hidden="true">→</span>
     </a>
   </div>
 </div>
@@ -1308,10 +1325,12 @@
         <p class="text-sm text-muted leading-relaxed mt-5">Display: <span class="text-text/90">{specimenData.display}</span> · Body: <span class="text-text/90">{specimenData.body}</span> · Accent/Mono: <span class="text-text/90">{specimenData.accent}</span> (kickers and labels only). One of 20 type systems inside the pack. Sources: Fontshare + Google Fonts + The League of Moveable Type.</p>
       {/if}
 
-      <a href={GUMROAD.launchpad} data-event="initiate_checkout" data-analytics-id="specimen-modal-cta" on:click={trackCheckoutClick} class="btn-primary flex items-center justify-center gap-2.5 mt-7 py-4 rounded-[2rem]">
+      <a href={GUMROAD.launchpad} data-event="initiate_checkout" data-analytics-id="specimen-modal-cta" on:click={trackCheckoutClick} class="btn-primary cta-btn w-full mt-7 rounded-[2rem] font-mono text-sm md:text-base uppercase">
         <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
-        Start My 5-Day Build · $129 →
+        <span class="cta-label"><span class="cta-label-full">Start My 5-Day Build</span><span class="cta-label-short">Start My Build</span></span>
+        <span class="cta-arrow" aria-hidden="true">→</span>
       </a>
+      <p class="cta-price"><span class="price">$129</span> · one payment · 30-day guarantee</p>
     </div>
   </div>
 {/if}
@@ -1708,6 +1727,74 @@
     :global(.btn-primary), :global(.btn-secondary) { font-size: 16px; }
   }
 
+  /* === STABLE CTA ROW (icon · label · arrow) ===
+     Every primary purchase CTA uses this: a non-wrapping flex row with the
+     owl mark on the left, the label in the middle, and the arrow on the right
+     as its own flex child so it can never drop below the text. Padding, gap,
+     min-height, and letter-spacing are owned here (not by inline utilities) so
+     the mobile execution is identical everywhere. */
+  :global(.cta-btn) {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    line-height: 1.1;
+    padding: 19px 34px;
+    letter-spacing: 0.1em;
+  }
+  :global(.cta-btn .cta-label) { min-width: 0; line-height: 1.1; white-space: nowrap; }
+  :global(.cta-btn .cta-arrow) { flex-shrink: 0; line-height: 1; font-size: 1.05em; }
+  :global(.cta-btn .owl-logo-cta) { flex-shrink: 0; }
+
+  /* Price line under every CTA — the button carries the action, this shows
+     the price clearly at every width (the mobile button label is shortened,
+     so the price must live here, not on the button). */
+  :global(.cta-price) {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    text-transform: uppercase;
+    text-align: center;
+    color: #A6A6A1;
+    letter-spacing: 0.08em;
+    font-size: 12px;
+    line-height: 1.55;
+    margin-top: 12px;
+  }
+  :global(.cta-price .price) { color: #D4AF37; font-weight: 700; font-size: 1.18em; letter-spacing: 0.04em; }
+  @media (min-width: 768px) {
+    :global(.cta-price) { font-size: 13px; letter-spacing: 0.14em; }
+  }
+
+  /* Responsive label: short on phones, full at tablet/desktop. */
+  :global(.cta-label-full) { display: none; }
+  :global(.cta-label-short) { display: inline; }
+  @media (min-width: 768px) {
+    :global(.cta-label-full) { display: inline; }
+    :global(.cta-label-short) { display: none; }
+  }
+
+  /* Mobile execution: tighter tracking, roomy-but-not-oversized padding,
+     stable tap height. This is the fix for the cramped/wrapping CTA. */
+  @media (max-width: 767px) {
+    :global(.cta-btn) {
+      gap: 9px;
+      padding: 18px 20px;
+      min-height: 64px;
+      letter-spacing: 0.02em;
+    }
+  }
+  /* Narrowest phones (≤400px): trim padding/tracking and drop the label a
+     touch so the shortened label + icon + arrow always fit the full-width
+     offer/specimen buttons with room to spare, even at 320px. */
+  @media (max-width: 400px) {
+    :global(.cta-btn) {
+      gap: 7px;
+      padding: 17px 14px;
+      font-size: 13px;
+      letter-spacing: 0.01em;
+    }
+  }
+
   /* === OWL LOGO IN CTA === */
   :global(.owl-logo-cta) {
     width: 20px !important;
@@ -1982,7 +2069,7 @@
   .sticky-cta-copy { display: flex; flex-direction: column; line-height: 1.1; }
   .sticky-cta-price { font-family: 'JetBrains Mono Numbers', 'Playfair Display', serif; font-size: 22px; color: #D4AF37; }
   .sticky-cta-sub { font-family: 'JetBrains Mono', monospace; font-size: 9px; text-transform: uppercase; letter-spacing: 0.12em; color: #A6A6A1; margin-top: 2px; }
-  .sticky-cta-btn { flex: 1; text-align: center; padding: 14px 18px; border-radius: 2rem; white-space: nowrap; }
+  .sticky-cta-btn { flex: 1; text-align: center; padding: 14px 18px; min-height: 52px; border-radius: 2rem; white-space: nowrap; }
   @media (max-width: 380px) {
     .sticky-cta-btn {
       font-size: 12px !important;
