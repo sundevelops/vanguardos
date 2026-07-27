@@ -27,3 +27,6 @@ vite.config.js.timestamp-*
 # Backups
 *.bak
 
+
+.dev.vars*
+!.dev.vars.example
