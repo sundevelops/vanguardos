@@ -312,10 +312,14 @@ test('primary CTA label is consistent (responsive) across every visible purchase
 });
 
 // ─────────────────────────────────────────────────────────────────────────
-// Price is clearly visible near every CTA (button labels are action-only, so
-// the price must be shown on its own line / in the offer stack / sticky chip).
+// Price discipline (2026-07-27 positioning pass). $129 is shown in a small,
+// fixed set of primary locations — hero, the main offer section, the final
+// CTA, the sticky mobile CTA, and the payment/delivery FAQ. Every other CTA
+// carries the reassurance line instead. The product should read as clear,
+// not repeatedly defended. Every .cta-price line must still be visible and
+// must say either the price or "One payment · 30-day guarantee".
 // ─────────────────────────────────────────────────────────────────────────
-test('the $129 price is visible near every CTA at mobile and desktop', async ({ page }) => {
+test('the $129 price appears only in its approved locations, and every CTA reassurance line is visible', async ({ page }) => {
   for (const { w, h } of [{ w: 390, h: 844 }, { w: 1280, h: 800 }]) {
     await page.setViewportSize({ width: w, height: h });
     await page.goto('/', { waitUntil: 'networkidle' });
@@ -330,20 +334,107 @@ test('the $129 price is visible near every CTA at mobile and desktop', async ({ 
           text: (el.textContent || '').replace(/\s+/g, ' ').trim(),
           visible: s.display !== 'none' && s.visibility !== 'hidden' && parseFloat(s.opacity) > 0.9 && r.width > 0 && r.height > 0,
           hasPrice: /\$129/.test(el.textContent || ''),
+          hasReassurance: /one payment/i.test(el.textContent || ''),
         };
       });
     });
     expect(prices.length, `too few .cta-price lines at ${w}px`).toBeGreaterThanOrEqual(4);
     for (const p of prices) {
       expect(p.visible, `price line not visible at ${w}px: "${p.text}"`).toBeTruthy();
-      expect(p.hasPrice, `price line missing $129 at ${w}px: "${p.text}"`).toBeTruthy();
+      expect(p.hasPrice || p.hasReassurance, `CTA line says neither the price nor "one payment" at ${w}px: "${p.text}"`).toBeTruthy();
     }
-    // The offer stack carries the headline $129 too.
-    const offerHasPrice = await page.evaluate(() => {
-      const el = document.querySelector('#offer-stack');
-      return el ? /\$129/.test(el.textContent || '') : false;
+    // The hero, the main offer section, and the final CTA each carry $129.
+    const sectionsWithPrice = await page.evaluate(() => {
+      const has = (sel) => {
+        const el = document.querySelector(sel);
+        return el ? /\$129/.test(el.textContent || '') : false;
+      };
+      // The hero price is the first .cta-price line on the page.
+      const first = document.querySelector('.cta-price');
+      return {
+        hero: first ? /\$129/.test(first.textContent || '') : false,
+        offer: has('#offer-stack'),
+        finalCta: has('#final-cta'),
+      };
     });
-    expect(offerHasPrice, `offer stack missing $129 at ${w}px`).toBeTruthy();
+    expect(sectionsWithPrice.hero, `hero missing $129 at ${w}px`).toBeTruthy();
+    expect(sectionsWithPrice.offer, `offer section missing $129 at ${w}px`).toBeTruthy();
+    expect(sectionsWithPrice.finalCta, `final CTA missing $129 at ${w}px`).toBeTruthy();
+
+    // Sections that must NOT repeat the price any more.
+    const forbidden = await page.evaluate(() => {
+      const ids = ['five-day', 'for-who', 'languages', 'language'];
+      const out = {};
+      for (const id of ids) {
+        const el = document.getElementById(id);
+        if (el) out[id] = /\$129/.test(el.textContent || '');
+      }
+      return out;
+    });
+    for (const [id, hasPrice] of Object.entries(forbidden)) {
+      expect(hasPrice, `#${id} still repeats $129 at ${w}px`).toBeFalsy();
+    }
+  }
+});
+
+// ─────────────────────────────────────────────────────────────────────────
+// Positioning guardrails (2026-07-27). These phrases were removed because
+// they mis-framed the buyer, stacked invented value, or claimed outcomes the
+// reviews do not establish. They must not come back.
+// ─────────────────────────────────────────────────────────────────────────
+test('retired positioning phrases and event labels are absent from the page', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto('/', { waitUntil: 'networkidle' });
+
+  const html = await page.content();
+  const banned = [
+    'complete beginner',
+    'Five stars, from people',
+    'Every one of them started',
+    "That's the whole promise, proven real",
+    '$811',
+    'nearly five times',
+    'data-event="initiate_checkout"',
+    'Live checkout, confirmed',
+  ];
+  for (const phrase of banned) {
+    expect(html.includes(phrase), `retired phrase is back on the page: "${phrase}"`).toBeFalsy();
+  }
+
+  // Every Gumroad CTA is labelled with the event that is actually sent.
+  const events = await page.evaluate(() =>
+    Array.from(document.querySelectorAll('a[href*="gumroad.com"]')).map((a) => a.getAttribute('data-event'))
+  );
+  expect(events.length, 'no Gumroad CTAs found').toBeGreaterThan(3);
+  for (const ev of events) {
+    expect(ev, 'a Gumroad CTA is not labelled checkout_click').toBe('checkout_click');
+  }
+
+  // Pixel contract: PageView + ViewContent once, no Purchase, no InitiateCheckout.
+  const head = await page.evaluate(() => document.head.innerHTML);
+  expect((head.match(/fbq\('track', 'PageView'/g) || []).length, 'PageView must fire exactly once').toBe(1);
+  expect((head.match(/fbq\('track', 'ViewContent'/g) || []).length, 'ViewContent must fire exactly once').toBe(1);
+  expect(/fbq\(\s*'track',\s*'Purchase'/.test(head), 'Purchase must not fire on the landing page').toBeFalsy();
+  expect(/fbq\(\s*'track',\s*'InitiateCheckout'/.test(head), 'InitiateCheckout must not fire on the landing page').toBeFalsy();
+});
+
+// ─────────────────────────────────────────────────────────────────────────
+// Wave 2 Meta ad assets are served as plain static PNGs at the exact paths
+// the Meta Ads MCP will ingest.
+// ─────────────────────────────────────────────────────────────────────────
+test('all 18 Wave 2 ad images resolve as PNGs', async ({ page }) => {
+  const groups = [
+    ['b01', 'b01-2am-scroll'],
+    ['b02', 'b02-decision-velocity'],
+    ['b03', 'b03-built-because-drowning'],
+  ];
+  for (const [dir, stem] of groups) {
+    for (let i = 1; i <= 6; i++) {
+      const url = `/meta/wave2/2026-07-26/${dir}/${stem}-s${i}.png`;
+      const res = await page.request.get(url);
+      expect(res.status(), `${url} did not return 200`).toBe(200);
+      expect(res.headers()['content-type'], `${url} is not image/png`).toContain('image/png');
+    }
   }
 });
 

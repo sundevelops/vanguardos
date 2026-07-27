@@ -18,6 +18,16 @@
       fbq('init', '915468030842339');
       fbq('track', 'PageView');
 
+      // ViewContent — fired once per page load for the Launchpad sales page.
+      // No Purchase and no InitiateCheckout on this page: Gumroad owns both.
+      fbq('track', 'ViewContent', {
+        content_name: 'The Vanguard Launchpad',
+        content_type: 'product',
+        content_ids: ['lgaxz'],
+        value: 129,
+        currency: 'USD'
+      });
+
       // Optional custom event — CheckoutClick
       document.addEventListener('click', function(e) {
         const link = e.target.closest('a[href*="gumroad.com"]');

@@ -101,40 +101,35 @@
     launchpad: 'https://vanguardos.gumroad.com/l/lgaxz?wanted=true'
   };
 
-  // ── ANALYTICS (Pixel-ready, Pixel not installed) ───────────────────
-  // One centralized hook every purchase CTA calls on click. Does nothing
-  // destructive today — the actual Meta Pixel snippet/ID is not present in
-  // app.html yet, so this no-ops until the founder drops the real Pixel ID
-  // in. Once that snippet exists, every CTA below starts firing
-  // InitiateCheckout automatically with zero further template changes,
-  // because they all already call this one function instead of each
-  // wiring its own tracking call. `data-event` / `data-analytics-id` are
-  // also present in the markup so a Pixel, GA4, or GTM container can bind
-  // to them declaratively instead of via this hook, if preferred later.
+  // ── ANALYTICS ──────────────────────────────────────────────────────
+  // One centralized hook every purchase CTA calls on click. The real work
+  // happens in the delegated listener in app.html, which fires the custom
+  // `CheckoutClick` event. `data-event="checkout_click"` /
+  // `data-analytics-id` are present in the markup so a Pixel, GA4, or GTM
+  // container can bind to them declaratively instead of via this hook.
   function trackCheckoutClick(e) {
-    // 2026-07-13: Checked out click tracked via delegated listener in app.html.
-    // InitiateCheckout is not tracked here to avoid double-firing or conflicts
-    // with Gumroad's domain-level events.
+    // 2026-07-27: the landing page deliberately does NOT fire the standard
+    // InitiateCheckout event. Gumroad owns the real checkout-start event;
+    // firing it here would double-count and conflict with Gumroad's
+    // domain-level events. The HTML label matches the event actually sent.
   }
 
-  // ── LAUNCHPAD OFFER STACK ──────────────────────────────────────────
-  // 1 core system ($197) + 6 bonuses ($614). Total stacked $811, sells for $129.
-  // launchpadStack[0] is THE CORE; everything after is a stacked-on bonus.
+  // ── WHAT IS INCLUDED ───────────────────────────────────────────────
+  // 2026-07-27: stacked-value arithmetic removed. No per-item dollar values,
+  // no strikethrough "value", no bonus framing. Concrete deliverables only —
+  // each piece exists because the next step in the sequence needs it.
+  // launchpadStack[0] is THE CORE; everything after is a supporting system.
   const launchpadStack = [
-    { name: 'The 5-Day Launchpad',                     value: '$197', img: '/products/stack-01.webp', blurb: 'The interactive, guided build system. Open it in your browser and it walks you from idea to launch-ready, one screen at a time, by Day 5.' },
-    { name: 'The Vanguard Vault',                      value: '$147', img: '/products/stack-02.webp', blurb: '150 paste-and-go AI prompts. Paste one, answer up to three plain questions, get finished work. Runs in any major AI writing assistant.' },
-    { name: '5 Cloneable Landing Page Templates',      value: '$149', img: '/products/stack-03.webp', blurb: 'One master prompt builds any of the five. Hero, offer, FAQ, CTAs, already wired.' },
-    { name: 'The Brand Palette Pack',                  value: '$79',  img: '/products/stack-04.webp', blurb: '20 ready-to-use palettes with the psychology behind each.' },
-    { name: 'The Typography Pack',                     value: '$79',  img: '/products/stack-05.webp', blurb: '20 free-to-use premium type systems for solo brands.' },
-    { name: 'The Notion Operations OS',                value: '$61',  img: '/products/stack-06.webp', blurb: 'One dashboard, four databases, duplicate it in under a minute. The operations room you run the business from after launch.' },
-    { name: 'The Funnel Pattern Library',              value: '$99',  img: '/products/stack-07.webp', blurb: 'Checkout upsell copy, a nine-email follow-up sequence, and CTA patterns for the complete buyer path. The conversion machinery.' }
+    { name: 'The 5-Day Launchpad',                     img: '/products/stack-01.webp', blurb: 'The interactive, guided build system. Open it in your browser and it walks you from idea to launch-ready, one screen at a time, by Day 5.' },
+    { name: 'The Vanguard Vault',                      img: '/products/stack-02.webp', blurb: '150 paste-and-go AI prompts. Paste one, answer up to three plain questions, get finished work. Runs in any major AI writing assistant.' },
+    { name: '5 Cloneable Landing Page Templates',      img: '/products/stack-03.webp', blurb: 'One master prompt builds any of the five. Hero, offer, FAQ, CTAs, already wired.' },
+    { name: 'The Brand Palette Pack',                  img: '/products/stack-04.webp', blurb: '20 ready-to-use palettes with the psychology behind each.' },
+    { name: 'The Typography Pack',                     img: '/products/stack-05.webp', blurb: '20 free-to-use premium type systems for solo brands.' },
+    { name: 'The Notion Operations OS',                img: '/products/stack-06.webp', blurb: 'One dashboard, four databases, duplicate it in under a minute. The operations room you run the business from after launch.' },
+    { name: 'The Funnel Pattern Library',              img: '/products/stack-07.webp', blurb: 'Checkout upsell copy, a nine-email follow-up sequence, and CTA patterns for the complete buyer path. The conversion machinery.' }
   ];
-  // Core vs bonus split + self-summing values (keeps the math honest: 197 + 614 = 811).
   const coreItem  = launchpadStack[0];
   const bonusItems = launchpadStack.slice(1);
-  const dollars = (v) => parseInt(String(v).replace(/[^0-9]/g, ''), 10) || 0;
-  const bonusValue = bonusItems.reduce((sum, i) => sum + dollars(i.value), 0);   // 614
-  const stackValue = launchpadStack.reduce((sum, i) => sum + dollars(i.value), 0); // 811
 
   // ── 5-DAY JOURNEY ────────────────────────────────────────────────
   // Restored as premium day cards 2026-07-13. The page needs to make the
@@ -227,12 +222,12 @@
     ['Do I need to be technical?', 'No. Every template, prompt, and pattern is copy-paste. The prompts ask you a few plain questions and do the rest. If you can follow a recipe, you can follow this.'],
     ["What if I don't have an idea yet?", "Yes, that's what Day 1 is for. Start with nothing more than a hunch, or a blank page: Day 1 is a sequenced way to surface, validate, and price an idea, and you finish it with a locked offer."],
     ['How much time does each day take?', 'One focused sitting, not a day off work. The Launchpad is 72 guided steps across Welcome plus five days, action-first, so most people finish a day in one to two hours after work. Plan on roughly 8 to 12 hours of hands-on building across the five days, and the AI does the heavy lifting inside each screen.'],
-    ['How do I get it after I pay?', 'Instantly. The moment your $129 payment clears, the email lands with a single file: the Launchpad itself, an interactive build system you open in your browser, plus the six bonus guides and the prompt vault, ready to keep forever. No onboarding call, no waiting room, nothing to install. You can open Day 1 the same night.'],
+    ['How do I get it after I pay?', 'Instantly. The moment your $129 payment clears, the email lands with a single file: the Launchpad itself, an interactive build system you open in your browser, plus the six supporting guides and the prompt vault, ready to keep forever. No onboarding call, no waiting room, nothing to install. You can open Day 1 the same night.'],
     ['What tools do I need?', "The free path can complete the whole system. Each day names the exact free and premium option for that stage: an AI writing assistant for the prompts, a guided website builder and deployment stack for Day 4, and a checkout platform for Day 5, all with real free tiers. A paid AI tier (about $20 a month) is optional polish, not a requirement: it buys longer sessions and a stronger model, which shows up as better output. There is no VanguardOS subscription on top, ever."],
     ['How much extra will I spend on tools?', 'You can build and host on free tiers. Two upgrades are worth it: a paid AI tier for stronger output, and a custom domain (about $10 a year) so your site has a real, credible address you own. A checkout platform also charges a small transaction fee per sale. Neither upgrade is required to finish, but both are worth the small spend.'],
     ['Will this work for my niche?', "Yes. The system is niche-agnostic by design. The templates and patterns are the scaffolding; the Day 2 brand work and Day 4 landing copy are where your niche shapes the output."],
     ["What if I'm already mid-launch?", "Drop into whichever day matches where you are. Stuck on the offer? Day 1. Brand feels off? Day 2. No landing page? Day 4. The Launchpad is a system you re-enter whenever a leg is weak."],
-    ['Refund policy?', 'A full 30 days, no questions asked. Buy it, go through it, and if the Launchpad is not for you for any reason, email us within 30 days for a full refund. No forms, no hoops, no explanation needed.']
+    ['Refund policy?', 'A full 30 days. Try the complete five-day system, and if it is not the right fit, email us within 30 days for a refund. If you get stuck on a step, tell us where. We would rather help you finish.']
   ];
 
   // ── STRUCTURED DATA ─────────────────────────────────────────────────
@@ -271,19 +266,19 @@
         "@type": "Review",
         "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
         "author": { "@type": "Person", "name": "Verified Buyer" },
-        "reviewBody": "I'm really glad I decided to go through this process. I had a lot of ideas but wasn't sure how to put everything together in a way that made sense. What I appreciated most was that it gave me clarity and helped me organize my thoughts into something practical that I could actually move forward with. The whole experience felt straightforward and productive. Instead of spending months trying to figure things out on my own, I came away with a clearer direction, a stronger brand foundation, and a funnel that I could start using right away. For me, it was a worthwhile investment because it helped turn a lot of uncertainty into a concrete plan. I left feeling more confident about my business and the next steps I needed to take."
+        "reviewBody": "Instead of spending months trying to figure things out on my own, I came away with a clearer direction, a stronger brand foundation, and a funnel that I could start using right away. For me, it was a worthwhile investment because it helped turn a lot of uncertainty into a concrete plan."
       },
       {
         "@type": "Review",
         "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
         "author": { "@type": "Person", "name": "Verified Buyer" },
-        "reviewBody": "I was so surprised by the quality of the final product. Sometimes you buy things online and cross your fingers hoping it matches what's advertised on the website, and in this case, it was even better. The system is super polished, easy to understand, and aesthetically it's a 10/10. It's been a great investment, and I would definitely recommend it to anyone hesitating to take the plunge. If you want an already proofed system, this is it!"
+        "reviewBody": "The system is super polished, easy to understand, and aesthetically it's a 10/10. It's been a great investment, and I would definitely recommend it to anyone hesitating to take the plunge."
       },
       {
         "@type": "Review",
         "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
         "author": { "@type": "Person", "name": "Verified Buyer" },
-        "reviewBody": "As a full time college student, I felt like I never had enough time to figure out how to start an online business. Every time I had a free moment, I would end up watching another YouTube video or buying into another idea, and I still felt like I was going in circles. Vanguard OS honestly helped simplify everything for me. Instead of feeling like I needed to do a hundred different things, I finally had a clear direction. It made starting feel a lot less overwhelming, which was exactly what I needed with everything else going on in my life. If u are busy, constantly second guessing yourself, or just tired of feeling stuck, I think it's worth checking out. It helped me go from overthinking my next move to following a system that lead me to actually starting that business that I had put off for years. Feels really good seeing my business on an actual website with a checkout system!"
+        "reviewBody": "It helped me go from overthinking my next move to following a system that lead me to actually starting that business that I had put off for years. Feels really good seeing my business on an actual website with a checkout system!"
       }
     ],
     "offers": [
@@ -437,7 +432,7 @@
       <a href="#five-day" class="text-xs font-mono uppercase tracking-wider text-muted hover:text-text transition">5-Day Journey</a>
       <a href="#faq" class="text-xs font-mono uppercase tracking-wider text-muted hover:text-text transition">FAQ</a>
       <a href="mailto:support@vanguardos.co" on:click|preventDefault={openContact} class="text-xs font-mono uppercase tracking-wider text-muted hover:text-text transition">Contact</a>
-      <a href={GUMROAD.launchpad} data-event="initiate_checkout" data-analytics-id="nav-cta" on:click={trackCheckoutClick} class="flex items-center gap-2 px-5 h-11 border border-gold-line hover:border-gold hover:bg-gold-soft text-gold text-xs font-semibold font-mono uppercase tracking-wider rounded-full transition hover:scale-[1.03]">
+      <a href={GUMROAD.launchpad} data-event="checkout_click" data-analytics-id="nav-cta" on:click={trackCheckoutClick} class="flex items-center gap-2 px-5 h-11 border border-gold-line hover:border-gold hover:bg-gold-soft text-gold text-xs font-semibold font-mono uppercase tracking-wider rounded-full transition hover:scale-[1.03]">
         <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
         Start My 5-Day Build
       </a>
@@ -462,7 +457,7 @@
       <a href="#five-day" on:click={() => menuOpen = false} class="block text-sm font-mono uppercase tracking-wider text-muted hover:text-text">5-Day Plan</a>
       <a href="#faq" on:click={() => menuOpen = false} class="block text-sm font-mono uppercase tracking-wider text-muted hover:text-text">FAQ</a>
       <a href="mailto:support@vanguardos.co" on:click|preventDefault={openContact} class="block text-sm font-mono uppercase tracking-wider text-muted hover:text-text">Contact</a>
-      <a href={GUMROAD.launchpad} data-event="initiate_checkout" data-analytics-id="mobile-nav-cta" on:click={(e) => { menuOpen = false; trackCheckoutClick(e); }} class="flex flex-nowrap items-center justify-center gap-2 h-12 bg-gold text-base-2 font-bold font-mono uppercase text-xs tracking-[0.04em] rounded-full">
+      <a href={GUMROAD.launchpad} data-event="checkout_click" data-analytics-id="mobile-nav-cta" on:click={(e) => { menuOpen = false; trackCheckoutClick(e); }} class="flex flex-nowrap items-center justify-center gap-2 h-12 bg-gold text-base-2 font-bold font-mono uppercase text-xs tracking-[0.04em] rounded-full">
         <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
         <span class="cta-label"><span class="cta-label-full">Start My 5-Day Build</span><span class="cta-label-short">Start My Build</span></span>
       </a>
@@ -512,7 +507,7 @@
 
       <!-- Supporting copy: names the exact sequence in one sentence. -->
       <p class="hero-item body-copy font-sans text-body text-[17px] md:text-2xl leading-[1.6] md:leading-snug w-full min-w-0 max-w-[820px] mx-auto" style="opacity: 0">
-        The Vanguard Launchpad guides a complete beginner through one exact sequence: validate the idea, build and package the product, create the brand and sales page, publish a working checkout, and prepare the follow-up email sequence.
+        The Vanguard Launchpad gives one unfinished idea an exact sequence: validate the offer, build and package the product, create the brand and sales page, publish the checkout, and prepare the follow-up.
       </p>
 
       <!-- Mechanism line: the three-part rhythm of how the work happens. -->
@@ -526,7 +521,7 @@
            lands inside the first 390×844 viewport without clipping. -->
       <div class="hero-item w-full min-w-0 flex flex-col items-center gap-4 pt-1 md:pt-2" style="opacity: 0">
         <div class="w-full min-w-0 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
-          <a href={GUMROAD.launchpad} data-event="initiate_checkout" data-analytics-id="hero-primary" on:click={trackCheckoutClick} class="btn-primary cta-btn cta-hero w-full sm:w-auto max-w-[360px] sm:max-w-none rounded-[2rem] font-mono text-sm md:text-base uppercase">
+          <a href={GUMROAD.launchpad} data-event="checkout_click" data-analytics-id="hero-primary" on:click={trackCheckoutClick} class="btn-primary cta-btn cta-hero w-full sm:w-auto max-w-[360px] sm:max-w-none rounded-[2rem] font-mono text-sm md:text-base uppercase">
             <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
             <span class="cta-label"><span class="cta-label-full">Start My 5-Day Build</span><span class="cta-label-short">Start My Build</span></span>
             <span class="cta-arrow" aria-hidden="true">→</span>
@@ -564,7 +559,7 @@
             <div class="mv-day-scan"><i></i></div>
           </div>
           <p class="font-mono text-[10px] md:text-[11px] uppercase tracking-[0.22em] text-muted mt-4">
-            <span class="text-gold" aria-hidden="true">✓</span> Live checkout, confirmed.
+            <span class="text-gold" aria-hidden="true">✓</span> Day 5 output: a checkout ready to publish.
           </p>
         </div>
       </div>
@@ -726,12 +721,12 @@
       </ol>
 
       <div class="text-center mt-12 reveal">
-        <a href={GUMROAD.launchpad} data-event="initiate_checkout" data-analytics-id="five-day-cta" on:click={trackCheckoutClick} class="btn-primary cta-btn w-full max-w-[480px] mx-auto rounded-[2rem] font-mono text-sm md:text-base uppercase">
+        <a href={GUMROAD.launchpad} data-event="checkout_click" data-analytics-id="five-day-cta" on:click={trackCheckoutClick} class="btn-primary cta-btn w-full max-w-[480px] mx-auto rounded-[2rem] font-mono text-sm md:text-base uppercase">
           <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
           <span class="cta-label"><span class="cta-label-full">Start My 5-Day Build</span><span class="cta-label-short">Start My Build</span></span>
           <span class="cta-arrow" aria-hidden="true">→</span>
         </a>
-        <p class="cta-price max-w-[480px] mx-auto"><span class="price">$129</span> · one payment · 30-day guarantee</p>
+        <p class="cta-price max-w-[480px] mx-auto">One payment · 30-day guarantee</p>
       </div>
     </div>
   </section>
@@ -800,14 +795,14 @@
       <header class="text-center max-w-[820px] mx-auto mb-12 md:mb-16">
         <div class="flex items-center justify-center gap-3 mb-6">
           <div class="h-px w-16 bg-gold-line"></div>
-          <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">What's In The Launchpad</span>
+          <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">One system. Everything in order.</span>
           <div class="h-px w-16 bg-gold-line"></div>
         </div>
         <h2 class="font-display text-4xl md:text-6xl lg:text-7xl leading-[0.95] text-text">
-          The system, <span class="italic text-gold">plus six bonuses.</span>
+          What you need to move from idea <span class="italic text-gold">to live checkout.</span>
         </h2>
         <p class="text-text text-lg md:text-xl mt-6 leading-relaxed">
-          The 5-Day Launchpad is the core: the whole path from a hunch in your notes app to a checkout page live on the internet, with the forty small decisions that stall most people already sequenced for you. Then six finished systems stack on top, free. Each is something you would otherwise lose a weekend building. Together they are the difference between launching someday and sending someone the link this week.
+          The complete five-day Launchpad, the Website System, brand palettes, typography systems, launch copy guidance, email prompts, and the supporting guides. Nothing is sold as a shortcut. Each piece exists because the next step needs it.
         </p>
       </header>
 
@@ -821,20 +816,19 @@
         style="background-image: radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.12), transparent 70%);">
         <div class="flex items-center justify-between gap-4 mb-4">
           <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">The core system</span>
-          <span class="font-mono text-base text-gold/70 line-through whitespace-nowrap">Value {coreItem.value}</span>
         </div>
         <div class="flex items-start gap-4 md:gap-6">
           <img src={coreItem.img} alt="{coreItem.name} cover art" class="w-20 h-20 md:w-28 md:h-28 rounded-[1rem] border border-gold-line/60 object-cover shrink-0" loading="lazy" decoding="async" />
           <div class="flex flex-col gap-2 min-w-0">
             <h3 class="font-display text-2xl md:text-4xl text-text leading-tight">{coreItem.name}</h3>
-            <p class="text-base md:text-lg text-text/85 leading-relaxed">{coreItem.blurb} This is the whole system. The six below are stacked on top of it.</p>
+            <p class="text-base md:text-lg text-text/85 leading-relaxed">{coreItem.blurb} This is the spine of the process. Everything below supports a step inside it.</p>
           </div>
         </div>
       </div>
 
       <div class="reveal flex items-center justify-center gap-4 my-8 md:my-10">
         <div class="h-px flex-1 bg-gold-line/40"></div>
-        <span class="font-mono text-gold text-center bonus-header-text">Then six bonuses, free · {'$' + bonusValue} of value</span>
+        <span class="font-mono text-gold text-center bonus-header-text">The supporting systems, included</span>
         <div class="h-px flex-1 bg-gold-line/40"></div>
       </div>
 
@@ -842,8 +836,7 @@
         {#each bonusItems as item}
           <li class="reveal rounded-[1.5rem] border border-line bg-surface/60 p-6 md:p-7 hover:border-gold-line transition flex flex-col gap-3">
             <div class="flex items-center justify-between gap-4">
-              <span class="font-mono text-[9px] uppercase tracking-[0.25em] text-gold border border-gold/40 bg-gold-soft/20 rounded-full px-2.5 py-1">Bonus</span>
-              <span class="font-mono text-base text-gold/60 line-through whitespace-nowrap">Value {item.value}</span>
+              <span class="font-mono text-[9px] uppercase tracking-[0.25em] text-gold border border-gold/40 bg-gold-soft/20 rounded-full px-2.5 py-1">Included</span>
             </div>
             <div class="flex items-start gap-4">
               <img src={item.img} alt="{item.name} cover art" class="w-16 h-16 md:w-20 md:h-20 rounded-[0.9rem] border border-line/60 object-cover shrink-0" loading="lazy" decoding="async" />
@@ -882,31 +875,16 @@
 
       <div class="reveal mt-10 md:mt-12 rounded-[2rem] border-2 border-gold bg-gold-soft/20 p-8 md:p-10"
         style="background-image: radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.10), transparent 70%);">
-        <div class="flex items-baseline justify-between text-text/80">
-          <span class="font-mono text-sm uppercase tracking-widest">The 5-day system</span>
-          <span class="font-mono text-base md:text-lg tracking-tight">{coreItem.value}</span>
+        <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 min-w-0">
+          <span class="font-display text-2xl md:text-3xl text-text leading-tight min-w-0">The Vanguard Launchpad</span>
+          <span class="font-mono font-bold text-3xl md:text-4xl text-gold tracking-tight min-w-0">$129<span class="font-normal text-sm md:text-base text-text/70 ml-2 whitespace-nowrap">· one payment</span></span>
         </div>
-        <div class="flex items-baseline justify-between mt-2.5 text-text/80">
-          <span class="font-mono text-sm uppercase tracking-widest">Six bonuses, stacked on top</span>
-          <span class="font-mono text-base md:text-lg tracking-tight">{'+$' + bonusValue}</span>
-        </div>
-        <div class="flex items-baseline justify-between mt-3 pt-3 border-t border-gold-line/40">
-          <span class="font-mono text-sm uppercase tracking-widest text-muted">Stacked value</span>
-          <span class="font-mono font-bold text-2xl md:text-3xl text-gold/60 line-through tracking-tight">{'$' + stackValue}</span>
-        </div>
-        <div class="flex items-baseline justify-between mt-3 pt-3 border-t border-gold-line/40">
-          <span class="font-mono text-sm uppercase tracking-widest text-text">Today, one payment</span>
-          <span class="font-mono font-bold text-4xl md:text-5xl text-gold tracking-tight">$129</span>
-        </div>
-        <p class="text-base text-text/85 leading-relaxed mt-5 text-center">
-          Counted on their own, the six bonuses come to {'$' + bonusValue}, nearly five times the price, and they are free. You pay $129 for the system and keep all {'$' + stackValue}.
-        </p>
-        <a href={GUMROAD.launchpad} data-event="initiate_checkout" data-analytics-id="offer-stack-cta" on:click={trackCheckoutClick} class="btn-primary cta-btn w-full mt-7 rounded-[2rem] font-mono text-sm md:text-base uppercase">
+        <a href={GUMROAD.launchpad} data-event="checkout_click" data-analytics-id="offer-stack-cta" on:click={trackCheckoutClick} class="btn-primary cta-btn w-full mt-7 rounded-[2rem] font-mono text-sm md:text-base uppercase">
           <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
           <span class="cta-label"><span class="cta-label-full">Start My 5-Day Build</span><span class="cta-label-short">Start My Build</span></span>
           <span class="cta-arrow" aria-hidden="true">→</span>
         </a>
-        <p class="text-xs md:text-sm font-mono uppercase tracking-wide md:tracking-widest text-muted mt-3 text-center leading-relaxed">One payment · 30-day guarantee · Yours for every launch after this one</p>
+        <p class="text-xs md:text-sm font-mono uppercase tracking-wide md:tracking-widest text-muted mt-3 text-center leading-relaxed">Instant access · Keep it for future launches · 30-day guarantee</p>
       </div>
     </div>
   </section>
@@ -1037,11 +1015,11 @@
         </div>
       </div>
       <div class="text-center mt-8">
-        <a href={GUMROAD.launchpad} data-event="initiate_checkout" data-analytics-id="for-who-cta" on:click={trackCheckoutClick} class="inline-flex flex-nowrap items-center justify-center gap-2 px-6 sm:px-8 h-12 max-w-full border border-gold-line hover:border-gold hover:bg-gold-soft text-gold text-xs font-semibold font-mono uppercase tracking-[0.04em] sm:tracking-wider rounded-full transition hover:scale-[1.03]">
+        <a href={GUMROAD.launchpad} data-event="checkout_click" data-analytics-id="for-who-cta" on:click={trackCheckoutClick} class="inline-flex flex-nowrap items-center justify-center gap-2 px-6 sm:px-8 h-12 max-w-full border border-gold-line hover:border-gold hover:bg-gold-soft text-gold text-xs font-semibold font-mono uppercase tracking-[0.04em] sm:tracking-wider rounded-full transition hover:scale-[1.03]">
           <span class="cta-label"><span class="cta-label-full">Start My 5-Day Build</span><span class="cta-label-short">Start My Build</span></span>
           <span class="cta-arrow shrink-0" aria-hidden="true">→</span>
         </a>
-        <p class="cta-price max-w-[420px] mx-auto"><span class="price">$129</span> · one payment · 30-day guarantee</p>
+        <p class="cta-price max-w-[420px] mx-auto">One payment · 30-day guarantee</p>
       </div>
     </div>
   </section>
@@ -1065,10 +1043,10 @@
           <div class="h-px w-16 bg-gold-line"></div>
         </div>
         <h2 class="font-display text-3xl md:text-5xl leading-tight text-text">
-          Five stars, from people <span class="italic text-gold">who actually built it</span>.
+          What the system helped them <span class="italic text-gold">clarify and build</span>.
         </h2>
         <p class="text-text/85 text-base md:text-lg mt-5 leading-relaxed">
-          Every one of them started exactly where you are: an idea, no plan, and months of stalling. Five days later, they had a live brand, a page, and a funnel. That's the whole promise, proven real.
+          Three firsthand accounts of using the VanguardOS process. Their words are shown without adding outcomes or promises they did not make.
         </p>
       </header>
 
@@ -1104,10 +1082,10 @@
           Build it. <span class="italic text-gold">Then decide.</span>
         </h2>
         <p class="text-text text-lg md:text-xl leading-relaxed max-w-[640px] mx-auto">
-          <strong class="text-gold">30-day money-back guarantee, no questions asked.</strong> Buy it, run the 5 days, and if the Launchpad is not for you, email us for a full refund. No forms, no hoops, no "sorry to see you go" sequence.
+          <strong class="text-gold">30-day money-back guarantee.</strong> Try the complete five-day system. If it is not the right fit, email us within 30 days for a refund.
         </p>
         <p class="text-text text-base md:text-[17px] leading-relaxed max-w-[620px] mx-auto mt-4">
-          And if you get stuck on a step, tell us where. We'd rather you finish your launch than have your money back.
+          If you get stuck on a step, tell us where. We would rather help you finish.
         </p>
       </div>
 
@@ -1135,7 +1113,7 @@
           English isn't your first language? <span class="italic text-gold">You're covered.</span>
         </h2>
         <p class="body-copy text-body text-lg md:text-xl mt-6 max-w-[760px] mx-auto leading-relaxed">
-          Choose the language you think and build in. Every edition includes the complete interactive Launchpad, the Website System, and all six bonus guides. Same download, same $129, no add-on.
+          Choose the language you think and build in. Every edition includes the complete interactive Launchpad, the Website System, and all six supporting guides. Same download, same price, no add-on.
         </p>
       </header>
 
@@ -1229,21 +1207,21 @@
     style="background-image: radial-gradient(ellipse at 50% 120%, rgba(212,175,55,0.12), transparent 60%);">
     <div class="max-w-[820px] mx-auto reveal space-y-8">
       <img src="/brand/brand-mark-owl.svg" alt="VanguardOS owl mark" class="w-12 h-12 mx-auto" />
-      <h2 class="font-display text-4xl md:text-6xl lg:text-7xl leading-[0.95] text-text">Five days from now, <span class="italic text-gold">it's live.</span></h2>
+      <h2 class="font-display text-4xl md:text-6xl lg:text-7xl leading-[0.95] text-text">Pick the idea you are tired of carrying. <span class="italic text-gold">Give it five ordered days.</span></h2>
       <p class="text-text text-lg md:text-xl max-w-[680px] mx-auto leading-relaxed">
-        Brand, product, landing page, checkout, funnel: the five things every solo launch needs, built with you and yours forever. <strong class="text-gold">$129, once.</strong>
+        The Launchpad turns the next launch into a sequence you can follow: brand, product, page, checkout, and follow-up.
       </p>
 
 
       <div class="flex flex-col items-center gap-4">
-        <a href={GUMROAD.launchpad} data-event="initiate_checkout" data-analytics-id="final-cta" on:click={trackCheckoutClick} class="btn-primary cta-btn w-full max-w-[480px] mx-auto rounded-[2rem] font-mono text-sm md:text-base uppercase">
+        <a href={GUMROAD.launchpad} data-event="checkout_click" data-analytics-id="final-cta" on:click={trackCheckoutClick} class="btn-primary cta-btn w-full max-w-[480px] mx-auto rounded-[2rem] font-mono text-sm md:text-base uppercase">
           <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
           <span class="cta-label"><span class="cta-label-full">Start My 5-Day Build</span><span class="cta-label-short">Start My Build</span></span>
           <span class="cta-arrow" aria-hidden="true">→</span>
         </a>
-        <p class="cta-price max-w-[480px] mx-auto"><span class="price">$129</span> · one payment · yours forever</p>
+        <p class="cta-price max-w-[480px] mx-auto"><span class="price">$129</span> · one payment · 30-day guarantee</p>
         <a href="#five-day" class="text-sm font-mono uppercase tracking-widest text-muted hover:text-text transition border-b border-gold-line/40 hover:border-gold pb-1">See the 5-Day Plan</a>
-        <p class="text-xs md:text-sm font-mono uppercase tracking-wide md:tracking-wider text-muted-2 pt-2 text-center leading-relaxed">Instant access · start Day 1 today · 30-day guarantee</p>
+        <p class="text-xs md:text-sm font-mono uppercase tracking-wide md:tracking-wider text-muted-2 pt-2 text-center leading-relaxed">Instant access · start Day 1 today</p>
       </div>
     </div>
   </section>
@@ -1280,7 +1258,7 @@
       <span class="sticky-cta-price">$129</span>
       <span class="sticky-cta-sub">One payment</span>
     </div>
-    <a href={GUMROAD.launchpad} data-event="initiate_checkout" data-analytics-id="sticky-cta" on:click={trackCheckoutClick} class="btn-primary cta-btn sticky-cta-btn" tabindex={stickyVisible ? 0 : -1}>
+    <a href={GUMROAD.launchpad} data-event="checkout_click" data-analytics-id="sticky-cta" on:click={trackCheckoutClick} class="btn-primary cta-btn sticky-cta-btn" tabindex={stickyVisible ? 0 : -1}>
       <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
       <span class="cta-label"><span class="cta-label-full">Start My 5-Day Build</span><span class="cta-label-short">Start My Build</span></span>
       <span class="cta-arrow" aria-hidden="true">→</span>
@@ -1325,12 +1303,12 @@
         <p class="text-sm text-muted leading-relaxed mt-5">Display: <span class="text-text/90">{specimenData.display}</span> · Body: <span class="text-text/90">{specimenData.body}</span> · Accent/Mono: <span class="text-text/90">{specimenData.accent}</span> (kickers and labels only). One of 20 type systems inside the pack. Sources: Fontshare + Google Fonts + The League of Moveable Type.</p>
       {/if}
 
-      <a href={GUMROAD.launchpad} data-event="initiate_checkout" data-analytics-id="specimen-modal-cta" on:click={trackCheckoutClick} class="btn-primary cta-btn w-full mt-7 rounded-[2rem] font-mono text-sm md:text-base uppercase">
+      <a href={GUMROAD.launchpad} data-event="checkout_click" data-analytics-id="specimen-modal-cta" on:click={trackCheckoutClick} class="btn-primary cta-btn w-full mt-7 rounded-[2rem] font-mono text-sm md:text-base uppercase">
         <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
         <span class="cta-label"><span class="cta-label-full">Start My 5-Day Build</span><span class="cta-label-short">Start My Build</span></span>
         <span class="cta-arrow" aria-hidden="true">→</span>
       </a>
-      <p class="cta-price"><span class="price">$129</span> · one payment · 30-day guarantee</p>
+      <p class="cta-price">One payment · 30-day guarantee</p>
     </div>
   </div>
 {/if}
