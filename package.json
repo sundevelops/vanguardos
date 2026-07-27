@@ -6,20 +6,21 @@
   "scripts": {
     "dev": "vite dev --port 5175",
     "build": "vite build",
-    "preview": "vite preview --port 5175",
-    "qa:landing": "playwright test --config=playwright.config.js"
+    "preview": "npm run build && wrangler dev",
+    "qa:landing": "playwright test --config=playwright.config.js",
+    "deploy": "npm run build && wrangler deploy"
   },
   "devDependencies": {
     "@playwright/test": "^1.48.0",
-    "@sveltejs/adapter-auto": "^3.2.0",
-    "@sveltejs/adapter-cloudflare": "^7.2.9",
+    "@sveltejs/adapter-cloudflare": "^7.2.8",
     "@sveltejs/kit": "^2.5.0",
     "@sveltejs/vite-plugin-svelte": "^3.1.0",
     "autoprefixer": "^10.4.18",
     "postcss": "^8.4.35",
     "svelte": "^4.2.12",
     "tailwindcss": "^3.4.17",
-    "vite": "^5.1.0"
+    "vite": "^5.1.0",
+    "wrangler": "^4.97.0"
   },
   "dependencies": {
     "motion": "^11.0.0"
