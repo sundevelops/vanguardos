@@ -270,6 +270,45 @@ test('customer-facing copy follows the no em dash brand rule', async ({ page }) 
   expect(publicCopy).not.toContain('—');
 });
 
+test('bonus descriptions stay readable on desktop and mobile', async ({ page }) => {
+  for (const viewport of [
+    { width: 390, height: 844 },
+    { width: 1440, height: 900 },
+  ]) {
+    await page.setViewportSize(viewport);
+    await page.goto('/', { waitUntil: 'networkidle' });
+    await page.locator('#offer-stack').scrollIntoViewIfNeeded();
+    await page.waitForTimeout(500);
+
+    const descriptions = await page.evaluate(() =>
+      Array.from(document.querySelectorAll('.offer-support-copy')).map((copy) => {
+        const card = copy.closest('.offer-support-card');
+        const copyRect = copy.getBoundingClientRect();
+        const cardRect = card.getBoundingClientRect();
+        const style = getComputedStyle(copy);
+        return {
+          color: style.color,
+          fontSize: parseFloat(style.fontSize),
+          lineHeight: parseFloat(style.lineHeight),
+          visible: copyRect.width > 0 && copyRect.height > 0,
+          contained:
+            copyRect.left >= cardRect.left - 1 &&
+            copyRect.right <= cardRect.right + 1,
+        };
+      })
+    );
+
+    expect(descriptions).toHaveLength(6);
+    for (const description of descriptions) {
+      expect(description.color).toBe('rgb(216, 214, 208)');
+      expect(description.fontSize).toBeGreaterThanOrEqual(15);
+      expect(description.lineHeight).toBeGreaterThanOrEqual(24);
+      expect(description.visible).toBe(true);
+      expect(description.contained).toBe(true);
+    }
+  }
+});
+
 // ─────────────────────────────────────────────────────────────────────────
 // (7) Essential body text stays readable (no faint opacity/color after settle)
 // ─────────────────────────────────────────────────────────────────────────

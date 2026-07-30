@@ -848,7 +848,7 @@
               <img src={item.img} alt="{item.name} cover art" class="offer-support-image w-14 h-14 md:w-20 md:h-20 rounded-[0.75rem] md:rounded-[0.9rem] border border-line/60 object-cover shrink-0" loading="lazy" decoding="async" />
               <div class="flex flex-col gap-2 min-w-0">
                 <h3 class="font-display text-xl md:text-[28px] text-text leading-tight">{item.name}</h3>
-                <p class="text-sm md:text-base text-text/85 leading-relaxed">{item.blurb}</p>
+                <p class="offer-support-copy">{item.blurb}</p>
               </div>
             </div>
           </li>
@@ -2253,9 +2253,27 @@
     text-transform: uppercase;
     white-space: nowrap;
   }
+  .offer-support-copy {
+    color: #D8D6D0;
+    font-size: 15px;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+  }
   @media (min-width: 768px) {
     .bonus-header-text {
       font-size: 12px;
+    }
+    .offer-support-copy {
+      font-size: 16px;
+    }
+  }
+  @media (max-width: 420px) {
+    .offer-support-card > div {
+      gap: 12px;
+    }
+    .offer-support-image {
+      width: 52px;
+      height: 52px;
     }
   }
   @media (max-width: 360px) {
