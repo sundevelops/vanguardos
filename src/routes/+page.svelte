@@ -737,19 +737,26 @@
        ═══════════════════════════════════════════════════════════════ -->
   <section id="reveal" class="relative py-16 md:py-20 px-6 border-t border-line/60">
     <div class="max-w-[900px] mx-auto reveal text-center">
-      <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">The Three-Prompt System</span>
+      <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">A Real Day 1 Screen</span>
       <h2 class="font-display text-3xl md:text-5xl leading-tight text-text mt-3 mb-4">
-        Three master prompts a day. <span class="italic text-gold">No prompt maze.</span>
+        The work arrives <span class="italic text-gold">one step at a time.</span>
       </h2>
-      <p class="body-copy text-text text-lg md:text-xl leading-relaxed max-w-[720px] mx-auto mb-10">
-        Each day consolidates the thinking into three guided prompts. Copy one, answer its short questions, save the result, and continue. The system keeps the depth while removing the feeling of juggling a hundred instructions.
+      <p class="body-copy text-text text-lg md:text-xl leading-relaxed max-w-[720px] mx-auto mb-8 md:mb-10">
+        Three guided prompts carry each day. Copy one, answer a few plain questions, save the result, and move to the next screen.
       </p>
-      <div class="reveal-crop relative max-w-[720px] mx-auto rounded-[1.5rem] md:rounded-[2rem] border border-gold-line/50 bg-surface/40 p-2 md:p-3 shadow-2xl shadow-black/40 overflow-hidden">
-        <img src="/screenshots/three-prompts.webp" alt="One day inside the Vanguard Launchpad: Prompt #1, #2, and #3 each with their own copy button, next to the Complete Step and day-progress controls" class="w-full rounded-[1rem] md:rounded-[1.5rem] border border-line/60 object-cover" style="aspect-ratio: 4 / 3; object-position: center 15%;" width="1200" height="900" loading="lazy" decoding="async" />
+      <div class="product-peek relative max-w-[760px] mx-auto rounded-[1.25rem] md:rounded-[1.5rem] border border-gold-line/50 bg-surface/60 shadow-2xl shadow-black/40 overflow-hidden">
+        <div class="product-peek-bar">
+          <span>Day 1 · Ideate</span>
+          <span><i aria-hidden="true"></i>15% saved</span>
+        </div>
+        <div class="product-peek-media">
+          <img src="/screenshots/three-prompts.webp" alt="A focused glimpse inside Day 1 of the Vanguard Launchpad, showing the saved progress, guided navigation, and first prompt screen" class="product-peek-image" width="1200" height="917" loading="lazy" decoding="async" />
+          <div class="product-peek-caption">
+            <span>Prompt 1 of 3</span>
+            <strong>One clear job. Then the next.</strong>
+          </div>
+        </div>
       </div>
-      <p class="font-mono text-[10px] md:text-[11px] uppercase tracking-[0.25em] text-muted-2 mt-4">
-        Prompt #1 · Prompt #2 · Prompt #3 · one copy button each
-      </p>
     </div>
   </section>
 
@@ -951,7 +958,7 @@
   <!-- ═══════════════════════════════════════════════════════════════
        RISK REVERSAL — 30-day guarantee
        ═══════════════════════════════════════════════════════════════ -->
-  <section class="relative py-20 md:py-24 px-6">
+  <section class="relative py-16 md:py-20 px-6">
     <div class="max-w-[860px] mx-auto reveal">
       <div class="rounded-[2.5rem] border border-gold-line bg-gold-soft/30 p-8 md:p-12 text-center"
         style="background-image: radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.10), transparent 70%);">
@@ -967,13 +974,6 @@
         </p>
       </div>
 
-      <!-- Completion glimpse: 3rd and final real visual on the page -->
-      <div class="reveal mt-8 flex flex-col items-center gap-4">
-        <div class="reveal-crop relative w-full max-w-[420px] rounded-[1.25rem] border border-gold-line/40 bg-surface/40 p-2 overflow-hidden">
-          <img src="/screenshots/completion.webp" alt="A completed Vanguard Launchpad, at 100%, with the Backup Progress action" class="w-full rounded-[0.85rem] border border-line/60 object-cover" style="aspect-ratio: 16 / 9; object-position: center 20%;" width="1200" height="675" loading="lazy" decoding="async" />
-        </div>
-        <p class="font-display italic text-lg md:text-xl text-text/90 text-center max-w-[520px]">The finish line is not a certificate. It is the checkout you can send someone.</p>
-      </div>
     </div>
   </section>
 
@@ -1974,19 +1974,96 @@
      screenshot, never a replacement for one. Class names are prefixed
      `mv-`/`motion-` to avoid colliding with the unrelated `.day-card` /
      `.phone-shell` classes already used elsewhere on this page. */
-  /* Edge-mask crop treatment for the page's real product screenshots
-     (Selective Product Reveal + Completion Glimpse). Restrained cropping
-     and a soft fade at the bottom edge instead of a blur overlay, so the
-     screenshot reads as a deliberate partial reveal rather than a locked
-     or obscured asset. */
-  .reveal-crop { isolation: isolate; }
-  .reveal-crop::after {
+  /* One real product glimpse, art-directed by viewport. The desktop crop
+     establishes the app's depth; mobile zooms into the active prompt so the
+     proof remains legible instead of becoming a tiny full-screen thumbnail. */
+  .product-peek { isolation: isolate; }
+  .product-peek-bar {
+    min-height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 0 16px;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.22);
+    color: #A6A6A1;
+    font: 500 9px 'JetBrains Mono', ui-monospace, monospace;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+  .product-peek-bar span:last-child {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    color: #D4AF37;
+  }
+  .product-peek-bar i {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #7FB89A;
+    box-shadow: 0 0 12px rgba(127, 184, 154, 0.5);
+  }
+  .product-peek-media {
+    position: relative;
+    aspect-ratio: 16 / 8.7;
+    overflow: hidden;
+    background: #0A0B0B;
+  }
+  .product-peek-image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 8%;
+  }
+  .product-peek-media::after {
     content: "";
     position: absolute;
     inset: 0;
     pointer-events: none;
-    background: linear-gradient(180deg, transparent 62%, rgba(17, 18, 18, 0.55) 100%);
-    border-radius: inherit;
+    background: linear-gradient(180deg, transparent 46%, rgba(10, 11, 11, 0.18) 66%, rgba(10, 11, 11, 0.96) 100%);
+  }
+  .product-peek-caption {
+    position: absolute;
+    z-index: 2;
+    left: 18px;
+    right: 18px;
+    bottom: 16px;
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 20px;
+    text-align: left;
+  }
+  .product-peek-caption span {
+    color: #D4AF37;
+    font: 500 9px 'JetBrains Mono', ui-monospace, monospace;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+  .product-peek-caption strong {
+    color: #ECEAE4;
+    font: 500 20px 'Playfair Display', Georgia, serif;
+    line-height: 1.15;
+  }
+  @media (max-width: 640px) {
+    .product-peek-bar { min-height: 38px; padding: 0 12px; font-size: 8px; }
+    .product-peek-media { aspect-ratio: 4 / 3; }
+    .product-peek-image {
+      transform: scale(1.52);
+      transform-origin: 72% 18%;
+    }
+    .product-peek-caption {
+      left: 12px;
+      right: 12px;
+      bottom: 11px;
+      align-items: start;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .product-peek-caption strong { font-size: 17px; }
   }
   .motion-viz {
     --mv-bg: #0A0B0B;

@@ -247,6 +247,17 @@ test('mobile page stays concise enough to scan', async ({ page }) => {
   expect(height, `mobile page is still excessively long (${height}px)`).toBeLessThan(16000);
 });
 
+test('product proof uses one selective screenshot, not a screenshot gallery', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/', { waitUntil: 'networkidle' });
+  const proof = await page.evaluate(() => ({
+    screenshots: Array.from(document.querySelectorAll('img[src^="/screenshots/"]')).map((img) => img.getAttribute('src')),
+    peekCount: document.querySelectorAll('.product-peek').length,
+  }));
+  expect(proof.screenshots).toEqual(['/screenshots/three-prompts.webp']);
+  expect(proof.peekCount).toBe(1);
+});
+
 // ─────────────────────────────────────────────────────────────────────────
 // (7) Essential body text stays readable (no faint opacity/color after settle)
 // ─────────────────────────────────────────────────────────────────────────
