@@ -103,15 +103,14 @@
 
   // ── ANALYTICS ──────────────────────────────────────────────────────
   // One centralized hook every purchase CTA calls on click. The real work
-  // happens in the delegated listener in app.html, which fires the custom
-  // `CheckoutClick` event. `data-event="checkout_click"` /
+  // happens in the delegated listener in app.html, which fires the standard
+  // `InitiateCheckout` event and the diagnostic custom `CheckoutClick` event.
+  // `data-event="checkout_click"` /
   // `data-analytics-id` are present in the markup so a Pixel, GA4, or GTM
   // container can bind to them declaratively instead of via this hook.
   function trackCheckoutClick(e) {
-    // 2026-07-27: the landing page deliberately does NOT fire the standard
-    // InitiateCheckout event. Gumroad owns the real checkout-start event;
-    // firing it here would double-count and conflict with Gumroad's
-    // domain-level events. The HTML label matches the event actually sent.
+    // The delegated listener owns analytics so every checkout link follows
+    // one contract without duplicate component-level calls.
   }
 
   // ── WHAT IS INCLUDED ───────────────────────────────────────────────
@@ -135,11 +134,11 @@
   // Restored as premium day cards 2026-07-13. The page needs to make the
   // buyer feel the sequence, not merely read a compressed checklist.
   const launchpadDays = [
-    { num: '01', kicker: 'IDEATE',        line: 'Lock your idea, validate, price.',         desc: 'Run the Problem-Validation Matrix to pick the one idea worth shipping, sketch a one-page portrait of the buyer who pays at 11pm, and set a price you can say out loud. You leave Day 1 with a locked offer in a single sentence.' },
-    { num: '02', kicker: 'BRAND',         line: 'Name, voice, colors, fonts, logo.',        desc: 'Name it, find its voice in three words, and lock the palette and type from 20 ready-made pairings instead of a blank canvas. One page, one day, a brand book your future self will actually obey.' },
-    { num: '03', kicker: 'ASSETS',        line: 'Covers, banners, social. Then build and package.',        desc: 'Generate a hero image, a product mockup, and a full social set, all brand-locked, in one studio session. Then write, structure, and package the product itself, with the exact cover and thumbnail your checkout needs.' },
-    { num: '04', kicker: 'LANDING PAGE',  line: 'Hero, offer, CTAs, mobile.',                desc: 'Write the rough sales copy, then build a real page in plain English inside the guided website workspace, no code, and deploy it to a live URL. Hero, high-impact offer, proof, and CTAs, mobile-first, by tonight.' },
-    { num: '05', kicker: 'FUNNEL',        line: 'Checkout, upsell, emails. Ready.',         desc: 'Wire the whole path from click to welcome: publish the product and its checkout, add the checkout upsell, and write the complete nine-email follow-up sequence right inside the Day 5 screens, ready for your own sender. Make a test purchase, refund yourself, and you are shipped.' }
+    { num: '01', kicker: 'IDEATE',        line: 'Lock your idea, buyer, offer, and price.',  desc: 'Leave with one validated offer you can explain in a single sentence.' },
+    { num: '02', kicker: 'BRAND',         line: 'Choose the name, voice, colors, type, and logo direction.', desc: 'Leave with a one-page brand system that keeps every asset consistent.' },
+    { num: '03', kicker: 'BUILD',         line: 'Create the product, package it, and make the launch assets.', desc: 'Leave with the product file, cover, thumbnail, and social visuals ready.' },
+    { num: '04', kicker: 'SELL',          line: 'Write and build the sales page, then publish it.', desc: 'Leave with a mobile-ready page at a live URL.' },
+    { num: '05', kicker: 'LAUNCH',        line: 'Connect checkout, delivery, upsell, and follow-up.', desc: 'Leave with the full buyer path tested and ready to take payment.' }
   ];
 
   // ── ASSET-PACK SPECIMENS ─────────────────────────────────────────
@@ -468,9 +467,9 @@
 
 <main id="top">
   <!-- HERO -->
-  <section class="relative pt-24 pb-12 md:pt-44 md:pb-32 px-6 flex flex-col items-center text-center overflow-hidden"
+  <section class="relative pt-24 pb-12 md:pt-28 md:pb-20 px-6 flex flex-col items-center text-center overflow-hidden"
     style="background-image: radial-gradient(ellipse at 80% -10%, rgba(212,175,55,0.10), transparent 60%);">
-    <div class="hero-inner w-full min-w-0 max-w-[1100px] mx-auto space-y-5 md:space-y-8">
+    <div class="hero-inner w-full min-w-0 max-w-[1100px] mx-auto space-y-5 md:space-y-6">
       <!-- Logo lockup hidden on mobile: the fixed navbar already carries the
            brand there, and every pixel of vertical space matters for
            getting the CTA into the first 390×844 viewport. -->
@@ -497,22 +496,22 @@
            Fixed rem sizes only (no viewport-width font sizing) so the two-line
            headline reads cleanly on a 390px viewport. -->
       <h1 class="hero-h1 font-display font-medium text-text leading-[1.02] md:leading-[0.98] w-full min-w-0 max-w-[1100px] mx-auto select-none">
-        <span class="block text-[1.95rem] leading-[1.08] sm:text-5xl md:text-6xl lg:text-[4.75rem] xl:text-[5.25rem] md:leading-[0.98]">
-          Five days from now, your idea can be a branded digital product
+        <span class="block text-[1.95rem] leading-[1.08] sm:text-5xl md:text-6xl lg:text-[4.25rem] xl:text-[4.75rem] md:leading-[0.98]">
+          Turn one unfinished idea into a branded digital product
         </span>
-        <span class="block italic text-gold text-[1.95rem] leading-[1.08] sm:text-5xl md:text-6xl lg:text-[4.75rem] xl:text-[5.25rem] md:leading-[0.98] mt-1.5 md:mt-3">
-          with a live checkout.
+        <span class="block italic text-gold text-[1.95rem] leading-[1.08] sm:text-5xl md:text-6xl lg:text-[4.25rem] xl:text-[4.75rem] md:leading-[0.98] mt-1.5 md:mt-3">
+          and a live checkout in five days.
         </span>
       </h1>
 
       <!-- Supporting copy: names the exact sequence in one sentence. -->
       <p class="hero-item body-copy font-sans text-body text-[17px] md:text-2xl leading-[1.6] md:leading-snug w-full min-w-0 max-w-[820px] mx-auto" style="opacity: 0">
-        The Vanguard Launchpad gives one unfinished idea an exact sequence: validate the offer, build and package the product, create the brand and sales page, publish the checkout, and prepare the follow-up.
+        The Vanguard Launchpad walks you through the offer, product, brand, sales page, checkout, and follow-up. One clear step at a time.
       </p>
 
       <!-- Mechanism line: the three-part rhythm of how the work happens. -->
       <p class="hero-item font-sans text-text text-base md:text-xl leading-relaxed w-full min-w-0 max-w-[720px] mx-auto" style="opacity: 0">
-        Three guided prompts a day. One required step at a time. Progress autosaves.
+        Three guided prompts a day. Your progress saves as you build.
       </p>
 
       <!-- Primary CTA: gold, prominent. Secondary "See the 5-Day Plan" is the
@@ -569,9 +568,9 @@
   <!-- ═══════════════════════════════════════════════════════════════
        THE PROBLEM — pain before the reveal
        ═══════════════════════════════════════════════════════════════ -->
-  <section id="problem" class="relative py-20 md:py-24 px-6 border-t border-line/60">
+  <section id="problem" class="relative py-14 md:py-20 px-6 border-t border-line/60">
     <div class="max-w-[1100px] mx-auto reveal">
-      <header class="text-center max-w-[860px] mx-auto mb-10 md:mb-14">
+      <header class="text-center max-w-[860px] mx-auto mb-8 md:mb-10">
         <div class="flex items-center justify-center gap-3 mb-6">
           <div class="h-px w-16 bg-gold-line"></div>
           <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">Why You Haven't Launched</span>
@@ -580,37 +579,34 @@
         <h2 class="font-display text-4xl md:text-6xl leading-[0.98] text-text">
           The idea is not the hard part. <span class="italic text-gold">The unfinished middle is.</span>
         </h2>
-        <p class="text-text/85 text-lg md:text-xl mt-6 leading-relaxed">
-          You already know enough to start. What keeps stealing weeks is the invisible chain between idea and payment: positioning, brand, assets, page, checkout, delivery, and follow-up.
+        <p class="body-copy text-text/85 text-lg md:text-xl mt-6 leading-relaxed">
+          What steals weeks is the chain between idea and payment: offer, product, brand, page, checkout, delivery, and follow-up.
         </p>
       </header>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5">
         <div class="rounded-[1.5rem] border border-line bg-surface/60 p-6 md:p-7">
           <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">01 · The Notes app trap</span>
-          <p class="text-base md:text-lg text-text/90 leading-relaxed mt-3">You open the idea again, polish two bullets, and close it. Nothing is wrong with the idea. There is just no next screen telling you what to do.</p>
+          <p class="text-base md:text-lg text-text/90 leading-relaxed mt-3">You polish the idea, close the note, and still do not know the next move.</p>
         </div>
         <div class="rounded-[1.5rem] border border-line bg-surface/60 p-6 md:p-7">
           <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">02 · The forty-decision fog</span>
-          <p class="text-base md:text-lg text-text/90 leading-relaxed mt-3">Name, promise, price, palette, logo, product file, page copy, domain, checkout, emails. None of it is impossible. All of it at once is where momentum dies.</p>
+          <p class="text-base md:text-lg text-text/90 leading-relaxed mt-3">Every choice feels small. All of them at once stop the launch.</p>
         </div>
         <div class="rounded-[1.5rem] border border-line bg-surface/60 p-6 md:p-7">
           <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">03 · The missing money path</span>
-          <p class="text-base md:text-lg text-text/90 leading-relaxed mt-3">Even a good product cannot sell from a folder. It needs a page, a reason to buy, a checkout, delivery, and a clean follow-up after the payment clears.</p>
+          <p class="text-base md:text-lg text-text/90 leading-relaxed mt-3">A file cannot sell itself. It needs a page, checkout, delivery, and follow-up.</p>
         </div>
       </div>
-      <p class="text-center text-lg md:text-xl text-text leading-relaxed max-w-[760px] mx-auto mt-10">
-        The Launchpad does not ask you to become a designer, copywriter, developer, and funnel strategist overnight. It gives you the order those people would follow if they were building it for you.
-      </p>
     </div>
   </section>
 
   <!-- ═══════════════════════════════════════════════════════════════
        THE 5-DAY JOURNEY — visual day-by-day outcomes
        ═══════════════════════════════════════════════════════════════ -->
-  <section id="five-day" class="relative py-20 md:py-28 px-6 border-t border-line/60 overflow-hidden"
+  <section id="five-day" class="relative py-16 md:py-24 px-6 border-t border-line/60 overflow-hidden"
     style="background-image: radial-gradient(ellipse at 50% -10%, rgba(212,175,55,0.08), transparent 60%);">
     <div class="max-w-[1180px] mx-auto">
-      <header class="text-center max-w-[820px] mx-auto mb-12 md:mb-16 reveal">
+      <header class="text-center max-w-[820px] mx-auto mb-10 md:mb-14 reveal">
         <div class="flex items-center justify-center gap-3 mb-6">
           <div class="h-px w-16 bg-gold-line"></div>
           <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">The 5-Day Journey</span>
@@ -620,7 +616,7 @@
           Five days. Five outcomes. <span class="italic text-gold">One launch-ready system.</span>
         </h2>
         <p class="body-copy text-body text-lg md:text-xl mt-6 leading-relaxed">
-          Each day ends with a finished piece of the business. You only see the work required for today, and every completed step prepares the next one. By Day 5 you have a real, live, take-payment-today system.
+          Finish one piece each day. Every completed step unlocks the next. By Day 5, the full path from idea to payment is ready.
         </p>
       </header>
 
@@ -647,7 +643,7 @@
           <li class="day-card reveal rounded-[1.5rem] border border-line bg-surface/60 p-5 md:p-6 flex flex-col gap-4 transition"
             data-day-index={idx}
             style="transition-delay: {idx * 90}ms">
-            <div class="relative aspect-square rounded-[1rem] overflow-hidden bg-base/40 border border-line/60">
+            <div class="day-visual relative aspect-square rounded-[1rem] overflow-hidden bg-base/40 border border-line/60">
               <div class="day-fallback absolute inset-0 p-3 select-none overflow-hidden"
                 style="background-image: radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.12), transparent 70%);" aria-hidden="true">
                 <div class="absolute top-2 left-2.5 flex items-baseline gap-1 z-10">
@@ -739,13 +735,13 @@
        without showing the full prompt text, the complete navigation, or
        every screen. Condensed 2026-07-11 from a 5-row screenshot gallery.
        ═══════════════════════════════════════════════════════════════ -->
-  <section id="reveal" class="relative py-20 md:py-24 px-6 border-t border-line/60">
+  <section id="reveal" class="relative py-16 md:py-20 px-6 border-t border-line/60">
     <div class="max-w-[900px] mx-auto reveal text-center">
       <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">The Three-Prompt System</span>
       <h2 class="font-display text-3xl md:text-5xl leading-tight text-text mt-3 mb-4">
         Three master prompts a day. <span class="italic text-gold">No prompt maze.</span>
       </h2>
-      <p class="text-text text-lg md:text-xl leading-relaxed max-w-[720px] mx-auto mb-10">
+      <p class="body-copy text-text text-lg md:text-xl leading-relaxed max-w-[720px] mx-auto mb-10">
         Each day consolidates the thinking into three guided prompts. Copy one, answer its short questions, save the result, and continue. The system keeps the depth while removing the feeling of juggling a hundred instructions.
       </p>
       <div class="reveal-crop relative max-w-[720px] mx-auto rounded-[1.5rem] md:rounded-[2rem] border border-gold-line/50 bg-surface/40 p-2 md:p-3 shadow-2xl shadow-black/40 overflow-hidden">
@@ -757,42 +753,48 @@
     </div>
   </section>
 
-  <!-- ═══════════════════════════════════════════════════════════════
-       OUTCOME SECTION — what exists five days from now, concretely
-       ═══════════════════════════════════════════════════════════════ -->
-  <section id="outcomes" class="relative py-20 md:py-24 px-6 border-t border-line/60">
-    <div class="max-w-[900px] mx-auto reveal text-center">
-      <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">Five Days From Now</span>
-      <h2 class="font-display text-3xl md:text-5xl leading-tight text-text mt-3">
-        The idea has somewhere to live, <span class="italic text-gold">and somewhere to get paid.</span>
-      </h2>
+  <!-- Verified-buyer proof appears immediately after the product reveal,
+       before the offer. The quotes remain verbatim. -->
+  <section id="testimonials" class="relative py-16 md:py-20 px-6 border-t border-line/60"
+    style="background-image: radial-gradient(ellipse at 50% -10%, rgba(212,175,55,0.07), transparent 55%);">
+    <div class="max-w-[1180px] mx-auto reveal">
+      <header class="text-center max-w-[780px] mx-auto mb-10 md:mb-12">
+        <div class="flex items-center justify-center gap-3 mb-6">
+          <div class="h-px w-16 bg-gold-line"></div>
+          <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">Verified Buyers</span>
+          <div class="h-px w-16 bg-gold-line"></div>
+        </div>
+        <h2 class="font-display text-3xl md:text-5xl leading-tight text-text">
+          From unfinished ideas <span class="italic text-gold">to something real.</span>
+        </h2>
+      </header>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6">
+        <div class="rounded-[1.5rem] border border-line bg-surface/60 p-6 md:p-7 flex flex-col gap-4 hover:border-gold-line transition">
+          <span class="text-gold text-lg tracking-[0.15em] leading-none" aria-label="Rated 5 out of 5 stars">★★★★★</span>
+          <p class="text-text/90 text-base leading-relaxed flex-1">"Instead of spending months trying to figure things out on my own, I came away with a clearer direction, a stronger brand foundation, and a funnel that I could start using right away. For me, it was a worthwhile investment because it helped turn a lot of uncertainty into a concrete plan."</p>
+          <span class="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-2 inline-flex items-center gap-1.5"><span class="text-gold" aria-hidden="true">✓</span> Verified Buyer</span>
+        </div>
+        <div class="rounded-[1.5rem] border border-line bg-surface/60 p-6 md:p-7 flex flex-col gap-4 hover:border-gold-line transition">
+          <span class="text-gold text-lg tracking-[0.15em] leading-none" aria-label="Rated 5 out of 5 stars">★★★★★</span>
+          <p class="text-text/90 text-base leading-relaxed flex-1">"The system is super polished, easy to understand, and aesthetically it's a 10/10. It's been a great investment, and I would definitely recommend it to anyone hesitating to take the plunge."</p>
+          <span class="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-2 inline-flex items-center gap-1.5"><span class="text-gold" aria-hidden="true">✓</span> Verified Buyer</span>
+        </div>
+        <div class="rounded-[1.5rem] border border-line bg-surface/60 p-6 md:p-7 flex flex-col gap-4 hover:border-gold-line transition">
+          <span class="text-gold text-lg tracking-[0.15em] leading-none" aria-label="Rated 5 out of 5 stars">★★★★★</span>
+          <p class="text-text/90 text-base leading-relaxed flex-1">"It helped me go from overthinking my next move to following a system that lead me to actually starting that business that I had put off for years. Feels really good seeing my business on an actual website with a checkout system!"</p>
+          <span class="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-2 inline-flex items-center gap-1.5"><span class="text-gold" aria-hidden="true">✓</span> Verified Buyer · Full-time college student</span>
+        </div>
+      </div>
     </div>
-    <ul class="reveal max-w-[820px] mx-auto grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4 mt-10 md:mt-12">
-      {#each [
-        'A validated product idea, not just a hunch in your notes app',
-        'A locked brand: name, palette, typography, logo direction',
-        'The core product itself, built and organized',
-        'A live, branded sales page at a real URL',
-        'A working checkout, ready to take payment',
-        'A written follow-up email sequence',
-        'Copy that explains the offer in plain language',
-        'A backup file, so none of the work can be lost',
-        'A system you reuse for free on every product after this one'
-      ] as outcome}
-        <li class="flex items-start gap-3 text-left">
-          <span class="text-gold mt-0.5 shrink-0" aria-hidden="true">✓</span>
-          <span class="text-base md:text-lg text-text/90 leading-snug">{outcome}</span>
-        </li>
-      {/each}
-    </ul>
   </section>
 
   <!-- ═══════════════════════════════════════════════════════════════
        OFFER — high-impact stack, core system first, bonuses made tangible.
        ═══════════════════════════════════════════════════════════════ -->
-  <section id="offer-stack" class="relative py-20 md:py-28 px-6 border-t border-line/60">
+  <section id="offer-stack" class="relative py-16 md:py-24 px-6 border-t border-line/60">
     <div class="max-w-[1100px] mx-auto reveal">
-      <header class="text-center max-w-[820px] mx-auto mb-12 md:mb-16">
+      <header class="text-center max-w-[820px] mx-auto mb-10 md:mb-14">
         <div class="flex items-center justify-center gap-3 mb-6">
           <div class="h-px w-16 bg-gold-line"></div>
           <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">One system. Everything in order.</span>
@@ -801,14 +803,14 @@
         <h2 class="font-display text-4xl md:text-6xl lg:text-7xl leading-[0.95] text-text">
           What you need to move from idea <span class="italic text-gold">to live checkout.</span>
         </h2>
-        <p class="text-text text-lg md:text-xl mt-6 leading-relaxed">
-          The complete five-day Launchpad, the Website System, brand palettes, typography systems, launch copy guidance, email prompts, and the supporting guides. Nothing is sold as a shortcut. Each piece exists because the next step needs it.
+        <p class="body-copy text-text text-lg md:text-xl mt-6 leading-relaxed">
+          The complete Launchpad plus the prompts, page system, brand tools, operations dashboard, and funnel patterns each step needs.
         </p>
       </header>
 
-      <div class="reveal mb-10 md:mb-12 max-w-[820px] mx-auto rounded-[1.25rem] border-l-2 border-gold bg-surface/60 px-6 py-5 md:px-8 md:py-6">
+      <div class="reveal mb-8 md:mb-10 max-w-[820px] mx-auto rounded-[1.25rem] border-l-2 border-gold bg-surface/60 px-5 py-4 md:px-8 md:py-6">
         <p class="font-display italic text-lg md:text-xl text-text/90 leading-relaxed">
-          The entire Launchpad is <span class="text-gold not-italic font-semibold">72 guided steps</span>, split across Welcome and the 5 days, inside one interactive app you open in your browser. Not a 250-page manual to study. You're meant to finish a day in a single sitting, one screen at a time.
+          <span class="text-gold not-italic font-semibold">72 guided steps</span> live inside one interactive app. You finish one screen, then move to the next. No giant manual to study first.
         </p>
       </div>
 
@@ -834,15 +836,12 @@
 
       <ul class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
         {#each bonusItems as item}
-          <li class="reveal rounded-[1.5rem] border border-line bg-surface/60 p-6 md:p-7 hover:border-gold-line transition flex flex-col gap-3">
-            <div class="flex items-center justify-between gap-4">
-              <span class="font-mono text-[9px] uppercase tracking-[0.25em] text-gold border border-gold/40 bg-gold-soft/20 rounded-full px-2.5 py-1">Included</span>
-            </div>
+          <li class="offer-support-card reveal rounded-[1.5rem] border border-line bg-surface/60 p-5 md:p-7 hover:border-gold-line transition flex flex-col gap-3">
             <div class="flex items-start gap-4">
-              <img src={item.img} alt="{item.name} cover art" class="w-16 h-16 md:w-20 md:h-20 rounded-[0.9rem] border border-line/60 object-cover shrink-0" loading="lazy" decoding="async" />
+              <img src={item.img} alt="{item.name} cover art" class="offer-support-image w-14 h-14 md:w-20 md:h-20 rounded-[0.75rem] md:rounded-[0.9rem] border border-line/60 object-cover shrink-0" loading="lazy" decoding="async" />
               <div class="flex flex-col gap-2 min-w-0">
-                <h3 class="font-display text-2xl md:text-[28px] text-text leading-tight">{item.name}</h3>
-                <p class="text-base text-text/85 leading-relaxed">{item.blurb}</p>
+                <h3 class="font-display text-xl md:text-[28px] text-text leading-tight">{item.name}</h3>
+                <p class="text-sm md:text-base text-text/85 leading-relaxed">{item.blurb}</p>
               </div>
             </div>
           </li>
@@ -890,90 +889,15 @@
   </section>
 
   <!-- ═══════════════════════════════════════════════════════════════
-       PROGRESS + TOOLS — backup/restore animation (2nd and last of the
-       page's two animations) plus the free-tools-first explanation.
-       Replaces the old screenshot-led Tools row and the separate "Do The
-       Math" freelancer-cost section (2026-07-11): the math section's one
-       real idea — you keep the system for every future launch — already
-       lives in the price-close line in "Everything Included" below, so
-       repeating it here in dollar-figure form was redundant.
-       ═══════════════════════════════════════════════════════════════ -->
-  <section id="progress" class="relative py-20 md:py-24 px-6 border-t border-line/60">
-    <div class="max-w-[1040px] mx-auto reveal grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10 items-center">
-      <div class="motion-viz motion-panel rounded-[1.5rem] border border-line bg-surface/40">
-        <span class="motion-label">Backup and restore</span>
-        <div class="mv-devices">
-          <div class="mv-device">Launchpad<i></i><i></i></div>
-          <div class="mv-device mv-device-mid">Drive<i></i><i></i></div>
-          <div class="mv-device">Restore<i></i><i></i></div>
-        </div>
-        <div class="mv-transfer-track"><div class="mv-file-token"></div></div>
-      </div>
-      <div>
-        <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">Progress, Backed Up</span>
-        <h3 class="font-display text-2xl md:text-3xl text-text leading-tight mt-2 mb-3">Start on one device. Continue on another.</h3>
-        <p class="text-base md:text-lg text-text/85 leading-relaxed">Your progress autosaves in the browser. <strong class="text-text">Backup Progress</strong> creates a portable file you can keep in Drive or move to another computer. <strong class="text-text">Restore Progress</strong> brings the work back exactly where you left it. It's mobile-friendly too, so a day can start on your phone and finish on your laptop.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══════════════════════════════════════════════════════════════
-       THE STACK IS ALREADY CHOSEN — mystery-by-outcome. The exact software
-       stack is part of the paid value, so it is never named on this public
-       page. Every tool is described by category and outcome only: the relief
-       of not losing a week comparing options, without revealing the picks.
-       ═══════════════════════════════════════════════════════════════ -->
-  <section id="stack-chosen" class="relative py-20 md:py-28 px-6 border-t border-line/60 overflow-hidden"
-    style="background-image: radial-gradient(ellipse at 50% -10%, rgba(212,175,55,0.07), transparent 55%);">
-    <div class="max-w-[1040px] mx-auto reveal">
-      <header class="text-center max-w-[820px] mx-auto mb-12 md:mb-14">
-        <div class="flex items-center justify-center gap-3 mb-6">
-          <div class="h-px w-16 bg-gold-line"></div>
-          <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">The Stack Is Already Chosen</span>
-          <div class="h-px w-16 bg-gold-line"></div>
-        </div>
-        <h2 class="font-display text-4xl md:text-6xl leading-[0.98] text-text">
-          No more losing a week <span class="italic text-gold">comparing tools.</span>
-        </h2>
-        <p class="body-copy text-body text-lg md:text-xl mt-6 leading-relaxed">
-          Every day reveals the exact free and premium option for that stage, what it does, and when to use it. You open the Launchpad, follow the screen, and keep building.
-        </p>
-      </header>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
-        <div class="rounded-[1.5rem] border border-line bg-surface/60 p-6 md:p-8 flex flex-col gap-3">
-          <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">The free path</span>
-          <h3 class="font-display text-2xl md:text-3xl text-text leading-tight">Enough to finish, start to checkout.</h3>
-          <p class="body-copy text-body text-base md:text-lg leading-relaxed">
-            The free path can complete the entire system. For each stage the Launchpad names a free option with a real free tier: an AI writing assistant for the prompts, an image generator for visuals, a guided website builder and deployment stack for the page, and a checkout platform to take payment.
-          </p>
-        </div>
-        <div class="rounded-[1.5rem] border border-gold-line bg-gold-soft/15 p-6 md:p-8 flex flex-col gap-3">
-          <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">The premium path</span>
-          <h3 class="font-display text-2xl md:text-3xl text-text leading-tight">Improves speed, range, and polish.</h3>
-          <p class="body-copy text-body text-base md:text-lg leading-relaxed">
-            When you want more, each stage also names the premium option and exactly what it buys: longer AI sessions and a stronger model, a premium AI workspace and visual studio for sharper output, and a custom domain for a credible address you own. None of it decides whether you finish.
-          </p>
-        </div>
-      </div>
-
-      <p class="body-copy text-body text-base md:text-lg leading-relaxed max-w-[820px] mx-auto mt-8 text-center">
-        The full five-day build can be completed with the free options named inside the Launchpad. Premium options can improve speed, range, and visual polish. A custom domain, transaction fees, and optional software upgrades are separate.
-      </p>
-    </div>
-  </section>
-
-
-  <!-- ═══════════════════════════════════════════════════════════════
        WHO THIS IS FOR / NOT FOR — final qualification gate, placed after
        proof (mechanism + testimonials) and right before the guarantee/CTA
        push. Condensed to 3 points per side 2026-07-11 (was 5/6) so this
        reads as a fast, concrete final filter instead of another wall of
        copy — the buyer has already seen the offer and proof by this point.
        ═══════════════════════════════════════════════════════════════ -->
-  <section id="for-who" class="relative py-20 md:py-24 px-6 border-t border-line/60">
+  <section id="for-who" class="relative py-16 md:py-20 px-6 border-t border-line/60">
     <div class="max-w-[1080px] mx-auto reveal">
-      <header class="text-center max-w-[760px] mx-auto mb-12 md:mb-16">
+      <header class="text-center max-w-[760px] mx-auto mb-10 md:mb-12">
         <div class="flex items-center justify-center gap-3 mb-6">
           <div class="h-px w-16 bg-gold-line"></div>
           <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">Who This Is For</span>
@@ -994,9 +918,9 @@
             This is for you if<span class="text-gold">...</span>
           </h3>
           <ul class="flex flex-col gap-4 text-base md:text-lg text-text/90 leading-relaxed">
-            <li class="flex gap-3"><span class="text-gold mt-1">·</span><span>You have a folder of unfinished ideas in your notes app, and you are ready to stop planning and get your first offer out of your head and onto a real page on the internet.</span></li>
-            <li class="flex gap-3"><span class="text-gold mt-1">·</span><span>You are overwhelmed by the volume of decisions a launch demands: naming, colors, type, copy, layout. You want a system that makes those calls for you.</span></li>
-            <li class="flex gap-3"><span class="text-gold mt-1">·</span><span>You want a real, payment-ready storefront, a structured funnel, and a complete email sequence ready to connect to your own platform, all on a live custom URL by Day 5.</span></li>
+            <li class="flex gap-3"><span class="text-gold mt-1">·</span><span>You have an unfinished idea and are ready to ship it.</span></li>
+            <li class="flex gap-3"><span class="text-gold mt-1">·</span><span>You want the launch decisions placed in a clear order.</span></li>
+            <li class="flex gap-3"><span class="text-gold mt-1">·</span><span>You want a real product, page, checkout, and follow-up ready by Day 5.</span></li>
           </ul>
         </div>
         <!-- NOT for you if... -->
@@ -1008,9 +932,9 @@
             This is <span class="italic text-muted">not</span> for you if<span class="text-muted">...</span>
           </h3>
           <ul class="flex flex-col gap-4 text-base md:text-lg text-text/80 leading-relaxed">
-            <li class="flex gap-3"><span class="text-muted mt-1">·</span><span>You are looking for an agency to build it for you. We give you the complete machinery, but you have to turn the key. If you want someone else's hands on the keyboard, it makes more sense to pay a $12,000 agency invoice.</span></li>
-            <li class="flex gap-3"><span class="text-muted mt-1">·</span><span>You expect sales to happen automatically without promotion. The Launchpad builds the storefront and checkout funnel; driving traffic is your job, and we would rather be honest about that upfront.</span></li>
-            <li class="flex gap-3"><span class="text-muted mt-1">·</span><span>You are selling something physical you need to manufacture, stock, or ship. The checkout and delivery system is instant-download, not inventory or fulfillment.</span></li>
+            <li class="flex gap-3"><span class="text-muted mt-1">·</span><span>You want someone else to do every step for you.</span></li>
+            <li class="flex gap-3"><span class="text-muted mt-1">·</span><span>You expect sales without showing people the offer.</span></li>
+            <li class="flex gap-3"><span class="text-muted mt-1">·</span><span>You need inventory, shipping, or physical-product fulfillment.</span></li>
           </ul>
         </div>
       </div>
@@ -1020,52 +944,6 @@
           <span class="cta-arrow shrink-0" aria-hidden="true">→</span>
         </a>
         <p class="cta-price max-w-[420px] mx-auto">One payment · 30-day guarantee</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══════════════════════════════════════════════════════════════
-       SOCIAL PROOF — real verified-buyer reviews, quoted verbatim
-       (2026-07-02: reverted an earlier light spelling pass per Jamil,
-       left exactly as submitted, no corrections). Placed right after
-       the for-who qualification gate, right before the guarantee: proof,
-       then risk reversal. Subhead intentionally does not mention names,
-       Gumroad, or spelling; it amplifies the offer instead of explaining
-       the sourcing.
-       ═══════════════════════════════════════════════════════════════ -->
-  <section id="testimonials" class="relative py-20 md:py-24 px-6 border-t border-line/60"
-    style="background-image: radial-gradient(ellipse at 50% -10%, rgba(212,175,55,0.07), transparent 55%);">
-    <div class="max-w-[1180px] mx-auto reveal">
-      <header class="text-center max-w-[780px] mx-auto mb-12 md:mb-16">
-        <div class="flex items-center justify-center gap-3 mb-6">
-          <div class="h-px w-16 bg-gold-line"></div>
-          <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">Verified Buyers</span>
-          <div class="h-px w-16 bg-gold-line"></div>
-        </div>
-        <h2 class="font-display text-3xl md:text-5xl leading-tight text-text">
-          What the system helped them <span class="italic text-gold">clarify and build</span>.
-        </h2>
-        <p class="text-text/85 text-base md:text-lg mt-5 leading-relaxed">
-          Three firsthand accounts of using the VanguardOS process. Their words are shown without adding outcomes or promises they did not make.
-        </p>
-      </header>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6">
-        <div class="rounded-[1.5rem] border border-line bg-surface/60 p-6 md:p-7 flex flex-col gap-4 hover:border-gold-line transition">
-          <span class="text-gold text-lg tracking-[0.15em] leading-none" aria-label="Rated 5 out of 5 stars">★★★★★</span>
-          <p class="text-text/90 text-base leading-relaxed flex-1">"Instead of spending months trying to figure things out on my own, I came away with a clearer direction, a stronger brand foundation, and a funnel that I could start using right away. For me, it was a worthwhile investment because it helped turn a lot of uncertainty into a concrete plan."</p>
-          <span class="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-2 inline-flex items-center gap-1.5"><span class="text-gold" aria-hidden="true">✓</span> Verified Buyer</span>
-        </div>
-        <div class="rounded-[1.5rem] border border-line bg-surface/60 p-6 md:p-7 flex flex-col gap-4 hover:border-gold-line transition">
-          <span class="text-gold text-lg tracking-[0.15em] leading-none" aria-label="Rated 5 out of 5 stars">★★★★★</span>
-          <p class="text-text/90 text-base leading-relaxed flex-1">"The system is super polished, easy to understand, and aesthetically it's a 10/10. It's been a great investment, and I would definitely recommend it to anyone hesitating to take the plunge."</p>
-          <span class="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-2 inline-flex items-center gap-1.5"><span class="text-gold" aria-hidden="true">✓</span> Verified Buyer</span>
-        </div>
-        <div class="rounded-[1.5rem] border border-line bg-surface/60 p-6 md:p-7 flex flex-col gap-4 hover:border-gold-line transition">
-          <span class="text-gold text-lg tracking-[0.15em] leading-none" aria-label="Rated 5 out of 5 stars">★★★★★</span>
-          <p class="text-text/90 text-base leading-relaxed flex-1">"It helped me go from overthinking my next move to following a system that lead me to actually starting that business that I had put off for years. Feels really good seeing my business on an actual website with a checkout system!"</p>
-          <span class="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-2 inline-flex items-center gap-1.5"><span class="text-gold" aria-hidden="true">✓</span> Verified Buyer · Full-time college student</span>
-        </div>
       </div>
     </div>
   </section>
@@ -2003,6 +1881,26 @@
   .day-card:hover .day-kicker {
     color: #E7C66A;
     text-shadow: 0 0 12px rgba(212,175,55,0.5);
+  }
+  @media (max-width: 639px) {
+    .day-card {
+      display: grid;
+      grid-template-columns: 96px minmax(0, 1fr);
+      grid-template-rows: auto auto auto auto;
+      align-items: start;
+      column-gap: 14px;
+      row-gap: 7px;
+      padding: 16px;
+    }
+    .day-card .day-visual {
+      grid-column: 1;
+      grid-row: 1 / span 4;
+      width: 96px;
+      height: 96px;
+    }
+    .day-card > :not(.day-visual) { grid-column: 2; }
+    .day-card h3 { margin: 0; }
+    .offer-support-card { border-radius: 1rem; }
   }
 
   /* === SPECIMEN ROWS + MODAL === */

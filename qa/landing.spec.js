@@ -228,6 +228,25 @@ test('mobile primary CTA is inside the 390x844 first viewport', async ({ page })
   expect(cta.h).toBeGreaterThanOrEqual(43.5);
 });
 
+test('desktop primary CTA is inside the 1440x900 first viewport', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/', { waitUntil: 'networkidle' });
+  await page.evaluate(() => document.fonts && document.fonts.ready);
+  await page.waitForTimeout(500);
+  const cta = await page.locator('a[data-analytics-id="hero-primary"]').boundingBox();
+  expect(cta, 'desktop hero primary CTA not found').not.toBeNull();
+  expect(cta.y).toBeGreaterThanOrEqual(0);
+  expect(cta.y + cta.height, 'desktop hero CTA falls below the 900px first viewport').toBeLessThanOrEqual(900);
+});
+
+test('mobile page stays concise enough to scan', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/', { waitUntil: 'networkidle' });
+  await page.evaluate(() => document.fonts && document.fonts.ready);
+  const height = await page.evaluate(() => document.documentElement.scrollHeight);
+  expect(height, `mobile page is still excessively long (${height}px)`).toBeLessThan(16000);
+});
+
 // ─────────────────────────────────────────────────────────────────────────
 // (7) Essential body text stays readable (no faint opacity/color after settle)
 // ─────────────────────────────────────────────────────────────────────────
@@ -235,6 +254,9 @@ test('essential body copy is readable', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 800 });
   await page.goto('/', { waitUntil: 'networkidle' });
   await prepPage(page);
+  // The hero uses a short staggered entrance. Measure the completed state,
+  // not an in-between animation frame.
+  await page.waitForTimeout(1400);
   const samples = await page.evaluate(() => {
     return Array.from(document.querySelectorAll('p.body-copy')).map((el) => {
       const s = getComputedStyle(el);
@@ -410,12 +432,16 @@ test('retired positioning phrases and event labels are absent from the page', as
     expect(ev, 'a Gumroad CTA is not labelled checkout_click').toBe('checkout_click');
   }
 
-  // Pixel contract: PageView + ViewContent once, no Purchase, no InitiateCheckout.
+  // Pixel contract: PageView + ViewContent once, no browser-side Purchase.
+  // InitiateCheckout must exist only inside the delegated Gumroad-click
+  // listener so merely loading the page never creates checkout intent.
   const head = await page.evaluate(() => document.head.innerHTML);
   expect((head.match(/fbq\('track', 'PageView'/g) || []).length, 'PageView must fire exactly once').toBe(1);
   expect((head.match(/fbq\('track', 'ViewContent'/g) || []).length, 'ViewContent must fire exactly once').toBe(1);
   expect(/fbq\(\s*'track',\s*'Purchase'/.test(head), 'Purchase must not fire on the landing page').toBeFalsy();
-  expect(/fbq\(\s*'track',\s*'InitiateCheckout'/.test(head), 'InitiateCheckout must not fire on the landing page').toBeFalsy();
+  expect((head.match(/fbq\(\s*'track',\s*'InitiateCheckout'/g) || []).length, 'InitiateCheckout must be declared exactly once').toBe(1);
+  expect(head.indexOf("fbq('track', 'InitiateCheckout'"), 'InitiateCheckout must be inside the click listener')
+    .toBeGreaterThan(head.indexOf("document.addEventListener('click'"));
 });
 
 // ─────────────────────────────────────────────────────────────────────────
