@@ -258,6 +258,18 @@ test('product proof uses one selective screenshot, not a screenshot gallery', as
   expect(proof.peekCount).toBe(1);
 });
 
+test('customer-facing copy follows the no em dash brand rule', async ({ page }) => {
+  await page.goto('/', { waitUntil: 'networkidle' });
+  const publicCopy = await page.evaluate(() => [
+    document.title,
+    document.body.innerText,
+    document.querySelector('meta[name="description"]')?.getAttribute('content') || '',
+    document.querySelector('meta[property="og:title"]')?.getAttribute('content') || '',
+    document.querySelector('meta[property="og:description"]')?.getAttribute('content') || '',
+  ].join('\n'));
+  expect(publicCopy).not.toContain('—');
+});
+
 // ─────────────────────────────────────────────────────────────────────────
 // (7) Essential body text stays readable (no faint opacity/color after settle)
 // ─────────────────────────────────────────────────────────────────────────
