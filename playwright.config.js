@@ -16,18 +16,25 @@ import { defineConfig, devices } from '@playwright/test';
  * non-zero.
  */
 
-const PREVIEW_URL = 'http://localhost:5175';
+const PREVIEW_URL = 'http://127.0.0.1:5187';
 
 // The eight viewports the brief requires. Each spec parametrizes over these.
 export const VIEWPORTS = [
   { name: '320x568',   width: 320,  height: 568 },
   { name: '360x800',   width: 360,  height: 800 },
+  { name: '375x667',   width: 375,  height: 667 },
   { name: '390x844',   width: 390,  height: 844 },
+  { name: '393x852',   width: 393,  height: 852 },
+  { name: '412x915',   width: 412,  height: 915 },
   { name: '430x932',   width: 430,  height: 932 },
   { name: '768x1024',  width: 768,  height: 1024 },
+  { name: '820x1180',  width: 820,  height: 1180 },
+  { name: '912x1368',  width: 912,  height: 1368 },
   { name: '1024x768',  width: 1024, height: 768 },
   { name: '1280x800',  width: 1280, height: 800 },
+  { name: '1366x768',  width: 1366, height: 768 },
   { name: '1440x900',  width: 1440, height: 900 },
+  { name: '1536x864',  width: 1536, height: 864 },
 ];
 
 export default defineConfig({
@@ -57,9 +64,9 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: 'npm run build && npm run preview',
+    command: 'npm run build && npx vite preview --host 127.0.0.1 --port 5187',
     url: PREVIEW_URL,
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer: false,
     timeout: 240 * 1000,
     stdout: 'pipe',
     stderr: 'pipe',

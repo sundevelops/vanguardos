@@ -6,11 +6,12 @@
   let scrollProgress = 0;
   let showStickyCta = false;   // persistent mobile CTA — appears once hero scrolls away
   let stickyNearEnd = false;   // true once the FAQ / final CTA enters view — hide the sticky then
+  let stickyOverJourney = false; // hide while the five-day cards are being read
   let menuOpen = false;
   // The sticky mobile CTA is only shown when we're past the hero, not near the
   // closing conversion sections, and no overlay is open — so it never covers
   // the final CTA, the FAQ controls, or a modal (QA gate #15).
-  $: stickyVisible = showStickyCta && !stickyNearEnd && !menuOpen && !contactOpen && !specimenModalOpen;
+  $: stickyVisible = showStickyCta && !stickyNearEnd && !stickyOverJourney && !menuOpen && !contactOpen && !specimenModalOpen;
   // Scroll-linked progress for the 5-day journey scrollytelling rail (0→1).
   let fiveDayProgress = 0;
 
@@ -352,6 +353,10 @@
       if (fd) {
         const r = fd.getBoundingClientRect();
         const vh = window.innerHeight;
+        // This section already closes with its own CTA. Keep the persistent
+        // bar out of the way while the cards are on screen so every outcome,
+        // visual, and line of copy can be read without an overlay.
+        stickyOverJourney = r.top < vh * 0.9 && r.bottom > vh * 0.12;
         // Fill completes while the day cards are still on screen: the gauge
         // reaches 100% (5th dot lit) just before the section scrolls past.
         const span = r.height * 0.45 + vh * 0.45;
@@ -418,8 +423,8 @@
 </div>
 
 <!-- Navbar -->
-<header class="fixed top-0 left-0 w-full z-[90] px-4 py-4">
-  <div class="mx-auto max-w-[1180px] rounded-[2rem] px-6 py-4 flex justify-between items-center border transition-all duration-300 {scrolled ? 'bg-base/60 backdrop-blur-xl border-line' : 'bg-transparent border-transparent'}">
+<header class="site-header fixed top-0 left-0 w-full z-[90] px-4 py-4 {scrolled ? 'site-header-scrolled' : ''}">
+  <div class="site-nav-shell mx-auto max-w-[1180px] rounded-[2rem] px-6 py-4 flex justify-between items-center border transition-all duration-300 {scrolled ? 'bg-base/80 border-line' : 'bg-transparent border-transparent'}">
     <a href="#top" class="flex items-center gap-2 group" aria-label="VanguardOS home">
       <img src="/brand/brand-mark-owl.svg" alt="VanguardOS owl mark" class="w-8 h-8 transition-transform group-hover:scale-105" />
       <span class="font-display text-base md:text-lg leading-none">
@@ -638,7 +643,7 @@
         </div>
       </div>
 
-      <ol class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 md:gap-5 mt-10 md:mt-12">
+      <ol class="day-card-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 md:gap-5 mt-10 md:mt-12">
         {#each launchpadDays as day, idx}
           <li class="day-card reveal rounded-[1.5rem] border border-line bg-surface/60 p-5 md:p-6 flex flex-col gap-4 transition"
             data-day-index={idx}
@@ -1806,6 +1811,18 @@
   }
 
   /* === 5-DAY SCROLLYTELLING RAIL === */
+  :global(main section[id]) {
+    scroll-margin-top: 112px;
+  }
+  .site-header {
+    transition: background-color 0.25s ease, border-color 0.25s ease, backdrop-filter 0.25s ease;
+  }
+  .site-header-scrolled {
+    background: rgba(17, 18, 18, 0.94);
+    border-bottom: 1px solid rgba(212, 175, 55, 0.12);
+    -webkit-backdrop-filter: blur(18px);
+    backdrop-filter: blur(18px);
+  }
   .five-day-rail {
     position: relative;
     max-width: 92%;
@@ -1883,24 +1900,57 @@
     text-shadow: 0 0 12px rgba(212,175,55,0.5);
   }
   @media (max-width: 639px) {
+    #five-day {
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+    .day-card-grid {
+      gap: 14px;
+    }
     .day-card {
-      display: grid;
-      grid-template-columns: 96px minmax(0, 1fr);
-      grid-template-rows: auto auto auto auto;
-      align-items: start;
-      column-gap: 14px;
-      row-gap: 7px;
-      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      min-width: 0;
+      overflow: hidden;
+      padding: 14px;
     }
     .day-card .day-visual {
-      grid-column: 1;
-      grid-row: 1 / span 4;
-      width: 96px;
-      height: 96px;
+      width: 100%;
+      height: auto;
+      min-width: 0;
+      aspect-ratio: 16 / 9;
     }
-    .day-card > :not(.day-visual) { grid-column: 2; }
-    .day-card h3 { margin: 0; }
+    .day-card > * {
+      min-width: 0;
+      max-width: 100%;
+    }
+    .day-card h3 {
+      margin: 0;
+      font-size: 28px;
+      line-height: 1;
+    }
+    .day-card p {
+      overflow-wrap: anywhere;
+    }
+    .day-card p:last-child {
+      padding-bottom: 2px;
+    }
     .offer-support-card { border-radius: 1rem; }
+  }
+  @media (max-width: 360px) {
+    .site-header {
+      padding: 10px 12px;
+    }
+    .site-nav-shell {
+      padding: 12px 16px;
+    }
+    .day-card {
+      padding: 12px;
+    }
+    .day-card h3 {
+      font-size: 26px;
+    }
   }
 
   /* === SPECIMEN ROWS + MODAL === */

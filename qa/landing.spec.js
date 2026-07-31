@@ -206,6 +206,103 @@ for (const vp of VIEWPORTS) {
   });
 }
 
+// The five-day cards are a high-intent proof surface. Check the geometry of
+// their artwork and copy directly, since generic overflow tests cannot detect
+// two valid boxes colliding inside the same card.
+for (const vp of VIEWPORTS) {
+  test(`five-day cards are contained and collision-free @ ${vp.name}`, async ({ page }) => {
+    await page.setViewportSize({ width: vp.width, height: vp.height });
+    await page.goto('/', { waitUntil: 'networkidle' });
+    await prepPage(page);
+
+    const cards = await page.evaluate(() => {
+      const intersects = (a, b) =>
+        a.left < b.right - 0.5 &&
+        a.right > b.left + 0.5 &&
+        a.top < b.bottom - 0.5 &&
+        a.bottom > b.top + 0.5;
+      return Array.from(document.querySelectorAll('.day-card')).map((card) => {
+        const cardRect = card.getBoundingClientRect();
+        const visual = card.querySelector('.day-visual');
+        const visualRect = visual.getBoundingClientRect();
+        const content = Array.from(card.children).filter((el) => el !== visual);
+        const contentRects = content.map((el) => ({
+          text: (el.textContent || '').trim().slice(0, 40),
+          rect: el.getBoundingClientRect(),
+        }));
+        return {
+          label: card.querySelector('h3')?.textContent?.trim(),
+          visualContained:
+            visualRect.left >= cardRect.left - 1 &&
+            visualRect.right <= cardRect.right + 1 &&
+            visualRect.top >= cardRect.top - 1 &&
+            visualRect.bottom <= cardRect.bottom + 1,
+          contentContained: contentRects.every(({ rect }) =>
+            rect.left >= cardRect.left - 1 &&
+            rect.right <= cardRect.right + 1 &&
+            rect.top >= cardRect.top - 1 &&
+            rect.bottom <= cardRect.bottom + 1
+          ),
+          visualCollisions: contentRects
+            .filter(({ rect }) => intersects(visualRect, rect))
+            .map(({ text }) => text),
+          siblingCollisions: contentRects.flatMap((entry, i) =>
+            contentRects.slice(i + 1)
+              .filter((other) => intersects(entry.rect, other.rect))
+              .map((other) => `${entry.text} <> ${other.text}`)
+          ),
+          visualWidth: visualRect.width,
+          cardWidth: cardRect.width,
+        };
+      });
+    });
+
+    expect(cards).toHaveLength(5);
+    for (const card of cards) {
+      expect(card.visualContained, `${card.label} art escapes its card at ${vp.name}`).toBeTruthy();
+      expect(card.contentContained, `${card.label} copy escapes its card at ${vp.name}`).toBeTruthy();
+      expect(card.visualCollisions, `${card.label} art overlaps copy at ${vp.name}`).toEqual([]);
+      expect(card.siblingCollisions, `${card.label} copy blocks overlap at ${vp.name}`).toEqual([]);
+      if (vp.width < 640) {
+        expect(card.visualWidth, `${card.label} art is still crushed at ${vp.name}`)
+          .toBeGreaterThanOrEqual(card.cardWidth - 30);
+      }
+    }
+  });
+}
+
+test('mobile header clears anchored section content and sticky CTA clears the five-day cards', async ({ page }) => {
+  for (const viewport of [
+    { width: 320, height: 568 },
+    { width: 393, height: 852 },
+    { width: 430, height: 932 },
+  ]) {
+    await page.setViewportSize(viewport);
+    await page.goto('/#five-day', { waitUntil: 'networkidle' });
+    await page.evaluate(() => document.fonts && document.fonts.ready);
+    await page.waitForTimeout(500);
+
+    const geometry = await page.evaluate(() => {
+      const header = document.querySelector('.site-header').getBoundingClientRect();
+      const heading = document.querySelector('#five-day h2').getBoundingClientRect();
+      const sticky = document.querySelector('.sticky-cta');
+      return {
+        headerBottom: header.bottom,
+        headingTop: heading.top,
+        stickyVisible: sticky.classList.contains('sticky-cta-show'),
+      };
+    });
+    expect(
+      geometry.headingTop,
+      `five-day heading sits under the header at ${viewport.width}px`
+    ).toBeGreaterThanOrEqual(geometry.headerBottom - 1);
+    expect(
+      geometry.stickyVisible,
+      `sticky CTA covers the five-day journey at ${viewport.width}px`
+    ).toBeFalsy();
+  }
+});
+
 // ─────────────────────────────────────────────────────────────────────────
 // (6) Mobile primary CTA inside the 390×844 first viewport
 // ─────────────────────────────────────────────────────────────────────────
