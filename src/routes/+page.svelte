@@ -2069,8 +2069,8 @@
      `mv-`/`motion-` to avoid colliding with the unrelated `.day-card` /
      `.phone-shell` classes already used elsewhere on this page. */
   /* One real product glimpse, art-directed by viewport. The desktop crop
-     establishes the app's depth; mobile zooms into the active prompt so the
-     proof remains legible instead of becoming a tiny full-screen thumbnail. */
+     establishes the app's depth. Mobile preserves the complete screenshot
+     so buyers can inspect the full interface without a zoomed or hidden edge. */
   .product-peek { isolation: isolate; }
   .product-peek-bar {
     min-height: 42px;
@@ -2144,15 +2144,32 @@
   }
   @media (max-width: 640px) {
     .product-peek-bar { min-height: 38px; padding: 0 12px; font-size: 8px; }
-    .product-peek-media { aspect-ratio: 4 / 3; }
+    .product-peek-media {
+      display: flex;
+      flex-direction: column;
+      aspect-ratio: auto;
+      overflow: visible;
+    }
     .product-peek-image {
-      transform: scale(1.52);
-      transform-origin: 72% 18%;
+      position: relative;
+      inset: auto;
+      height: auto;
+      aspect-ratio: 1200 / 917;
+      object-fit: contain;
+      object-position: center;
+      transform: none;
+    }
+    .product-peek-media::after {
+      display: none;
     }
     .product-peek-caption {
-      left: 12px;
-      right: 12px;
-      bottom: 11px;
+      position: relative;
+      left: auto;
+      right: auto;
+      bottom: auto;
+      padding: 12px;
+      border-top: 1px solid rgba(212, 175, 55, 0.22);
+      background: #101111;
       align-items: start;
       flex-direction: column;
       gap: 3px;
@@ -2531,9 +2548,9 @@
     display: block;
     margin-top: 2px;
     color: #e7c66a;
-    font-family: 'Playfair Display', Georgia, serif;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
     font-size: 72px;
-    font-weight: 600;
+    font-weight: 700;
     line-height: 0.95;
     letter-spacing: 0;
   }

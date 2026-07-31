@@ -355,6 +355,50 @@ test('product proof uses one selective screenshot, not a screenshot gallery', as
   expect(proof.peekCount).toBe(1);
 });
 
+test('mobile product proof shows the complete screenshot without zoom or caption overlap', async ({ page }) => {
+  for (const viewport of [
+    { width: 320, height: 720 },
+    { width: 390, height: 844 },
+    { width: 430, height: 932 },
+  ]) {
+    await page.setViewportSize(viewport);
+    await page.goto('/', { waitUntil: 'networkidle' });
+    await page.locator('.product-peek').scrollIntoViewIfNeeded();
+    await page.waitForTimeout(300);
+
+    const proof = await page.evaluate(() => {
+      const media = document.querySelector('.product-peek-media');
+      const image = document.querySelector('.product-peek-image');
+      const caption = document.querySelector('.product-peek-caption');
+      const mediaRect = media.getBoundingClientRect();
+      const imageRect = image.getBoundingClientRect();
+      const captionRect = caption.getBoundingClientRect();
+      const imageStyle = getComputedStyle(image);
+      return {
+        loaded: image.complete && image.naturalWidth > 0,
+        naturalRatio: image.naturalWidth / image.naturalHeight,
+        renderedRatio: imageRect.width / imageRect.height,
+        objectFit: imageStyle.objectFit,
+        transform: imageStyle.transform,
+        imageContained:
+          imageRect.left >= mediaRect.left - 1 &&
+          imageRect.right <= mediaRect.right + 1 &&
+          imageRect.top >= mediaRect.top - 1,
+        captionBelowImage: captionRect.top >= imageRect.bottom - 1,
+        horizontalOverflow: document.documentElement.scrollWidth > window.innerWidth,
+      };
+    });
+
+    expect(proof.loaded).toBe(true);
+    expect(proof.renderedRatio).toBeCloseTo(proof.naturalRatio, 2);
+    expect(proof.objectFit).toBe('contain');
+    expect(proof.transform).toBe('none');
+    expect(proof.imageContained).toBe(true);
+    expect(proof.captionBelowImage).toBe(true);
+    expect(proof.horizontalOverflow).toBe(false);
+  }
+});
+
 test('customer-facing copy follows the no em dash brand rule', async ({ page }) => {
   await page.goto('/', { waitUntil: 'networkidle' });
   const publicCopy = await page.evaluate(() => [
@@ -505,9 +549,12 @@ test('offer close uses truthful contrast and keeps the price hierarchy readable'
       const price = panel.querySelector('.offer-price');
       const priceRect = price.getBoundingClientRect();
       const scratch = panel.querySelector('.offer-scratch');
+      const priceStyle = getComputedStyle(price);
       return {
         text: panel.textContent.replace(/\s+/g, ' ').trim(),
-        priceSize: parseFloat(getComputedStyle(price).fontSize),
+        priceSize: parseFloat(priceStyle.fontSize),
+        priceFont: priceStyle.fontFamily,
+        priceWeight: Number(priceStyle.fontWeight),
         priceContained:
           priceRect.left >= panelRect.left - 1 &&
           priceRect.right <= panelRect.right + 1,
@@ -522,6 +569,8 @@ test('offer close uses truthful contrast and keeps the price hierarchy readable'
     expect(close.text).not.toContain('$614');
     expect(close.text).not.toContain('$197');
     expect(close.priceSize).toBeGreaterThanOrEqual(54);
+    expect(close.priceFont).toContain('JetBrains Mono');
+    expect(close.priceWeight).toBe(700);
     expect(close.priceContained).toBe(true);
     expect(close.scratchVisible).toBe(true);
   }
