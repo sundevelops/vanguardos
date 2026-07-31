@@ -115,9 +115,9 @@
   }
 
   // ── WHAT IS INCLUDED ───────────────────────────────────────────────
-  // 2026-07-27: stacked-value arithmetic removed. No per-item dollar values,
-  // no strikethrough "value", no bonus framing. Concrete deliverables only —
-  // each piece exists because the next step in the sequence needs it.
+  // No invented per-item dollar values or false former-price comparisons.
+  // The six supporting systems are presented as purchase-conditioned bonuses:
+  // completely free with the Launchpad, with that condition kept conspicuous.
   // launchpadStack[0] is THE CORE; everything after is a supporting system.
   const launchpadStack = [
     { name: 'The 5-Day Launchpad',                     img: '/products/stack-01.webp', blurb: 'The interactive, guided build system. Open it in your browser and it walks you from idea to launch-ready, one screen at a time, by Day 5.' },
@@ -813,12 +813,42 @@
           <div class="h-px w-16 bg-gold-line"></div>
         </div>
         <h2 class="font-display text-4xl md:text-6xl lg:text-7xl leading-[0.95] text-text">
-          What you need to move from idea <span class="italic text-gold">to live checkout.</span>
+          Build the product. Open the checkout. <span class="italic text-gold">Own the whole system.</span>
         </h2>
         <p class="body-copy text-text text-lg md:text-xl mt-6 leading-relaxed">
-          The complete Launchpad plus six launch bonuses: the prompts, page system, brand tools, operations dashboard, and funnel patterns each step needs.
+          One guided five-day build, plus six launch bonuses that finish the work. Pay once. Keep every piece. Use it again on your next launch.
         </p>
       </header>
+
+      <div class="bundle-showcase reveal" aria-label="The complete Vanguard Launchpad bundle">
+        <div class="bundle-visual">
+          <figure class="bundle-core-art">
+            <img src={coreItem.img} alt="{coreItem.name} cover art" loading="eager" decoding="async" />
+            <figcaption>Core system</figcaption>
+          </figure>
+          <div class="bundle-bonus-art-grid" aria-label="Six included bonus covers">
+            {#each bonusItems as item, idx}
+              <figure class="bundle-bonus-art">
+                <img src={item.img} alt="{item.name} cover art" loading="lazy" decoding="async" />
+                <figcaption>Bonus {String(idx + 1).padStart(2, '0')}</figcaption>
+              </figure>
+            {/each}
+          </div>
+        </div>
+        <div class="bundle-message">
+          <span class="bundle-kicker">The complete Vanguard Launchpad bundle</span>
+          <h3>
+            <span>One core launch system.</span>
+            <strong>Six bonuses that finish the job.</strong>
+          </h3>
+          <p>Product prompts, page templates, brand tools, an operations dashboard, and the follow-up system are all inside.</p>
+          <div class="bundle-free-seal">
+            <strong>Completely free</strong>
+            <span>with the Launchpad</span>
+          </div>
+          <p class="bundle-free-proof">All six bonuses add $0 to your order.</p>
+        </div>
+      </div>
 
       <div class="reveal mb-8 md:mb-10 max-w-[820px] mx-auto rounded-[1.25rem] border-l-2 border-gold bg-surface/60 px-5 py-4 md:px-8 md:py-6">
         <p class="font-display italic text-lg md:text-xl text-text/90 leading-relaxed">
@@ -842,7 +872,7 @@
 
       <div class="reveal flex items-center justify-center gap-4 my-8 md:my-10">
         <div class="h-px flex-1 bg-gold-line/40"></div>
-        <span class="font-mono text-gold text-center bonus-header-text">Six launch bonuses, included</span>
+        <span class="font-mono text-gold text-center bonus-header-text">Six launch bonuses · completely free with the Launchpad</span>
         <div class="h-px flex-1 bg-gold-line/40"></div>
       </div>
 
@@ -853,7 +883,7 @@
               <img src={item.img} alt="{item.name} cover art" class="offer-support-image w-14 h-14 md:w-20 md:h-20 rounded-[0.75rem] md:rounded-[0.9rem] border border-line/60 object-cover shrink-0" loading="lazy" decoding="async" />
               <div class="flex flex-col gap-2 min-w-0">
                 <span class="bonus-card-label font-mono text-[9px] md:text-[10px] uppercase tracking-[0.22em] text-gold">
-                  Bonus {String(idx + 1).padStart(2, '0')} · Included
+                  Bonus {String(idx + 1).padStart(2, '0')} · Completely free
                 </span>
                 <h3 class="font-display text-xl md:text-[28px] text-text leading-tight">{item.name}</h3>
                 <p class="offer-support-copy">{item.blurb}</p>
@@ -887,11 +917,22 @@
         </button>
       </div>
 
-      <div class="reveal mt-10 md:mt-12 rounded-[2rem] border-2 border-gold bg-gold-soft/20 p-8 md:p-10"
+      <div class="offer-close reveal mt-10 md:mt-12 rounded-[2rem] border-2 border-gold bg-gold-soft/20 p-7 md:p-10"
         style="background-image: radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.10), transparent 70%);">
-        <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 min-w-0">
-          <span class="font-display text-2xl md:text-3xl text-text leading-tight min-w-0">The Vanguard Launchpad</span>
-          <span class="font-mono font-bold text-3xl md:text-4xl text-gold tracking-tight min-w-0">$129<span class="font-normal text-sm md:text-base text-text/70 ml-2 whitespace-nowrap">· one payment</span></span>
+        <div class="offer-close-grid">
+          <div class="offer-close-copy">
+            <span class="offer-close-kicker">The Vanguard Launchpad</span>
+            <h3>Get the full build. Keep every bonus.</h3>
+            <p>Start at your idea. Finish with the product, brand, page, checkout, delivery, and follow-up ready to go.</p>
+          </div>
+          <div class="offer-price-block">
+            <div class="offer-scratch" aria-label="Seven separate purchases crossed out">
+              <span>Seven separate purchases</span>
+            </div>
+            <span class="offer-price-label">Today · one payment</span>
+            <strong class="offer-price">$129</strong>
+            <span class="offer-price-note">Six bonuses completely free</span>
+          </div>
         </div>
         <a href={GUMROAD.launchpad} data-event="checkout_click" data-analytics-id="offer-stack-cta" on:click={trackCheckoutClick} class="btn-primary cta-btn w-full mt-7 rounded-[2rem] font-mono text-sm md:text-base uppercase">
           <svg class="owl-logo-cta" width="20" height="20" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M9 15 L9 24 Q9 31 20 33 Q31 31 31 24 L31 15 Q26 10 20 13 Q14 10 9 15 Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="15.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="24.5" cy="19" r="2" stroke="currentColor" stroke-width="1.4"/><circle cx="15.5" cy="19" r=".7" fill="currentColor"/><circle cx="24.5" cy="19" r=".7" fill="currentColor"/><path d="M20 22 L18 25 L22 25 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
@@ -2300,9 +2341,210 @@
     .mv-day-chip span { font-size: 6px; }
   }
 
+  .bundle-showcase {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(280px, 0.85fr);
+    gap: 40px;
+    align-items: center;
+    margin: 0 auto 40px;
+    padding: 32px;
+    border: 1px solid rgba(212, 175, 55, 0.44);
+    border-radius: 24px;
+    background: #101111;
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.34);
+    overflow: hidden;
+  }
+  .bundle-visual {
+    display: grid;
+    grid-template-columns: minmax(150px, 0.85fr) minmax(0, 1.15fr);
+    gap: 18px;
+    align-items: center;
+    min-width: 0;
+  }
+  .bundle-core-art,
+  .bundle-bonus-art {
+    margin: 0;
+    min-width: 0;
+  }
+  .bundle-core-art img,
+  .bundle-bonus-art img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border: 1px solid rgba(212, 175, 55, 0.42);
+    border-radius: 10px;
+    background: #090a0a;
+  }
+  .bundle-core-art img {
+    box-shadow: 0 22px 42px rgba(0, 0, 0, 0.42);
+  }
+  .bundle-core-art figcaption,
+  .bundle-bonus-art figcaption {
+    margin-top: 8px;
+    color: #d4af37;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 9px;
+    line-height: 1.4;
+    letter-spacing: 0;
+    text-align: center;
+    text-transform: uppercase;
+  }
+  .bundle-bonus-art-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    min-width: 0;
+  }
+  .bundle-message {
+    min-width: 0;
+  }
+  .bundle-kicker,
+  .offer-close-kicker,
+  .offer-price-label,
+  .offer-price-note {
+    display: block;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 10px;
+    line-height: 1.5;
+    letter-spacing: 0;
+    text-transform: uppercase;
+  }
+  .bundle-kicker,
+  .offer-close-kicker {
+    color: #d4af37;
+  }
+  .bundle-message h3 {
+    margin: 16px 0 14px;
+    color: #eceae4;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 38px;
+    line-height: 1.04;
+    letter-spacing: 0;
+  }
+  .bundle-message h3 span,
+  .bundle-message h3 strong {
+    display: block;
+  }
+  .bundle-message h3 strong {
+    margin-top: 8px;
+    color: #e7c66a;
+    font-style: italic;
+    font-weight: 500;
+  }
+  .bundle-message > p {
+    margin: 0;
+    color: #d8d6d0;
+    font-size: 16px;
+    line-height: 1.65;
+  }
+  .bundle-free-seal {
+    margin-top: 24px;
+    padding: 16px 0;
+    border-top: 1px solid rgba(212, 175, 55, 0.52);
+    border-bottom: 1px solid rgba(212, 175, 55, 0.52);
+  }
+  .bundle-free-seal strong {
+    display: block;
+    color: #e7c66a;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 40px;
+    line-height: 0.95;
+    letter-spacing: 0;
+    text-transform: uppercase;
+  }
+  .bundle-free-seal span {
+    display: block;
+    margin-top: 9px;
+    color: #eceae4;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 11px;
+    line-height: 1.4;
+    letter-spacing: 0;
+    text-transform: uppercase;
+  }
+  .bundle-message .bundle-free-proof {
+    margin-top: 12px;
+    color: #a6a6a1;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 10px;
+    line-height: 1.5;
+    text-transform: uppercase;
+  }
+  .offer-close-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(260px, 0.62fr);
+    gap: 36px;
+    align-items: end;
+  }
+  .offer-close-copy h3 {
+    margin: 10px 0 10px;
+    color: #eceae4;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 36px;
+    line-height: 1.05;
+    letter-spacing: 0;
+  }
+  .offer-close-copy p {
+    margin: 0;
+    max-width: 590px;
+    color: #d8d6d0;
+    font-size: 16px;
+    line-height: 1.6;
+  }
+  .offer-price-block {
+    min-width: 0;
+    text-align: right;
+  }
+  .offer-scratch {
+    position: relative;
+    display: inline-block;
+    max-width: 100%;
+    margin-bottom: 12px;
+    color: #a6a6a1;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 25px;
+    line-height: 1.15;
+    letter-spacing: 0;
+  }
+  .offer-scratch::before,
+  .offer-scratch::after {
+    content: '';
+    position: absolute;
+    left: -3%;
+    right: -3%;
+    top: 51%;
+    height: 2px;
+    background: #d4af37;
+    transform: rotate(-4deg);
+  }
+  .offer-scratch::after {
+    top: 58%;
+    opacity: 0.64;
+    transform: rotate(2deg);
+  }
+  .offer-price-label {
+    color: #eceae4;
+  }
+  .offer-price {
+    display: block;
+    margin-top: 2px;
+    color: #e7c66a;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 72px;
+    font-weight: 600;
+    line-height: 0.95;
+    letter-spacing: 0;
+  }
+  .offer-price-note {
+    margin-top: 10px;
+    color: #d4af37;
+  }
+
   .bonus-header-text {
     font-size: 10px;
-    letter-spacing: 0.3em;
+    letter-spacing: 0;
     text-transform: uppercase;
     white-space: nowrap;
   }
@@ -2320,7 +2562,77 @@
       font-size: 16px;
     }
   }
+  @media (max-width: 900px) {
+    .bundle-showcase {
+      grid-template-columns: 1fr;
+      gap: 30px;
+    }
+    .bundle-message {
+      max-width: 680px;
+    }
+  }
+  @media (max-width: 767px) {
+    .bundle-showcase {
+      gap: 26px;
+      margin-bottom: 32px;
+      padding: 22px;
+      border-radius: 18px;
+    }
+    .bundle-message h3 {
+      font-size: 32px;
+    }
+    .bundle-free-seal strong {
+      font-size: 34px;
+    }
+    .offer-close-grid {
+      grid-template-columns: 1fr;
+      gap: 28px;
+    }
+    .offer-price-block {
+      padding-top: 24px;
+      border-top: 1px solid rgba(212, 175, 55, 0.42);
+      text-align: left;
+    }
+    .offer-price {
+      font-size: 64px;
+    }
+  }
   @media (max-width: 420px) {
+    .bundle-showcase {
+      padding: 18px;
+    }
+    .bundle-visual {
+      grid-template-columns: 112px minmax(0, 1fr);
+      gap: 12px;
+      align-items: start;
+    }
+    .bundle-bonus-art-grid {
+      gap: 8px;
+    }
+    .bundle-core-art figcaption,
+    .bundle-bonus-art figcaption {
+      margin-top: 5px;
+      font-size: 7px;
+    }
+    .bundle-message h3 {
+      font-size: 29px;
+    }
+    .bundle-message > p,
+    .offer-close-copy p {
+      font-size: 15px;
+    }
+    .bundle-free-seal strong {
+      font-size: 30px;
+    }
+    .offer-close-copy h3 {
+      font-size: 31px;
+    }
+    .offer-scratch {
+      font-size: 22px;
+    }
+    .offer-price {
+      font-size: 58px;
+    }
     .offer-support-card > div {
       gap: 12px;
     }
@@ -2332,8 +2644,29 @@
   @media (max-width: 360px) {
     .bonus-header-text {
       font-size: 9px;
-      letter-spacing: 0.16em;
+      letter-spacing: 0;
       white-space: normal;
+    }
+    .bundle-showcase {
+      padding: 16px;
+    }
+    .bundle-visual {
+      grid-template-columns: 94px minmax(0, 1fr);
+    }
+    .bundle-bonus-art-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .bundle-message h3 {
+      font-size: 27px;
+    }
+    .bundle-free-seal strong {
+      font-size: 23px;
+    }
+    .offer-close-copy h3 {
+      font-size: 29px;
+    }
+    .offer-price {
+      font-size: 54px;
     }
   }
 

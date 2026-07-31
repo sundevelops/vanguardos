@@ -406,7 +406,7 @@ test('bonus descriptions stay readable on desktop and mobile', async ({ page }) 
   }
 });
 
-test('offer stack clearly labels all six included bonuses', async ({ page }) => {
+test('offer stack clearly labels all six bonuses as completely free with purchase', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/', { waitUntil: 'networkidle' });
   await page.locator('#offer-stack').scrollIntoViewIfNeeded();
@@ -418,15 +418,113 @@ test('offer stack clearly labels all six included bonuses', async ({ page }) => 
       .map((el) => (el.textContent || '').replace(/\s+/g, ' ').trim()),
   }));
 
-  expect(bonusOffer.sectionText).toContain('Six launch bonuses, included');
+  expect(bonusOffer.sectionText).toContain('Six launch bonuses · completely free with the Launchpad');
+  expect(bonusOffer.sectionText).toContain('All six bonuses add $0 to your order.');
   expect(bonusOffer.labels).toEqual([
-    'Bonus 01 · Included',
-    'Bonus 02 · Included',
-    'Bonus 03 · Included',
-    'Bonus 04 · Included',
-    'Bonus 05 · Included',
-    'Bonus 06 · Included',
+    'Bonus 01 · Completely free',
+    'Bonus 02 · Completely free',
+    'Bonus 03 · Completely free',
+    'Bonus 04 · Completely free',
+    'Bonus 05 · Completely free',
+    'Bonus 06 · Completely free',
   ]);
+});
+
+test('bundle showcase renders all seven real product covers without overlap', async ({ page }) => {
+  for (const viewport of [
+    { width: 320, height: 720 },
+    { width: 390, height: 844 },
+    { width: 768, height: 1024 },
+    { width: 1440, height: 900 },
+  ]) {
+    await page.setViewportSize(viewport);
+    await page.goto('/', { waitUntil: 'networkidle' });
+    await page.locator('.bundle-showcase').scrollIntoViewIfNeeded();
+    await page.waitForTimeout(250);
+
+    const bundle = await page.evaluate(() => {
+      const stage = document.querySelector('.bundle-showcase');
+      const stageRect = stage.getBoundingClientRect();
+      const images = Array.from(stage.querySelectorAll('img')).map((img) => {
+        const rect = img.getBoundingClientRect();
+        return {
+          src: img.getAttribute('src'),
+          complete: img.complete,
+          naturalWidth: img.naturalWidth,
+          width: rect.width,
+          height: rect.height,
+          contained:
+            rect.left >= stageRect.left - 1 &&
+            rect.right <= stageRect.right + 1 &&
+            rect.top >= stageRect.top - 1 &&
+            rect.bottom <= stageRect.bottom + 1,
+        };
+      });
+      const seal = stage.querySelector('.bundle-free-seal').getBoundingClientRect();
+      const freeText = stage.querySelector('.bundle-free-seal strong').getBoundingClientRect();
+      return {
+        images,
+        sealVisible: seal.width > 0 && seal.height > 0,
+        freeTextContained:
+          freeText.left >= seal.left - 1 &&
+          freeText.right <= seal.right + 1,
+        scrollWidth: document.documentElement.scrollWidth,
+        viewportWidth: window.innerWidth,
+      };
+    });
+
+    expect(bundle.images).toHaveLength(7);
+    expect(new Set(bundle.images.map((image) => image.src)).size).toBe(7);
+    for (const image of bundle.images) {
+      expect(image.complete).toBe(true);
+      expect(image.naturalWidth).toBeGreaterThan(0);
+      expect(image.width).toBeGreaterThan(0);
+      expect(image.height).toBeGreaterThan(0);
+      expect(image.contained).toBe(true);
+    }
+    expect(bundle.sealVisible).toBe(true);
+    expect(bundle.freeTextContained).toBe(true);
+    expect(bundle.scrollWidth).toBeLessThanOrEqual(bundle.viewportWidth);
+  }
+});
+
+test('offer close uses truthful contrast and keeps the price hierarchy readable', async ({ page }) => {
+  for (const viewport of [
+    { width: 320, height: 720 },
+    { width: 390, height: 844 },
+    { width: 1440, height: 900 },
+  ]) {
+    await page.setViewportSize(viewport);
+    await page.goto('/', { waitUntil: 'networkidle' });
+    await page.locator('.offer-close').scrollIntoViewIfNeeded();
+    await page.waitForTimeout(250);
+
+    const close = await page.evaluate(() => {
+      const panel = document.querySelector('.offer-close');
+      const panelRect = panel.getBoundingClientRect();
+      const price = panel.querySelector('.offer-price');
+      const priceRect = price.getBoundingClientRect();
+      const scratch = panel.querySelector('.offer-scratch');
+      return {
+        text: panel.textContent.replace(/\s+/g, ' ').trim(),
+        priceSize: parseFloat(getComputedStyle(price).fontSize),
+        priceContained:
+          priceRect.left >= panelRect.left - 1 &&
+          priceRect.right <= panelRect.right + 1,
+        scratchVisible: scratch.getBoundingClientRect().width > 0,
+      };
+    });
+
+    expect(close.text).toContain('Seven separate purchases');
+    expect(close.text).toContain('Today · one payment $129');
+    expect(close.text).toContain('Six bonuses completely free');
+    expect(close.text).not.toContain('$811');
+    expect(close.text).not.toContain('$614');
+    expect(close.text).not.toContain('$197');
+    expect(close.priceSize).toBeGreaterThanOrEqual(54);
+    expect(close.priceContained).toBe(true);
+    expect(close.scratchVisible).toBe(true);
+  }
 });
 
 // ─────────────────────────────────────────────────────────────────────────
