@@ -7,48 +7,50 @@
 
     <!-- Meta Pixel Code -->
     <script>
-      !function(f,b,e,v,n,t,s)
-      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-      n.queue=[];t=b.createElement(e);t.async=!0;
-      t.src=v;s=b.getElementsByTagName(e)[0];
-      s.parentNode.insertBefore(t,s)}(window, document,'script',
-      'https://connect.facebook.net/en_US/fbevents.js');
-      fbq('init', '915468030842339');
-      fbq('track', 'PageView');
+      // Keep local previews and automated QA out of Meta's learning signal.
+      const isVanguardProductionHost =
+        window.location.hostname === 'vanguardos.co' ||
+        window.location.hostname === 'www.vanguardos.co';
 
-      // ViewContent — fired once per page load for the Launchpad sales page.
-      // Purchase remains server-side only. InitiateCheckout fires only when a
-      // visitor clicks through to the hosted checkout.
-      fbq('track', 'ViewContent', {
-        content_name: 'The Vanguard Launchpad',
-        content_type: 'product',
-        content_ids: ['lgaxz'],
-        value: 129,
-        currency: 'USD'
-      });
+      if (isVanguardProductionHost) {
+        !function(f,b,e,v,n,t,s)
+        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+        n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t,s)}(window, document,'script',
+        'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '915468030842339');
+        fbq('track', 'PageView');
 
-      // Checkout intent — one standard optimization event plus the existing
-      // diagnostic custom event. Gumroad cannot fire this browser event back
-      // to the VanguardOS pixel, so the outbound checkout click is the clean
-      // and deduplicated boundary.
-      document.addEventListener('click', function(e) {
-        const link = e.target.closest('a[href*="gumroad.com"]');
-        if (link && typeof fbq === 'function') {
-          fbq('track', 'InitiateCheckout', {
-            content_name: 'The Vanguard Launchpad',
-            content_type: 'product',
-            content_ids: ['lgaxz'],
-            value: 129,
-            currency: 'USD'
-          });
-          fbq('trackCustom', 'CheckoutClick', {
-            content_name: 'The Vanguard Launchpad',
-            destination: 'gumroad'
-          });
-        }
-      }, true);
+        // ViewContent fires once per production page load. Purchase remains
+        // server-side only. InitiateCheckout fires only on checkout intent.
+        fbq('track', 'ViewContent', {
+          content_name: 'The Vanguard Launchpad',
+          content_type: 'product',
+          content_ids: ['lgaxz'],
+          value: 129,
+          currency: 'USD'
+        });
+
+        document.addEventListener('click', function(e) {
+          const link = e.target.closest('a[href*="gumroad.com"]');
+          if (link && typeof fbq === 'function') {
+            fbq('track', 'InitiateCheckout', {
+              content_name: 'The Vanguard Launchpad',
+              content_type: 'product',
+              content_ids: ['lgaxz'],
+              value: 129,
+              currency: 'USD'
+            });
+            fbq('trackCustom', 'CheckoutClick', {
+              content_name: 'The Vanguard Launchpad',
+              destination: 'gumroad'
+            });
+          }
+        }, true);
+      }
     </script>
     <noscript><img height="1" width="1" style="display:none"
       src="https://www.facebook.com/tr?id=915468030842339&ev=PageView&noscript=1"

@@ -115,9 +115,9 @@
   }
 
   // ── WHAT IS INCLUDED ───────────────────────────────────────────────
-  // No invented per-item dollar values or false former-price comparisons.
-  // The six supporting systems are presented as purchase-conditioned bonuses:
-  // completely free with the Launchpad, with that condition kept conspicuous.
+  // The bundle's documented component value is shown as a value anchor, never
+  // as a former selling price. The six supporting systems are presented as
+  // purchase-conditioned bonuses, with that condition kept conspicuous.
   // launchpadStack[0] is THE CORE; everything after is a supporting system.
   const launchpadStack = [
     { name: 'The 5-Day Launchpad',                     img: '/products/stack-01.webp', blurb: 'The interactive, guided build system. Open it in your browser and it walks you from idea to launch-ready, one screen at a time, by Day 5.' },
@@ -130,6 +130,7 @@
   ];
   const coreItem  = launchpadStack[0];
   const bonusItems = launchpadStack.slice(1);
+  const stackValue = 811;
 
   // ── 5-DAY JOURNEY ────────────────────────────────────────────────
   // Restored as premium day cards 2026-07-13. The page needs to make the
@@ -926,12 +927,13 @@
             <p>Start at your idea. Finish with the product, brand, page, checkout, delivery, and follow-up ready to go.</p>
           </div>
           <div class="offer-price-block">
-            <div class="offer-scratch" aria-label="Seven separate purchases crossed out">
+            <div class="offer-scratch" aria-label="Seven separate purchases and $811 combined value crossed out">
               <span>Seven separate purchases</span>
+              <strong>${stackValue} combined value</strong>
             </div>
-            <span class="offer-price-label">Today · one payment</span>
+            <span class="offer-price-label">Bundle price today · one payment</span>
             <strong class="offer-price">$129</strong>
-            <span class="offer-price-note">Six bonuses completely free</span>
+            <span class="offer-price-note">Core system + six bonuses completely free</span>
           </div>
         </div>
         <a href={GUMROAD.launchpad} data-event="checkout_click" data-analytics-id="offer-stack-cta" on:click={trackCheckoutClick} class="btn-primary cta-btn w-full mt-7 rounded-[2rem] font-mono text-sm md:text-base uppercase">
@@ -939,7 +941,8 @@
           <span class="cta-label"><span class="cta-label-full">Start My 5-Day Build</span><span class="cta-label-short">Start My Build</span></span>
           <span class="cta-arrow" aria-hidden="true">→</span>
         </a>
-        <p class="text-xs md:text-sm font-mono uppercase tracking-wide md:tracking-widest text-muted mt-3 text-center leading-relaxed">Instant access · Keep it for future launches · 30-day guarantee</p>
+        <p class="text-xs md:text-sm font-mono uppercase tracking-wide md:tracking-widest text-muted mt-3 text-center leading-relaxed">Secure checkout · Instant access · No subscription · 30-day guarantee</p>
+        <p class="offer-value-disclosure">${stackValue} is the combined value of all seven pieces. It is not a former selling price.</p>
       </div>
     </div>
   </section>
@@ -2516,13 +2519,26 @@
   }
   .offer-scratch {
     position: relative;
-    display: inline-block;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-end;
     max-width: 100%;
-    margin-bottom: 12px;
+    margin-bottom: 14px;
     color: #a6a6a1;
     font-family: 'Playfair Display', Georgia, serif;
-    font-size: 25px;
-    line-height: 1.15;
+    line-height: 1.12;
+    letter-spacing: 0;
+  }
+  .offer-scratch span {
+    font-size: 22px;
+  }
+  .offer-scratch strong {
+    margin-top: 3px;
+    color: #d8d6d0;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 27px;
+    font-weight: 700;
+    line-height: 1.1;
     letter-spacing: 0;
   }
   .offer-scratch::before,
@@ -2531,13 +2547,13 @@
     position: absolute;
     left: -3%;
     right: -3%;
-    top: 51%;
+    top: 48%;
     height: 2px;
     background: #d4af37;
     transform: rotate(-4deg);
   }
   .offer-scratch::after {
-    top: 58%;
+    top: 57%;
     opacity: 0.64;
     transform: rotate(2deg);
   }
@@ -2557,6 +2573,14 @@
   .offer-price-note {
     margin-top: 10px;
     color: #d4af37;
+  }
+  .offer-value-disclosure {
+    margin: 12px auto 0;
+    max-width: 620px;
+    color: #8f8f89;
+    font-size: 12px;
+    line-height: 1.5;
+    text-align: center;
   }
 
   .bonus-header-text {
@@ -2610,6 +2634,9 @@
       border-top: 1px solid rgba(212, 175, 55, 0.42);
       text-align: left;
     }
+    .offer-scratch {
+      align-items: flex-start;
+    }
     .offer-price {
       font-size: 64px;
     }
@@ -2644,8 +2671,11 @@
     .offer-close-copy h3 {
       font-size: 31px;
     }
-    .offer-scratch {
-      font-size: 22px;
+    .offer-scratch span {
+      font-size: 20px;
+    }
+    .offer-scratch strong {
+      font-size: 24px;
     }
     .offer-price {
       font-size: 58px;

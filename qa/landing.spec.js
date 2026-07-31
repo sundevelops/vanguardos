@@ -563,9 +563,11 @@ test('offer close uses truthful contrast and keeps the price hierarchy readable'
     });
 
     expect(close.text).toContain('Seven separate purchases');
-    expect(close.text).toContain('Today · one payment $129');
-    expect(close.text).toContain('Six bonuses completely free');
-    expect(close.text).not.toContain('$811');
+    expect(close.text).toContain('$811 combined value');
+    expect(close.text).toContain('Bundle price today · one payment $129');
+    expect(close.text).toContain('Core system + six bonuses completely free');
+    expect(close.text).toContain('Secure checkout · Instant access · No subscription · 30-day guarantee');
+    expect(close.text).toContain('$811 is the combined value of all seven pieces. It is not a former selling price.');
     expect(close.text).not.toContain('$614');
     expect(close.text).not.toContain('$197');
     expect(close.priceSize).toBeGreaterThanOrEqual(54);
@@ -743,7 +745,6 @@ test('retired positioning phrases and event labels are absent from the page', as
     'Five stars, from people',
     'Every one of them started',
     "That's the whole promise, proven real",
-    '$811',
     'nearly five times',
     'data-event="initiate_checkout"',
     'Live checkout, confirmed',
@@ -765,6 +766,8 @@ test('retired positioning phrases and event labels are absent from the page', as
   // InitiateCheckout must exist only inside the delegated Gumroad-click
   // listener so merely loading the page never creates checkout intent.
   const head = await page.evaluate(() => document.head.innerHTML);
+  expect(head).toContain("window.location.hostname === 'vanguardos.co'");
+  expect(head).toContain("window.location.hostname === 'www.vanguardos.co'");
   expect((head.match(/fbq\('track', 'PageView'/g) || []).length, 'PageView must fire exactly once').toBe(1);
   expect((head.match(/fbq\('track', 'ViewContent'/g) || []).length, 'ViewContent must fire exactly once').toBe(1);
   expect(/fbq\(\s*'track',\s*'Purchase'/.test(head), 'Purchase must not fire on the landing page').toBeFalsy();
