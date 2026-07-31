@@ -406,6 +406,29 @@ test('bonus descriptions stay readable on desktop and mobile', async ({ page }) 
   }
 });
 
+test('offer stack clearly labels all six included bonuses', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/', { waitUntil: 'networkidle' });
+  await page.locator('#offer-stack').scrollIntoViewIfNeeded();
+  await page.waitForTimeout(300);
+
+  const bonusOffer = await page.evaluate(() => ({
+    sectionText: document.querySelector('#offer-stack')?.textContent || '',
+    labels: Array.from(document.querySelectorAll('.bonus-card-label'))
+      .map((el) => (el.textContent || '').replace(/\s+/g, ' ').trim()),
+  }));
+
+  expect(bonusOffer.sectionText).toContain('Six launch bonuses, included');
+  expect(bonusOffer.labels).toEqual([
+    'Bonus 01 · Included',
+    'Bonus 02 · Included',
+    'Bonus 03 · Included',
+    'Bonus 04 · Included',
+    'Bonus 05 · Included',
+    'Bonus 06 · Included',
+  ]);
+});
+
 // ─────────────────────────────────────────────────────────────────────────
 // (7) Essential body text stays readable (no faint opacity/color after settle)
 // ─────────────────────────────────────────────────────────────────────────

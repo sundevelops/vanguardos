@@ -816,7 +816,7 @@
           What you need to move from idea <span class="italic text-gold">to live checkout.</span>
         </h2>
         <p class="body-copy text-text text-lg md:text-xl mt-6 leading-relaxed">
-          The complete Launchpad plus the prompts, page system, brand tools, operations dashboard, and funnel patterns each step needs.
+          The complete Launchpad plus six launch bonuses: the prompts, page system, brand tools, operations dashboard, and funnel patterns each step needs.
         </p>
       </header>
 
@@ -842,16 +842,19 @@
 
       <div class="reveal flex items-center justify-center gap-4 my-8 md:my-10">
         <div class="h-px flex-1 bg-gold-line/40"></div>
-        <span class="font-mono text-gold text-center bonus-header-text">The supporting systems, included</span>
+        <span class="font-mono text-gold text-center bonus-header-text">Six launch bonuses, included</span>
         <div class="h-px flex-1 bg-gold-line/40"></div>
       </div>
 
       <ul class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
-        {#each bonusItems as item}
+        {#each bonusItems as item, idx}
           <li class="offer-support-card reveal rounded-[1.5rem] border border-line bg-surface/60 p-5 md:p-7 hover:border-gold-line transition flex flex-col gap-3">
             <div class="flex items-start gap-4">
               <img src={item.img} alt="{item.name} cover art" class="offer-support-image w-14 h-14 md:w-20 md:h-20 rounded-[0.75rem] md:rounded-[0.9rem] border border-line/60 object-cover shrink-0" loading="lazy" decoding="async" />
               <div class="flex flex-col gap-2 min-w-0">
+                <span class="bonus-card-label font-mono text-[9px] md:text-[10px] uppercase tracking-[0.22em] text-gold">
+                  Bonus {String(idx + 1).padStart(2, '0')} · Included
+                </span>
                 <h3 class="font-display text-xl md:text-[28px] text-text leading-tight">{item.name}</h3>
                 <p class="offer-support-copy">{item.blurb}</p>
               </div>
