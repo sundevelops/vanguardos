@@ -57,6 +57,7 @@ HTML=$(curl -sL "$BASE/")
 
 BANNED=(
   "complete beginner"
+  "Turn one unfinished idea into a branded digital product"
   "Five stars, from people"
   "Every one of them started"
   "That's the whole promise, proven real"
@@ -72,7 +73,9 @@ done
 [ "$BAD" -eq 0 ] && pass "all 8 retired phrases absent"
 
 REQUIRED=(
-  "gives one unfinished idea an exact sequence"
+  "Build or refine your digital product"
+  "Start with no idea, an unfinished idea, or a product that already exists"
+  "I already have a digital product. Will this still work for me?"
   "Day 5 output: a checkout ready to publish"
   "What the system helped them"
   "Three firsthand accounts"

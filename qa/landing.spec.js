@@ -411,6 +411,22 @@ test('customer-facing copy follows the no em dash brand rule', async ({ page }) 
   expect(publicCopy).not.toContain('—');
 });
 
+test('hero and FAQ cover all three buyer starting states', async ({ page }) => {
+  await page.goto('/', { waitUntil: 'networkidle' });
+
+  await expect(page.locator('h1')).toContainText('Build or refine your digital product.');
+  await expect(page.locator('h1')).toContainText('Launch it with a live checkout in five guided days.');
+  await expect(page.locator('[data-market-fit="three-starting-states"]')).toContainText(
+    'Start with no idea, an unfinished idea, or a product that already exists.'
+  );
+  await expect(page.locator('#for-who')).toContainText(
+    'You have no idea yet, an unfinished idea, or a digital product that needs a stronger launch system.'
+  );
+  await expect(page.locator('#faq')).toContainText(
+    'I already have a digital product. Will this still work for me?'
+  );
+});
+
 test('bonus descriptions stay readable on desktop and mobile', async ({ page }) => {
   for (const viewport of [
     { width: 390, height: 844 },

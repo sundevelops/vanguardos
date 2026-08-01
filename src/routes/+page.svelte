@@ -221,13 +221,13 @@
   // ── LAUNCHPAD FAQ ────────────────────────────────────────────────
   const launchpadFaq = [
     ['Do I need to be technical?', 'No. Every template, prompt, and pattern is copy-paste. The prompts ask you a few plain questions and do the rest. If you can follow a recipe, you can follow this.'],
-    ["What if I don't have an idea yet?", "Yes, that's what Day 1 is for. Start with nothing more than a hunch, or a blank page: Day 1 is a sequenced way to surface, validate, and price an idea, and you finish it with a locked offer."],
+    ["What if I don't have an idea yet?", "That is exactly what Day 1 is for. Start with a hunch or a blank page: Day 1 helps you surface, validate, and price an idea, and you finish with a locked offer."],
     ['How much time does each day take?', 'One focused sitting, not a day off work. The Launchpad is 72 guided steps across Welcome plus five days, action-first, so most people finish a day in one to two hours after work. Plan on roughly 8 to 12 hours of hands-on building across the five days, and the AI does the heavy lifting inside each screen.'],
     ['How do I get it after I pay?', 'Instantly. The moment your $129 payment clears, the email lands with a single file: the Launchpad itself, an interactive build system you open in your browser, plus the six supporting guides and the prompt vault, ready to keep forever. No onboarding call, no waiting room, nothing to install. You can open Day 1 the same night.'],
     ['What tools do I need?', "The free path can complete the whole system. Each day names the exact free and premium option for that stage: an AI writing assistant for the prompts, a guided website builder and deployment stack for Day 4, and a checkout platform for Day 5, all with real free tiers. A paid AI tier (about $20 a month) is optional polish, not a requirement: it buys longer sessions and a stronger model, which shows up as better output. There is no VanguardOS subscription on top, ever."],
     ['How much extra will I spend on tools?', 'You can build and host on free tiers. Two upgrades are worth it: a paid AI tier for stronger output, and a custom domain (about $10 a year) so your site has a real, credible address you own. A checkout platform also charges a small transaction fee per sale. Neither upgrade is required to finish, but both are worth the small spend.'],
     ['Will this work for my niche?', "Yes. The system is niche-agnostic by design. The templates and patterns are the scaffolding; the Day 2 brand work and Day 4 landing copy are where your niche shapes the output."],
-    ["What if I'm already mid-launch?", "Drop into whichever day matches where you are. Stuck on the offer? Day 1. Brand feels off? Day 2. No landing page? Day 4. The Launchpad is a system you re-enter whenever a leg is weak."],
+    ["I already have a digital product. Will this still work for me?", "Yes. Skip the steps you have already completed and use the Launchpad where your system is weakest: sharpen the offer on Day 1, strengthen the brand on Day 2, improve the product and assets on Day 3, build the sales page on Day 4, or connect checkout and follow-up on Day 5."],
     ['Refund policy?', 'A full 30 days. Try the complete five-day system, and if it is not the right fit, email us within 30 days for a refund. If you get stuck on a step, tell us where. We would rather help you finish.']
   ];
 
@@ -251,7 +251,7 @@
     "@context": "https://schema.org",
     "@type": "Product",
     "name": "The Vanguard Launchpad",
-    "description": "The Vanguard Launchpad is an interactive five-day system that guides you from idea to a branded digital product, a live sales page, a working checkout, and a ready-to-connect follow-up email sequence.",
+    "description": "The Vanguard Launchpad is an interactive five-day system for finding, building, refining, branding, and launching a digital product with a live sales page, checkout, and follow-up.",
     "image": "https://vanguardos.co/og/og-card.jpg",
     "url": "https://vanguardos.co/",
     "brand": { "@type": "Brand", "name": "VanguardOS" },
@@ -503,16 +503,16 @@
            headline reads cleanly on a 390px viewport. -->
       <h1 class="hero-h1 font-display font-medium text-text leading-[1.02] md:leading-[0.98] w-full min-w-0 max-w-[1100px] mx-auto select-none">
         <span class="block text-[1.95rem] leading-[1.08] sm:text-5xl md:text-6xl lg:text-[4.25rem] xl:text-[4.75rem] md:leading-[0.98]">
-          Turn one unfinished idea into a branded digital product
+          Build or refine your digital product.
         </span>
-        <span class="block italic text-gold text-[1.95rem] leading-[1.08] sm:text-5xl md:text-6xl lg:text-[4.25rem] xl:text-[4.75rem] md:leading-[0.98] mt-1.5 md:mt-3">
-          and a live checkout in five days.
+        <span class="block text-text text-[1.95rem] leading-[1.08] sm:text-5xl md:text-6xl lg:text-[4.25rem] xl:text-[4.75rem] md:leading-[0.98] mt-1.5 md:mt-3">
+          Launch it with a <span class="italic text-gold">live checkout</span> in five guided days.
         </span>
       </h1>
 
-      <!-- Supporting copy: names the exact sequence in one sentence. -->
-      <p class="hero-item body-copy font-sans text-body text-[17px] md:text-2xl leading-[1.6] md:leading-snug w-full min-w-0 max-w-[820px] mx-auto" style="opacity: 0">
-        The Vanguard Launchpad walks you through the offer, product, brand, sales page, checkout, and follow-up. One clear step at a time.
+      <!-- Supporting copy: names the three valid starting states, then the sequence. -->
+      <p data-market-fit="three-starting-states" class="hero-item body-copy font-sans text-body text-[17px] md:text-2xl leading-[1.6] md:leading-snug w-full min-w-0 max-w-[860px] mx-auto" style="opacity: 0">
+        Start with no idea, an unfinished idea, or a product that already exists. The Vanguard Launchpad shows you the next missing step: offer, product, brand, sales page, checkout, and follow-up.
       </p>
 
       <!-- Mechanism line: the three-part rhythm of how the work happens. -->
@@ -977,7 +977,7 @@
             This is for you if<span class="text-gold">...</span>
           </h3>
           <ul class="flex flex-col gap-4 text-base md:text-lg text-text/90 leading-relaxed">
-            <li class="flex gap-3"><span class="text-gold mt-1">·</span><span>You have an unfinished idea and are ready to ship it.</span></li>
+            <li class="flex gap-3"><span class="text-gold mt-1">·</span><span>You have no idea yet, an unfinished idea, or a digital product that needs a stronger launch system.</span></li>
             <li class="flex gap-3"><span class="text-gold mt-1">·</span><span>You want the launch decisions placed in a clear order.</span></li>
             <li class="flex gap-3"><span class="text-gold mt-1">·</span><span>You want a real product, page, checkout, and follow-up ready by Day 5.</span></li>
           </ul>
