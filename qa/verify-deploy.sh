@@ -91,10 +91,10 @@ for p in "${REQUIRED[@]}"; do
 done
 [ "$MISS" -eq 0 ] && pass "all new copy present"
 
-# $129 should appear 6x: 5 visible locations + 1 mirrored in the FAQ JSON-LD.
-N=$(grep -o '\$129' <<<"$HTML" | wc -l | tr -d ' ')
-[ "$N" -eq 6 ] && pass "\$129 appears 6x (5 visible + FAQ structured data)" \
-               || fail "\$129 appears ${N}x, expected 6"
+# $27 should appear 6x: 5 visible locations + 1 mirrored in the FAQ JSON-LD.
+N=$(grep -o '\$27' <<<"$HTML" | wc -l | tr -d ' ')
+[ "$N" -eq 6 ] && pass "\$27 appears 6x (5 visible + FAQ structured data)" \
+               || fail "\$27 appears ${N}x, expected 6"
 
 # ── 3. CTAs ───────────────────────────────────────────────────────────────
 echo

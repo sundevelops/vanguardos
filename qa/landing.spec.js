@@ -580,7 +580,7 @@ test('offer close uses truthful contrast and keeps the price hierarchy readable'
 
     expect(close.text).toContain('Seven separate purchases');
     expect(close.text).toContain('$811 combined value');
-    expect(close.text).toContain('Bundle price today · one payment $129');
+    expect(close.text).toContain('Bundle price today · one payment $27');
     expect(close.text).toContain('Core system + six bonuses completely free');
     expect(close.text).toContain('Secure checkout · Instant access · No subscription · 30-day guarantee');
     expect(close.text).toContain('$811 is the combined value of all seven pieces. It is not a former selling price.');
@@ -681,14 +681,14 @@ test('primary CTA label is consistent (responsive) across every visible purchase
 });
 
 // ─────────────────────────────────────────────────────────────────────────
-// Price discipline (2026-07-27 positioning pass). $129 is shown in a small,
+// Price discipline (2026-08-13 price update). $27 is shown in a small,
 // fixed set of primary locations — hero, the main offer section, the final
 // CTA, the sticky mobile CTA, and the payment/delivery FAQ. Every other CTA
 // carries the reassurance line instead. The product should read as clear,
 // not repeatedly defended. Every .cta-price line must still be visible and
 // must say either the price or "One payment · 30-day guarantee".
 // ─────────────────────────────────────────────────────────────────────────
-test('the $129 price appears only in its approved locations, and every CTA reassurance line is visible', async ({ page }) => {
+test('the $27 price appears only in its approved locations, and every CTA reassurance line is visible', async ({ page }) => {
   for (const { w, h } of [{ w: 390, h: 844 }, { w: 1280, h: 800 }]) {
     await page.setViewportSize({ width: w, height: h });
     await page.goto('/', { waitUntil: 'networkidle' });
@@ -702,7 +702,7 @@ test('the $129 price appears only in its approved locations, and every CTA reass
         return {
           text: (el.textContent || '').replace(/\s+/g, ' ').trim(),
           visible: s.display !== 'none' && s.visibility !== 'hidden' && parseFloat(s.opacity) > 0.9 && r.width > 0 && r.height > 0,
-          hasPrice: /\$129/.test(el.textContent || ''),
+          hasPrice: /\$27/.test(el.textContent || ''),
           hasReassurance: /one payment/i.test(el.textContent || ''),
         };
       });
@@ -712,23 +712,23 @@ test('the $129 price appears only in its approved locations, and every CTA reass
       expect(p.visible, `price line not visible at ${w}px: "${p.text}"`).toBeTruthy();
       expect(p.hasPrice || p.hasReassurance, `CTA line says neither the price nor "one payment" at ${w}px: "${p.text}"`).toBeTruthy();
     }
-    // The hero, the main offer section, and the final CTA each carry $129.
+    // The hero, the main offer section, and the final CTA each carry $27.
     const sectionsWithPrice = await page.evaluate(() => {
       const has = (sel) => {
         const el = document.querySelector(sel);
-        return el ? /\$129/.test(el.textContent || '') : false;
+        return el ? /\$27/.test(el.textContent || '') : false;
       };
       // The hero price is the first .cta-price line on the page.
       const first = document.querySelector('.cta-price');
       return {
-        hero: first ? /\$129/.test(first.textContent || '') : false,
+        hero: first ? /\$27/.test(first.textContent || '') : false,
         offer: has('#offer-stack'),
         finalCta: has('#final-cta'),
       };
     });
-    expect(sectionsWithPrice.hero, `hero missing $129 at ${w}px`).toBeTruthy();
-    expect(sectionsWithPrice.offer, `offer section missing $129 at ${w}px`).toBeTruthy();
-    expect(sectionsWithPrice.finalCta, `final CTA missing $129 at ${w}px`).toBeTruthy();
+    expect(sectionsWithPrice.hero, `hero missing $27 at ${w}px`).toBeTruthy();
+    expect(sectionsWithPrice.offer, `offer section missing $27 at ${w}px`).toBeTruthy();
+    expect(sectionsWithPrice.finalCta, `final CTA missing $27 at ${w}px`).toBeTruthy();
 
     // Sections that must NOT repeat the price any more.
     const forbidden = await page.evaluate(() => {
@@ -736,12 +736,12 @@ test('the $129 price appears only in its approved locations, and every CTA reass
       const out = {};
       for (const id of ids) {
         const el = document.getElementById(id);
-        if (el) out[id] = /\$129/.test(el.textContent || '');
+        if (el) out[id] = /\$27/.test(el.textContent || '');
       }
       return out;
     });
     for (const [id, hasPrice] of Object.entries(forbidden)) {
-      expect(hasPrice, `#${id} still repeats $129 at ${w}px`).toBeFalsy();
+      expect(hasPrice, `#${id} still repeats $27 at ${w}px`).toBeFalsy();
     }
   }
 });

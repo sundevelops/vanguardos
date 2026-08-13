@@ -223,7 +223,7 @@
     ['Do I need to be technical?', 'No. Every template, prompt, and pattern is copy-paste. The prompts ask you a few plain questions and do the rest. If you can follow a recipe, you can follow this.'],
     ["What if I don't have an idea yet?", "That is exactly what Day 1 is for. Start with a hunch or a blank page: Day 1 helps you surface, validate, and price an idea, and you finish with a locked offer."],
     ['How much time does each day take?', 'One focused sitting, not a day off work. The Launchpad is 72 guided steps across Welcome plus five days, action-first, so most people finish a day in one to two hours after work. Plan on roughly 8 to 12 hours of hands-on building across the five days, and the AI does the heavy lifting inside each screen.'],
-    ['How do I get it after I pay?', 'Instantly. The moment your $129 payment clears, the email lands with a single file: the Launchpad itself, an interactive build system you open in your browser, plus the six supporting guides and the prompt vault, ready to keep forever. No onboarding call, no waiting room, nothing to install. You can open Day 1 the same night.'],
+    ['How do I get it after I pay?', 'Instantly. The moment your $27 payment clears, the email lands with a single file: the Launchpad itself, an interactive build system you open in your browser, plus the six supporting guides and the prompt vault, ready to keep forever. No onboarding call, no waiting room, nothing to install. You can open Day 1 the same night.'],
     ['What tools do I need?', "The free path can complete the whole system. Each day names the exact free and premium option for that stage: an AI writing assistant for the prompts, a guided website builder and deployment stack for Day 4, and a checkout platform for Day 5, all with real free tiers. A paid AI tier (about $20 a month) is optional polish, not a requirement: it buys longer sessions and a stronger model, which shows up as better output. There is no VanguardOS subscription on top, ever."],
     ['How much extra will I spend on tools?', 'You can build and host on free tiers. Two upgrades are worth it: a paid AI tier for stronger output, and a custom domain (about $10 a year) so your site has a real, credible address you own. A checkout platform also charges a small transaction fee per sale. Neither upgrade is required to finish, but both are worth the small spend.'],
     ['Will this work for my niche?', "Yes. The system is niche-agnostic by design. The templates and patterns are the scaffolding; the Day 2 brand work and Day 4 landing copy are where your niche shapes the output."],
@@ -286,7 +286,7 @@
       {
         "@type": "Offer",
         "name": "The Vanguard Launchpad",
-        "price": "129",
+        "price": "27",
         "priceCurrency": "USD",
         "availability": "https://schema.org/InStock",
         "url": "https://vanguardos.co/",
@@ -540,7 +540,7 @@
       <!-- Price + trust line: price shown clearly right under the CTA, then
            the reassurances a skeptical cold click needs before scrolling. -->
       <div class="hero-item w-full min-w-0 pt-1" style="opacity: 0">
-        <p class="cta-price w-full min-w-0 max-w-[860px] mx-auto"><span class="price">$129</span> · one payment · yours forever</p>
+        <p class="cta-price w-full min-w-0 max-w-[860px] mx-auto"><span class="price">$27</span> · one payment · yours forever</p>
         <p class="font-mono text-[10px] md:text-[11px] uppercase tracking-[0.12em] md:tracking-[0.28em] text-muted-2 w-full min-w-0 max-w-[860px] mx-auto leading-relaxed mt-2">
           Instant access &nbsp;·&nbsp; Mobile and desktop &nbsp;·&nbsp; 30-day guarantee
         </p>
@@ -774,7 +774,7 @@
       <header class="text-center max-w-[780px] mx-auto mb-10 md:mb-12">
         <div class="flex items-center justify-center gap-3 mb-6">
           <div class="h-px w-16 bg-gold-line"></div>
-          <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">Verified Buyers</span>
+          <span class="font-mono text-[10px] uppercase tracking-[0.3em] text-gold">User Reviews</span>
           <div class="h-px w-16 bg-gold-line"></div>
         </div>
         <h2 class="font-display text-3xl md:text-5xl leading-tight text-text">
@@ -932,7 +932,7 @@
               <strong>${stackValue} combined value</strong>
             </div>
             <span class="offer-price-label">Bundle price today · one payment</span>
-            <strong class="offer-price">$129</strong>
+              <strong class="offer-price">$27</strong>
             <span class="offer-price-note">Core system + six bonuses completely free</span>
           </div>
         </div>
@@ -1149,7 +1149,7 @@
           <span class="cta-label"><span class="cta-label-full">Start My 5-Day Build</span><span class="cta-label-short">Start My Build</span></span>
           <span class="cta-arrow" aria-hidden="true">→</span>
         </a>
-        <p class="cta-price max-w-[480px] mx-auto"><span class="price">$129</span> · one payment · 30-day guarantee</p>
+        <p class="cta-price max-w-[480px] mx-auto"><span class="price">$27</span> · one payment · 30-day guarantee</p>
         <a href="#five-day" class="text-sm font-mono uppercase tracking-widest text-muted hover:text-text transition border-b border-gold-line/40 hover:border-gold pb-1">See the 5-Day Plan</a>
         <p class="text-xs md:text-sm font-mono uppercase tracking-wide md:tracking-wider text-muted-2 pt-2 text-center leading-relaxed">Instant access · start Day 1 today</p>
       </div>
@@ -1185,7 +1185,7 @@
 <div class="sticky-cta lg:hidden {stickyVisible ? 'sticky-cta-show' : ''}" aria-hidden={!stickyVisible}>
   <div class="sticky-cta-inner">
     <div class="sticky-cta-copy">
-      <span class="sticky-cta-price">$129</span>
+      <span class="sticky-cta-price">$27</span>
       <span class="sticky-cta-sub">One payment</span>
     </div>
     <a href={GUMROAD.launchpad} data-event="checkout_click" data-analytics-id="sticky-cta" on:click={trackCheckoutClick} class="btn-primary cta-btn sticky-cta-btn" tabindex={stickyVisible ? 0 : -1}>
